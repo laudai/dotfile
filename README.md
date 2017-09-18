@@ -1,1 +1,1 @@
-#laudai dotfile config
+# laudai dotfile config

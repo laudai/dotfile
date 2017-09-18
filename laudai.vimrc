@@ -17,3 +17,7 @@ set softtabstop=4
 "設定中斷快速鍵
 imap jk <ESC>
 " It's mean insert map jk to ESC
+
+"設定搜尋顏色
+set hlsearch
+

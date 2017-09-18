@@ -9,3 +9,7 @@ Also you can type
 $tput colors
 to display you terminal support colors.
 
+If u wanna to get the now config.
+U can type  
+$tmux show -g >> current.tmux.conf
+#U need at least a tmux
