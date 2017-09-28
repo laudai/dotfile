@@ -12,6 +12,7 @@ ZSH_THEME="random"
 
 #I like the THEME:
 #cloud.zsh-theme
+#gentoo.zsh-theme
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
