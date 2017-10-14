@@ -13,3 +13,9 @@ If u wanna to get the now config.
 U can type  
 $tmux show -g >> current.tmux.conf
 #U need at least a tmux
+
+
+if u fire up a tmux , u can use like this 
+$tmux new-session -s servers -d "ssh login@server"
+but if u in this tmux session and exit , it will shutdown this session.
+bcz it si fire up from your program and this is the side effect.

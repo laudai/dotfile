@@ -3,6 +3,10 @@
 #then
 #fi
 
+
+#tmux new-session -s servers "ssh login@server"
+# if u not use send-keys , u don't need to use C-m
+
 tmux new-session -s workspace -n win1 -d
 
 #tmux send-keys -t development "cd ~/devproject" C-m

@@ -8,7 +8,8 @@ export ZSH=$HOME/.oh-my-zsh
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
-ZSH_THEME="random"
+#ZSH_THEME="random"
+ZSH_THEME="cloud"
 
 #I like the THEME:
 #cloud.zsh-theme
