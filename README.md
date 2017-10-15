@@ -1,6 +1,6 @@
 # laudai dotfile config
 
-#### There are two file u can test your ternimal color
+#### There are two file u can test your terminal color
 #### you could use like this code:
 
 `$bash color_test1.sh`
