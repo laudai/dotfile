@@ -1,3 +1,11 @@
+" Author : laudai
+"
+"
+" Use Vim settings, rather than Vi settings (much better!).
+" " This must be first, because it changes other options as a side effect.
+set nocompatible
+
+
 "設定狀態
 
 set number
@@ -14,15 +22,23 @@ set shiftwidth=4 ""bcz I write python ,
 set tabstop=4 ""bcz I write python
 set softtabstop=4
 
-"設定中斷快速鍵
+"設定插入模式中斷快速鍵
 imap jk <ESC>
 " It's mean insert map jk to ESC
 
+"設定命令模式中斷快速鍵
+cmap jk <ESC>
+" It's mean insert map jk to ESC
+
 "設定搜尋顏色
-set hlsearch
+set hlsearch " it can set hls 
+
+"將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
+"number<C-a> or number<C-x>
+set nrformats=
+
 
 " This is copy from vim74 example
-
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
@@ -59,3 +75,8 @@ endif " has("autocmd")
 " This is copy from vim74 example
 
 
+" Python header
+ autocmd BufNewFile *.py 0put =\"#!/usr/bin/env python\<nl>\"|$
+ autocmd BufNewFile *.py 1put =\"# encoding: utf8\<nl>\"|$
+ autocmd BufNewFile *.py 2put =\"# Author : laudai\<nl>\"|$
+ autocmd BufNewFile *.py 3put =\"\<nl>\"|$
