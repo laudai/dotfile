@@ -90,3 +90,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# To remove any command from the zsh history file
+# this method is from https://goo.gl/sTPu62
+histrm() { LC_ALL=C sed --in-place '/$1/d' $HISTFILE }

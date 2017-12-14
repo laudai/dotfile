@@ -24,6 +24,9 @@ tmux send-keys -t workspace:2 "python" C-m
 tmux new-window -t workspace -n win3
 tmux send-keys -t workspace:3 "htop" C-m
 
+tmux new-window -t workspace -n win4
+tmux send-keys -t workspace:4 "nmcli dev wifi list" C-m
+
 #tmux select-window -t workspace:1.1
 #I meet some problem,bcz I had set window-index base 1
 #but I get index 0
