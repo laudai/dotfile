@@ -6,7 +6,7 @@
 set nocompatible
 
 
-"設定狀態
+" 設定狀態
 
 set number
 set autoindent "自動縮排"
@@ -14,29 +14,39 @@ set laststatus=2
 set t_Co=256
 set ruler
 
-"設定背景
+" 設定背景
 set bg =dark
 
-"設定軟體狀態
+" 設定軟體狀態
 set shiftwidth=4 ""bcz I write python , 
 set tabstop=4 ""bcz I write python
 set softtabstop=4
 
-"設定插入模式中斷快速鍵
+" 設定插入模式中斷快速鍵
 imap jk <ESC>
 " It's mean insert map jk to ESC
 
-"設定命令模式中斷快速鍵
+" 設定命令模式中斷快速鍵
 cmap jk <ESC>
 " It's mean insert map jk to ESC
 
-"設定搜尋顏色
+" 設定搜尋顏色
 set hlsearch " it can set hls 
 
-"將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
-"number<C-a> or number<C-x>
+" 將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
+" number<C-a> or number<C-x>
 set nrformats=
 
+" 設定自補全模式
+" 中文教學: http://www.yinqisen.cn/blog-729.html
+" works likes bash shell
+" set wildmode=longest,list
+
+" works likes zsh
+set wmnu
+" wildmenu synonym is wmnu
+set wim=full
+" wildmode synonym is wim
 
 " This is copy from vim74 example
 
