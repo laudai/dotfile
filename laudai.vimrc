@@ -48,7 +48,12 @@ set wmnu
 set wim=full
 " wildmode synonym is wim
 
-" This is copy from vim74 example
+" set history number, default is 50
+set history =200
+
+"set incsearch: 即時搜尋輸入的關鍵字
+
+""" This is copy from vim74 example
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
