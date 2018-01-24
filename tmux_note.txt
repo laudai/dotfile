@@ -27,4 +27,10 @@ u can download battery script by type
 $wget --no-check-certificate \
 https://raw.github.com/richo/battery/master/bin/battery
 
+Default M-1~5
+bind-key    -T prefix M-1              select-layout even-horizontal
+bind-key    -T prefix M-2              select-layout even-vertical
+bind-key    -T prefix M-3              select-layout main-horizontal
+bind-key    -T prefix M-4              select-layout main-vertical
+bind-key    -T prefix M-5              select-layout tiled
 

@@ -19,6 +19,13 @@ Screenshot for tmux
 
 You can find more example tmux.conf from /usr/share/doc/tmux/examples
 
+Show your tmux setting
+`$tmux show -g`
+
+Show tmux bind kyes
+`<prefix> ?`
+`:list-keys`
+
 **This is my addition config** 
 ```
 <prefix> C : creat a new windw from current path to  next index
@@ -35,6 +42,16 @@ C-t : set layout tiled
 <prefix> C-j : prompt a cmd to join <window>.<pane> to this pane
 <prefix> M-n : set repeat 0.6s , titles off , display time 0.75s
 <prefix> M-s : set repeat 1s , titles on , display time 1.5s  
+<prefix> S : prompt a cmd to new session
+<prefix> T : move window to next unused number
+<prefix> M-1~9 : select current windows's pane
+```
+**In copy-mode **
+```
+v : begin selection
+V : select whole line
+C-v : rectangle selection
+y : copy selection
 ```
 `In config u need C-\ to use C-| , maybe is a bug in tmux 2.1 version`
 ##### tmux_note.txt is my note to remind me what i config
