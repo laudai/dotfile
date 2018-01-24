@@ -1,4 +1,4 @@
-# laudai dotfile config
+# LauDai dotfile config
 **Tmux configure is running in tmux 2.1 version**
 
 ---
@@ -19,7 +19,7 @@ Screenshot for tmux
 
 You can find more example tmux.conf from /usr/share/doc/tmux/examples
 
-**This is my aaddition config** 
+**This is my addition config** 
 ```
 <prefix> C : creat a new windw from current path to  next index
 <prefix> C-s : synchronize all panes
