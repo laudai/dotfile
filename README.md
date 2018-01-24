@@ -46,7 +46,7 @@ C-t : set layout tiled
 <prefix> T : move window to next unused number
 <prefix> M-1~9 : select current windows's pane
 ```
-**In copy-mode **
+** In copy-mode **
 ```
 v : begin selection
 V : select whole line
