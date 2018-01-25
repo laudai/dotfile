@@ -44,7 +44,10 @@ C-t : set layout tiled
 <prefix> M-s : set repeat 1s , titles on , display time 1.5s  
 <prefix> S : prompt a cmd to new session
 <prefix> T : move window to next unused number
-<prefix> M-1~9 : select current windows's pane
+<prefix> I : prompt a cmd to change window's index
+M-1~9 : select current windows's pane
+<prefix> o : select next pane (repeat)
+<prefix> / : select last window
 ```
 **In copy-mode **
 ```
@@ -54,6 +57,7 @@ C-v : rectangle selection
 y : copy selection
 ```
 `In config u need C-\ to use C-| , maybe is a bug in tmux 2.1 version`
+`can't bind ; to other action , maybe is a bug in tmux 2.1 version`
 ##### tmux_note.txt is my note to remind me what i config
 ##### zshrc.zsh-template.org is the oh-my-zsh template origin file backup.
 

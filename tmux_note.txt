@@ -34,3 +34,5 @@ bind-key    -T prefix M-3              select-layout main-horizontal
 bind-key    -T prefix M-4              select-layout main-vertical
 bind-key    -T prefix M-5              select-layout tiled
 
+Default o
+bind-key    -T prefix o                select-pane -t :.+
