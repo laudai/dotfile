@@ -49,7 +49,7 @@ M-1~9 : select current windows's pane
 <prefix> o : select next pane (repeat)
 <prefix> / : select last window
 ```
-**In copy-mode **
+**In copy-mode**
 ```
 v : begin selection
 V : select whole line
