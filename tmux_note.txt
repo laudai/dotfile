@@ -27,6 +27,9 @@ u can download battery script by type
 $wget --no-check-certificate \
 https://raw.github.com/richo/battery/master/bin/battery
 
+Follow setting is default values.
+But I change to other keybind.
+-------------------------------------------------------------
 Default M-1~5
 bind-key    -T prefix M-1              select-layout even-horizontal
 bind-key    -T prefix M-2              select-layout even-vertical

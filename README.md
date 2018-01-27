@@ -1,37 +1,49 @@
-# LauDai dotfile config
-**Tmux configure is running in tmux 2.1 version**
+LauDai dotfile config
+===
+Author: LauDai
 
+How to use tmux
 ---
 
-#### There are two file u can test your terminal color
-#### you could use like this code:
+*My tmux configure is running in tmux 2.1 version*
+
+#### Colors
+In tmux Manual
+```
+The colour is one of: black, red, green, yellow, blue, magenta, cyan, white, aixterm bright variants (if supported: brightred, brightgreen, and so on), colour0 to colour255 from the 256-colour set, default, or a hexadecimal RGB string such as ‘#ffffff’, which chooses the closest match from the default 256-colour set.
+```
+#### Check your terminal color support colors
+There are two file can test your terminal color
 
 `$bash color_test1.sh`
+or
+`$bash color_test1.sh`
 
-* color_test1.sh
-* color_test2.sh
-
-### you could type in ternimal to show your ternimal supoort colors
+#### You can type in ternimal to show your ternimal supoort colors
 `$tput colors`
 
-Screenshot for tmux
-![tmux screenshoot](screenshot/tmux.png)
+![ternimal suppotr colors](screenshot/tput_colors.png)
 
-You can find more example tmux.conf from /usr/share/doc/tmux/examples
+Set tmux 256 colors
+`set -g default-terminal "screen-256color"`
+
 
 Show your tmux setting
 `$tmux show -g`
 
 Show tmux bind kyes
 `<prefix> ?`
+or
 `:list-keys`
 
-**This is my addition config** 
+
+**My addition keybind**
+---
 ```
 <prefix> C : creat a new windw from current path to  next index
 <prefix> C-s : synchronize all panes
-M-k : confirm before kill window
-C-k : confirm before kill session
+M-k : confirm before kill current window
+C-k : confirm before kill current session
 C-o : rotate the current window
 M-| : set layout main vertical
 M-_ : set layout main horizontal
@@ -41,25 +53,33 @@ C-t : set layout tiled
 <prefix> C-t : via a choose window to move current pane to window
 <prefix> C-j : prompt a cmd to join <window>.<pane> to this pane
 <prefix> M-n : set repeat 0.6s , titles off , display time 0.75s
-<prefix> M-s : set repeat 1s , titles on , display time 1.5s  
+<prefix> M-s : set repeat 1s , titles on , display time 1.5s
 <prefix> S : prompt a cmd to new session
 <prefix> T : move window to next unused number
 <prefix> I : prompt a cmd to change window's index
 M-1~9 : select current windows's pane
 <prefix> o : select next pane (repeat)
 <prefix> / : select last window
+<prefix> M-s : prompt a cmd to swap current window's index to target index
 ```
 **In copy-mode**
 ```
 v : begin selection
 V : select whole line
-C-v : rectangle selection
+C-v : rectangle toggle selection
 y : copy selection
 ```
 `In config u need C-\ to use C-| , maybe is a bug in tmux 2.1 version`
 `can't bind ; to other action , maybe is a bug in tmux 2.1 version`
-##### tmux_note.txt is my note to remind me what i config
-##### zshrc.zsh-template.org is the oh-my-zsh template origin file backup.
+
+Screenshot for tmux
+![tmux screenshoot](screenshot/tmux.png)
+
+You can find more example tmux.conf from
+`/usr/share/doc/tmux/examples`
+
+##### tmux_note.txt is a file that remind some tmux setting
+##### zshrc.zsh-template.orig is the oh-my-zsh template original file backup.
 
 ---
 
@@ -81,3 +101,5 @@ XKBOPTIONS="lv3:ralt_alt,compose:menu,ctrl:nocaps"
 
 sudo dpkg-reconfigure keyboard-configuration
 ```
+---
+## [Emacs Wiki : MovingTheCtrlKey](https://www.emacswiki.org/emacs/MovingTheCtrlKey)
