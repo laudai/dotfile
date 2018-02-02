@@ -9,22 +9,22 @@ export ZSH=$HOME/.oh-my-zsh
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="random"
-#ZSH_THEME="cloud"
+ZSH_THEME="cloud"
 
 #I like the THEME:
 #cloud.zsh-theme
 #gentoo.zsh-theme
 #steeef.zsh-theme
 
-if [ "$HOST"="raspberrypi" ]
-then
-	ZSH_THEME="robbyrussell"
-fi
-
-if [ "$HOST"="ldv" ]
-then
-	ZSH_THEME="cloud"
-fi
+#if [ "$HOST"="raspberrypi" ]
+#then
+#	ZSH_THEME="robbyrussell"
+#fi
+#
+#if [ "$HOST"="ldv" ]
+#then
+#	ZSH_THEME="cloud"
+#fi
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
