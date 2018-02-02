@@ -19,7 +19,10 @@ export ZSH=$HOME/.oh-my-zsh
 if [ "$HOST"="raspberrypi" ]
 then
 	ZSH_THEME="robbyrussell"
-else
+fi
+
+if [ "$HOST"="ldv" ]
+then
 	ZSH_THEME="cloud"
 fi
 
