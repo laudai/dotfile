@@ -27,6 +27,10 @@ u can download battery script by type
 $wget --no-check-certificate \
 https://raw.github.com/richo/battery/master/bin/battery
 
+In tmux2.5 version
+I use the tmux-battery plugins
+battery_remain function may not work in charging, maybe is to repport.
+
 Follow setting is default values.
 But I change to other keybind.
 -------------------------------------------------------------

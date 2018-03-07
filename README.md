@@ -5,7 +5,7 @@ Author: LauDai
 How to use tmux
 ---
 
-*My tmux configure is running in tmux 2.1 version*
+*My tmux configure is running in tmux 2.5 version*
 
 #### Colors
 In tmux Manual
@@ -56,31 +56,43 @@ C-t : set layout tiled
 <prefix> M-s : set repeat 1s , titles on , display time 1.5s
 <prefix> S : prompt a cmd to new session
 <prefix> T : move window to next unused number
-<prefix> I : prompt a cmd to change window's index
+<prefix> @ : prompt a cmd to change window's index
 M-1~9 : select current windows's pane
 <prefix> o : select next pane (repeat)
 <prefix> / : select last window
 <prefix> M-s : prompt a cmd to swap current window's index to target index
 ```
+M- which is the Meta key (i.e. Alt on most keyboards)
+
 **In copy-mode**
 ```
-v : begin selection
-V : select whole line
-C-v : rectangle toggle selection
-y : copy selection
+All copy-mode use VI-mode
+plugins use plugin tmux-yank
 ```
-`In config u need C-\ to use C-| , maybe is a bug in tmux 2.1 version`
-`can't bind ; to other action , maybe is a bug in tmux 2.1 version`
 
 Screenshot for tmux
-![tmux screenshoot](screenshot/tmux.png)
+![tmux2.5 screenshoot](screenshot/tmux2.5.png)
 
 You can find more example tmux.conf from
 `/usr/share/doc/tmux/examples`
 
+Requirements
+---
+#### for workspace.sh
+all you can get via `sudo apt-get install `
+* `fortune `
+* `lolcat`
+* `cowsay`
+* `htop`
+* `cmatrix`
+#### for tmux plugin
+* `xsel` (recommended) or `xclip`.
+* `urlview`
+* `iostat`
+
+---
 ##### tmux_note.txt is a file that remind some tmux setting
 ##### zshrc.zsh-template.orig is the oh-my-zsh template original file backup.
-
 ---
 
 [you can change your Ctrl to CAPS via this link](http://www.atjiang.com/pragmatic-tmux-configure/)
@@ -103,3 +115,6 @@ sudo dpkg-reconfigure keyboard-configuration
 ```
 ---
 ## [Emacs Wiki : MovingTheCtrlKey](https://www.emacswiki.org/emacs/MovingTheCtrlKey)
+---
+###Ubuuntu 17.10 can use gnome-tweak-tool to change the CTRL to CAPS LOCK key
+![gnome-tweak-tool cahnge CTRL2CAPS](screenshot/gnome-tweak-tool_changeCTRL2CAPS.png)

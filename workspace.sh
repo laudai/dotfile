@@ -14,7 +14,7 @@ if ! tmux has-session -t workspace;then
 	tmux send-keys -t workspace:1.3 "fortune | cowsay | lolcat" C-m
 	#tmux send-keys -t workspace:1.3 "cowsay Hi welcom to linux" C-m
 
-	tmux split-window -t workspace -v -p 30
+	tmux split-window -t workspace -v -p 35
 	tmux clock-mode -t workspace:1.4
 
 	tmux new-window -t workspace -n win2 "python3"
