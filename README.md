@@ -65,10 +65,10 @@ M-1~9 : select current windows's pane
 M- which is the Meta key (i.e. Alt on most keyboards)
 
 **In copy-mode**
-```
-All copy-mode use VI-mode
+
+>All copy-mode use VI-mode
 plugins use plugin tmux-yank
-```
+
 
 Screenshot for tmux
 ![tmux2.5 screenshoot](screenshot/tmux2.5.png)
@@ -116,5 +116,5 @@ sudo dpkg-reconfigure keyboard-configuration
 ---
 ## [Emacs Wiki : MovingTheCtrlKey](https://www.emacswiki.org/emacs/MovingTheCtrlKey)
 ---
-###Ubuuntu 17.10 can use gnome-tweak-tool to change the CTRL to CAPS LOCK key
+### Ubuuntu 17.10 can use gnome-tweak-tool to change the CTRL to CAPS LOCK key
 ![gnome-tweak-tool cahnge CTRL2CAPS](screenshot/gnome-tweak-tool_changeCTRL2CAPS.png)
