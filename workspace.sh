@@ -17,7 +17,7 @@ if ! tmux has-session -t workspace;then
 	tmux split-window -t workspace -v -p 35
 	tmux clock-mode -t workspace:1.4
 
-	tmux new-window -t workspace -n win2 "python3"
+	tmux new-window -t workspace -n win2 "ipython3"
 
 	tmux new-window -t workspace -n win3 "htop"
 
