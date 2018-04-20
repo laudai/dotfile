@@ -118,3 +118,15 @@ sudo dpkg-reconfigure keyboard-configuration
 ---
 ### Ubuuntu 17.10 can use gnome-tweak-tool to change the CTRL to CAPS LOCK key
 ![gnome-tweak-tool cahnge CTRL2CAPS](screenshot/gnome-tweak-tool_changeCTRL2CAPS.png)
+
+My zsh plugins
+---
+`git`
+`pip`
+`python`
+`cloudapp`
+`systemd`
+`tmux`
+
+u need install cloudapp via terminal
+`gem install cloudapp_api`
