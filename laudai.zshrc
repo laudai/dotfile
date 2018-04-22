@@ -103,5 +103,7 @@ source $ZSH/oh-my-zsh.sh
 
 # To remove any command from the zsh history file
 # this method is from https://goo.gl/sTPu62
-export BROWSER='/usr/bin/firefox'
+if [ -e '/usr/bin/firefox' ] ; then
+  export BROWSER='/usr/bin/firefox'
+fi
 histrm() { LC_ALL=C sed --in-place '/$1/d' $HISTFILE }
