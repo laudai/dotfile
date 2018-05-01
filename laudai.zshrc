@@ -103,7 +103,16 @@ source $ZSH/oh-my-zsh.sh
 
 # To remove any command from the zsh history file
 # this method is from https://goo.gl/sTPu62
+histrm() { LC_ALL=C sed --in-place '/$1/d' $HISTFILE }
+
+# let urlview to use firefox browser to show
 if [ -e '/usr/bin/firefox' ] ; then
   export BROWSER='/usr/bin/firefox'
 fi
-histrm() { LC_ALL=C sed --in-place '/$1/d' $HISTFILE }
+
+# cd folder and ls item at the same time
+# this method is from https://goo.gl/92NCHU
+function cdls() {
+  cd $1 ;
+  ls
+}
