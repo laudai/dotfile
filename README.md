@@ -69,6 +69,11 @@ M- which is the Meta key (i.e. Alt on most keyboards)
 >All copy-mode use VI-mode
 plugins use plugin tmux-yank
 
+in copy-mode-vi will binding Space to send begin-selection
+`bind-key    -T copy-mode-vi Space             send-keys -X begin-selection`
+
+you can open a highlighted text in copy-mode via press `o` or `Ctrl-o` to open file by `xdg-open` or `$EDITOR` respectively .
+power by tmux-open pulgin
 
 Screenshot for tmux
 ![tmux2.5 screenshoot](screenshot/tmux2.5.png)
@@ -80,15 +85,15 @@ Requirements
 ---
 #### for workspace.sh
 all you can get via `sudo apt-get install `
-* `fortune `
+* `fortunes`
 * `lolcat`
 * `cowsay`
 * `htop`
 * `cmatrix`
 #### for tmux plugin
-* `xsel` (recommended) or `xclip`.
-* `urlview`
-* `iostat`
+* `xsel` (recommended) or `xclip` for tmux-yank
+* `urlview` for tmux-urlview
+* `iostat` or `sar` (Optional requirement) for tmux-cpu
 
 ---
 ##### tmux_note.txt is a file that remind some tmux setting
