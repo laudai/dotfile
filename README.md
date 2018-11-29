@@ -69,7 +69,7 @@ M- which is the Meta key (i.e. Alt on most keyboards)
 >All copy-mode use VI-mode
 plugins use plugin tmux-yank
 
-in copy-mode-vi will binding `Space` key to send begin-selection\n
+in copy-mode-vi will binding `Space` key to send begin-selection<br/>
 `bind-key    -T copy-mode-vi Space             send-keys -X begin-selection`
 
 you can open a highlighted text in copy-mode via press `o` or `Ctrl-o` to open file by `xdg-open` or `$EDITOR` respectively .
