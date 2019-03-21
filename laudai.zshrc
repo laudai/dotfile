@@ -118,3 +118,4 @@ function cdls() {
 }
 
 alias dcp="docker-compose"
+alias cls="printf '\033c'"
