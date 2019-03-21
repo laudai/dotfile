@@ -53,6 +53,9 @@ set history =200
 
 "set incsearch: 即時搜尋輸入的關鍵字
 
+" 設定vim paste 開關
+set pastetoggle=<F7>
+
 """ This is copy from vim74 example
 
 " Only do this part when compiled with support for autocommands.
