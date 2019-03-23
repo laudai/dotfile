@@ -40,6 +40,8 @@ or
 **My addition keybind**
 ---
 ```
+C-S-Right :add 200 lines to right
+C-S-Left : add 200 lines to left
 <prefix> C : creat a new windw from current path to  next index
 <prefix> C-s : synchronize all panes
 M-k : confirm before kill current window
@@ -64,6 +66,7 @@ M-1~9 : select current windows's pane
 <prefix> M-s : prompt a cmd to swap current window's index to target index
 ```
 M- which is the Meta key (i.e. Alt on most keyboards)
+S- means Shift key
 
 **In copy-mode**
 
