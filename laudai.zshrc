@@ -68,7 +68,7 @@ ZSH_THEME="cloud"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git pip python systemd tmux docker docker-compose)
+plugins=(git pip python systemd tmux docker docker-compose encode64)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -119,3 +119,6 @@ function cdls() {
 
 alias dcp="docker-compose"
 alias cls="printf '\033c'"
+alias dcls="docker container ls"
+alias dclsa="docker container ls -a"
+
