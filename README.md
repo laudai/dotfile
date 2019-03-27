@@ -130,12 +130,7 @@ sudo dpkg-reconfigure keyboard-configuration
 
 My zsh plugins
 ---
-`git`
-`pip`
-`python`
-`cloudapp`
-`systemd`
-`tmux`
+```git pip python systemd tmux docker docker-compose encode64```
 
 u need install cloudapp via terminal
 `gem install cloudapp_api`
