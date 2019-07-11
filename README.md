@@ -52,9 +52,9 @@ M-_ : set layout main horizontal
 C-| : set layout even horizontal
 C-_ : set layout even vertical
 C-t : set layout tiled
-C-b : clear screen & screen history
 <prefix> C-t : via a choose window to move current pane to window
 <prefix> C-j : prompt a cmd to join <window>.<pane> to this pane
+<prefix> C-b : clear screen & screen history
 <prefix> M-n : set repeat 0.6s , titles off , display time 0.75s
 <prefix> M-s : set repeat 1s , titles on , display time 1.5s
 <prefix> S : prompt a cmd to new session
