@@ -122,3 +122,4 @@ alias cls="printf '\033c'"
 alias dcls="docker container ls"
 alias dclsa="docker container ls -a"
 
+alias line="google-chrome --app=chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html"
