@@ -117,9 +117,19 @@ function cdls() {
   ls
 }
 
+function mkcdf() {
+  mkdir $1 
+  cd $1
+  # new folder and enter the folder
+}
+
 alias dcp="docker-compose"
 alias cls="printf '\033c'"
 alias dcls="docker container ls"
 alias dclsa="docker container ls -a"
 
 alias line="google-chrome --app=chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html"
+
+alias gquit="gnome-session-quit"
+alias python="/usr/bin/python3"
+
