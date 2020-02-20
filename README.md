@@ -57,6 +57,7 @@ C-t : set layout tiled
 <prefix> C-b : clear screen & screen history
 <prefix> M-n : set repeat 0.6s , titles off , display time 0.75s
 <prefix> M-s : set repeat 1s , titles on , display time 1.5s
+<prefix> M-v : swap current pane to last vistied pane
 <prefix> S : prompt a cmd to new session
 <prefix> T : move window to next unused number
 <prefix> @ : prompt a cmd to change window's index
