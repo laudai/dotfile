@@ -123,13 +123,15 @@ function mkcdf() {
   # new folder and enter the folder
 }
 
+# docker alias
 alias dcp="docker-compose"
-alias cls="printf '\033c'"
 alias dcls="docker container ls"
 alias dclsa="docker container ls -a"
 
-alias line="google-chrome --app=chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html"
-
+# system alias
+alias cls="printf '\033c'"
 alias gquit="gnome-session-quit"
-alias python="/usr/bin/python3"
 
+# python alias
+alias python="/usr/bin/python3"
+alias pip="/usr/bin/pip3"
