@@ -131,6 +131,7 @@ alias dclsa="docker container ls -a"
 # system alias
 alias cls="printf '\033c'"
 alias gquit="gnome-session-quit"
+alias gquit--no-prompt="gnome-session-quit --no-prompt"
 
 # python alias
 alias python="/usr/bin/python3"
