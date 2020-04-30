@@ -110,6 +110,7 @@ if [ -e '/usr/bin/firefox' ] ; then
   export BROWSER='/usr/bin/firefox'
 fi
 
+
 # cd folder and ls item at the same time
 # this method is from https://goo.gl/92NCHU
 function cdls() {
@@ -134,5 +135,15 @@ alias gquit="gnome-session-quit"
 alias gquit--no-prompt="gnome-session-quit --no-prompt"
 
 # python alias
-alias python="/usr/bin/python3"
-alias pip="/usr/bin/pip3"
+#alias python="/usr/bin/python3"
+#alias pip="/usr/bin/pip3"
+
+# export
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+# pyenv , pyenv virtualenv initalize
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+eval "$(pyenv virtualenv-init -)"
