@@ -1,3 +1,5 @@
 // 將按鍵繫結關係放在此檔案中以覆寫預設
 [
+  { "key": "Ctrl+Shift+j", "command": "workbench.action.terminal.focusNext" },
+  { "key": "Ctrl+Shift+k", "command": "workbench.action.terminal.focusPrevious" }
 ]
