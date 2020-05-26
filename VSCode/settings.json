@@ -14,11 +14,11 @@
     "editor.renderControlCharacters": true,//開啟字元轉換控制
     "editor.renderWhitespace": "boundary" ,//空白字元轉換
     "editor.wordWrap": "on",//程式碼自動換行
-    
+    "editor.formatOnSave": true, ///檔案儲存自動格式化
     // window
     "window.menuBarVisibility": "toggle", //按alt開關功能列表
     
     "[Log]": {
         "editor.fontSize": 20
-    }
+    },
 }
