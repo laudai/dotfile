@@ -10,3 +10,4 @@ code --install-extension tht13.python
 code --install-extension formulahendry.code-runner
 code --install-extension mdickin.markdown-shortcuts
 code --install-extension yzhang.markdown-all-in-one
+code --install-extension coenraads.bracket-pair-colorizer-2
