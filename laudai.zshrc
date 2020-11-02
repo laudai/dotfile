@@ -68,7 +68,7 @@ ZSH_THEME="cloud"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git pip python systemd tmux docker docker-compose encode64)
+plugins=(git pip python systemd tmux docker docker-compose encode64 zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
