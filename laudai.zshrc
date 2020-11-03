@@ -70,6 +70,11 @@ ZSH_THEME="cloud"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git pip python systemd tmux docker docker-compose encode64 zsh-autosuggestions)
 
+# Default ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+# See more document via man zshzle
+# use colour 0~7 avoid terminal only supports 8 colors
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=5,bg=none,bold,underline"
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
