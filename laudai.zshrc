@@ -138,10 +138,11 @@ alias dcp="docker-compose"
 alias dcls="docker container ls"
 alias dclsa="docker container ls -a"
 
-# system alias
+# operating alias
 alias cls="printf '\033c'"
 alias gquit="gnome-session-quit"
 alias gquit--no-prompt="gnome-session-quit --no-prompt"
+alias dotfile="cd ~/.dotfile"
 
 # python alias
 #alias python="/usr/bin/python3"
