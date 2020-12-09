@@ -1,6 +1,27 @@
 // 將按鍵繫結關係放在此檔案中以覆寫預設
 [
-  { "key": "Ctrl+Shift+j", "command": "workbench.action.terminal.focusNext" },
-  { "key": "Ctrl+Shift+k", "command": "workbench.action.terminal.focusPrevious" },
-  { "key": "Shift+Alt+m", "command": "editor.action.toggleMinimap"}
+  {
+    "key": "ctrl+a j",
+    "command": "workbench.action.terminal.focusNext"
+  },
+  {
+    "key": "ctrl+a k",
+    "command": "workbench.action.terminal.focusPrevious"
+  },
+  {
+    "key": "ctrl+a h",
+    "command": "workbench.action.terminal.focusPreviousPane"
+  },
+  {
+    "key": "ctrl+a l",
+    "command": "workbench.action.terminal.focusNextPane"
+  },
+  {
+    "key": "ctrl+a ctrl+k",
+    "command": "workbench.action.terminal.kill"
+  },
+  {
+    "key": "Shift+Alt+m",
+    "command": "editor.action.toggleMinimap"
+  }
 ]
