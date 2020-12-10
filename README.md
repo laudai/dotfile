@@ -43,7 +43,6 @@ or
 C-S-Right :add 200 lines to right
 C-S-Left : add 200 lines to left
 <prefix> C : creat a new windw from current path to  next index
-<prefix> C-s : synchronize all panes
 M-k : confirm before kill current window
 C-k : confirm before kill current session
 C-o : rotate the current window
@@ -62,6 +61,7 @@ C-t : set layout tiled
 <prefix> T : move window to next unused number
 <prefix> @ : prompt a cmd to change window's index
 M-1~9 : select current windows's pane
+M-s : synchronize all panes
 <prefix> o : select next pane (repeat)
 <prefix> / : select last window
 <prefix> M-s : prompt a cmd to swap current window's index to target index
