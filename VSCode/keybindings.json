@@ -2,23 +2,28 @@
 [
   {
     "key": "ctrl+a j",
-    "command": "workbench.action.terminal.focusNext"
+    "command": "workbench.action.terminal.focusNext",
+    "when": "terminalFocus && terminalProcessSupported"
   },
   {
     "key": "ctrl+a k",
-    "command": "workbench.action.terminal.focusPrevious"
+    "command": "workbench.action.terminal.focusPrevious",
+    "when": "terminalFocus && terminalProcessSupported"
   },
   {
     "key": "ctrl+a h",
-    "command": "workbench.action.terminal.focusPreviousPane"
+    "command": "workbench.action.terminal.focusPreviousPane",
+    "when": "terminalFocus && terminalProcessSupported"
   },
   {
     "key": "ctrl+a l",
-    "command": "workbench.action.terminal.focusNextPane"
+    "command": "workbench.action.terminal.focusNextPane",
+    "when": "terminalFocus && terminalProcessSupported"
   },
   {
     "key": "ctrl+a ctrl+k",
-    "command": "workbench.action.terminal.kill"
+    "command": "workbench.action.terminal.kill",
+    "when": "terminalFocus && terminalProcessSupported"
   },
   {
     "key": "Shift+Alt+m",
