@@ -144,6 +144,9 @@ alias gquit="gnome-session-quit"
 alias gquit--no-prompt="gnome-session-quit --no-prompt"
 alias dotfile="cd ~/.dotfile"
 
+# git alias
+alias glodsd="glods --date=local" # must use with zsh git plugin
+
 # python alias
 #alias python="/usr/bin/python3"
 #alias pip="/usr/bin/pip3"
