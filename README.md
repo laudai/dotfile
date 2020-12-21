@@ -43,14 +43,14 @@ or
 C-S-Right :add 200 lines to right
 C-S-Left : add 200 lines to left
 <prefix> C : creat a new windw from current path to  next index
-M-k : confirm before kill current window
-C-k : confirm before kill current session
+M-k : confirm before kill current session
 C-o : rotate the current window
 M-| : set layout main vertical
 M-_ : set layout main horizontal
 C-| : set layout even horizontal
 C-_ : set layout even vertical
 C-t : set layout tiled
+<prefix> C-k : confirm before kill current window
 <prefix> C-t : via a choose window to move current pane to window
 <prefix> C-j : prompt a cmd to join <window>.<pane> to this pane
 <prefix> C-b : clear screen & screen history
