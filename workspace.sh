@@ -51,5 +51,6 @@ if ! tmux has-session -t workspace;then
 
 	#tmux select-layout -t workspace main-horizontal
 	tmux attach -t workspace
+else
+	exec tmux attach -t workspace
 fi
-exec tmux attach -t workspace
