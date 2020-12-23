@@ -107,6 +107,13 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Keybindings
+bindkey '^[\' autosuggest-toggle # alt-\
+# keybindings reference
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
+# https://github.com/ThiefMaster/zsh-config/blob/master/zshrc.d/keybinds.zsh
+
+
 # SETTING
 HIST_STAMPS="yyyy-mm-dd"
 
