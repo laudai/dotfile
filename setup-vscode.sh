@@ -11,3 +11,4 @@ code --install-extension formulahendry.code-runner
 code --install-extension mdickin.markdown-shortcuts
 code --install-extension yzhang.markdown-all-in-one
 code --install-extension coenraads.bracket-pair-colorizer-2
+code --install-extension vscodevim.vim

@@ -28,5 +28,9 @@
   {
     "key": "Shift+Alt+m",
     "command": "editor.action.toggleMinimap"
+  },
+  {
+    "key": "ctrl+alt+/",
+    "command": "toggleVim"
   }
 ]

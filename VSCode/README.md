@@ -9,6 +9,7 @@
 - [Markdown Shortcuts](https://marketplace.visualstudio.com/items?itemName=mdickin.markdown-shortcuts)
 - [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
 - [Bracket Pair Colorizer 2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+- [Vim](https://marketplace.visualstudio.com/items?itemName=vscodevim.vim)
 
 ## Addtion Keybinding
 ### Terminal
@@ -20,3 +21,7 @@
 
 ### Minimap
 * shift+alt+m	:toggle the Minimap
+
+### Vim
+* ctrl+alt+\	:toggle Vim mode
+* jk	:<ESC> key(insert mode)
