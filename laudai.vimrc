@@ -32,6 +32,13 @@ imap <C-]> <ESC>:e<CR>
 " 在普通模式重新edit檔案
 nmap <C-]> <ESC>:e<CR>
 
+" Insert newline without entering insert mode
+" https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
+" nnoremap normal no recursion map
+nn o o<Esc>k
+nn O O<Esc>j
+
+
 " 快捷鍵設定教學
 " 中文版	http://haoxiang.org/2011/09/vim-modes-and-mappin/
 " 英文版	https://medium.com/vim-drops/understand-vim-mappings-and-create-your-own-shortcuts-f52ee4a6b8ed
