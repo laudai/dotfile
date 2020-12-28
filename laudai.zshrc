@@ -153,6 +153,7 @@ alias dotfile="cd ~/.dotfile"
 
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
+alias grf="git reflog"
 
 # python alias
 #alias python="/usr/bin/python3"
