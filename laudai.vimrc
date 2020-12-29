@@ -24,11 +24,25 @@ set softtabstop=4
 
 " 設定插入模式中斷快速鍵
 imap jk <ESC>
-" It's mean insert map jk to ESC
-
 " 設定命令模式中斷快速鍵
 cmap jk <ESC>
-" It's mean insert map jk to ESC
+
+" 在插入模式重新edit檔案
+imap <C-]> <ESC>:e<CR>
+" 在普通模式重新edit檔案
+nmap <C-]> <ESC>:e<CR>
+
+" Insert newline without entering insert mode
+" https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
+" nnoremap normal no recursion map
+nn o o<Esc>k
+nn O O<Esc>j
+
+
+" 快捷鍵設定教學
+" 中文版	http://haoxiang.org/2011/09/vim-modes-and-mappin/
+" 英文版	https://medium.com/vim-drops/understand-vim-mappings-and-create-your-own-shortcuts-f52ee4a6b8ed
+
 
 " 設定搜尋顏色
 set hlsearch " it can set hls 
@@ -52,6 +66,9 @@ set wim=full
 set history =200
 
 "set incsearch: 即時搜尋輸入的關鍵字
+
+" 設定vim paste 開關
+set pastetoggle=<F7>
 
 """ This is copy from vim74 example
 

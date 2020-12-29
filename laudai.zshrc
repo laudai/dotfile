@@ -15,6 +15,7 @@ ZSH_THEME="cloud"
 #cloud.zsh-theme
 #gentoo.zsh-theme
 #steeef.zsh-theme
+#powerlevel10k/powerlevel10k # need install
 
 #if [ "$HOST"="raspberrypi" ]
 #then
@@ -68,7 +69,12 @@ ZSH_THEME="cloud"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git pip python systemd tmux docker docker-compose encode64 zsh-autosuggestions autojump zsh-syntax-highlighting sudo vscode)
+
+# Default ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+# See more document via man zshzle
+# use colour 0~7 avoid terminal only supports 8 colors
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=5,bg=none,bold,underline"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -101,6 +107,64 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Keybindings
+bindkey '^[\' autosuggest-toggle # alt-\
+# keybindings reference
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
+# https://github.com/ThiefMaster/zsh-config/blob/master/zshrc.d/keybinds.zsh
+
+
+# SETTING
+HIST_STAMPS="yyyy-mm-dd"
+
 # To remove any command from the zsh history file
 # this method is from https://goo.gl/sTPu62
 histrm() { LC_ALL=C sed --in-place '/$1/d' $HISTFILE }
+
+# let urlview to use firefox browser to show
+if [ -e '/usr/bin/firefox' ] ; then
+  export BROWSER='/usr/bin/firefox'
+fi
+
+
+# cd folder and ls item at the same time
+# this method is from https://goo.gl/92NCHU
+function cdls() {
+  cd $1 ;
+  ls
+}
+
+function mkcdf() {
+  mkdir $1 
+  cd $1
+  # new folder and enter the folder
+}
+
+# docker alias
+alias dcp="docker-compose"
+alias dcls="docker container ls"
+alias dclsa="docker container ls -a"
+
+# operating alias
+alias cls="printf '\033c'"
+alias gquit="gnome-session-quit"
+alias gquit--no-prompt="gnome-session-quit --no-prompt"
+alias dotfile="cd ~/.dotfile"
+
+# git alias
+alias glodsd="glods --date=local" # must use with zsh git plugin
+alias grf="git reflog"
+
+# python alias
+#alias python="/usr/bin/python3"
+#alias pip="/usr/bin/pip3"
+
+# export
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+# pyenv , pyenv virtualenv initalize
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+eval "$(pyenv virtualenv-init -)"

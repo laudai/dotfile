@@ -5,7 +5,7 @@ Author: LauDai
 How to use tmux
 ---
 
-*My tmux configure is running in tmux 2.1 version*
+*My tmux configure is running in tmux 2.5 version*
 
 #### Colors
 In tmux Manual
@@ -40,47 +40,69 @@ or
 **My addition keybind**
 ---
 ```
+C-S-Right :add 200 lines to right
+C-S-Left : add 200 lines to left
 <prefix> C : creat a new windw from current path to  next index
-<prefix> C-s : synchronize all panes
-M-k : confirm before kill current window
-C-k : confirm before kill current session
+M-k : confirm before kill current session
 C-o : rotate the current window
 M-| : set layout main vertical
 M-_ : set layout main horizontal
 C-| : set layout even horizontal
 C-_ : set layout even vertical
 C-t : set layout tiled
+<prefix> C-k : confirm before kill current window
 <prefix> C-t : via a choose window to move current pane to window
 <prefix> C-j : prompt a cmd to join <window>.<pane> to this pane
+<prefix> C-b : clear screen & screen history
 <prefix> M-n : set repeat 0.6s , titles off , display time 0.75s
 <prefix> M-s : set repeat 1s , titles on , display time 1.5s
+<prefix> M-v : swap current pane to last vistied pane
 <prefix> S : prompt a cmd to new session
 <prefix> T : move window to next unused number
-<prefix> I : prompt a cmd to change window's index
+<prefix> @ : prompt a cmd to change window's index
 M-1~9 : select current windows's pane
+M-s : synchronize all panes
 <prefix> o : select next pane (repeat)
 <prefix> / : select last window
 <prefix> M-s : prompt a cmd to swap current window's index to target index
 ```
+M- which is the Meta key (i.e. Alt on most keyboards)
+S- means Shift key
+
 **In copy-mode**
-```
-v : begin selection
-V : select whole line
-C-v : rectangle toggle selection
-y : copy selection
-```
-`In config u need C-\ to use C-| , maybe is a bug in tmux 2.1 version`
-`can't bind ; to other action , maybe is a bug in tmux 2.1 version`
+
+>All copy-mode use VI-mode
+plugins use plugin tmux-yank
+
+in copy-mode-vi will binding `Space` key to send begin-selection<br/>
+`bind-key    -T copy-mode-vi Space             send-keys -X begin-selection`
+
+you can open a highlighted text in copy-mode via press `o` or `Ctrl-o` to open file by `xdg-open` or `$EDITOR` respectively .
+power by tmux-open pulgin
 
 Screenshot for tmux
-![tmux screenshoot](screenshot/tmux.png)
+![tmux2.5 screenshoot](screenshot/tmux2.5.png)
 
 You can find more example tmux.conf from
 `/usr/share/doc/tmux/examples`
 
+Requirements
+---
+#### for workspace.sh
+all you can get via `sudo apt-get install `
+* `fortunes`
+* `lolcat`
+* `cowsay`
+* `htop`
+* `cmatrix`
+#### for tmux plugin
+* `xsel` (recommended) or `xclip` for tmux-yank
+* `urlview` for tmux-urlview
+* `iostat` or `sar` (Optional requirement) for tmux-cpu
+
+---
 ##### tmux_note.txt is a file that remind some tmux setting
 ##### zshrc.zsh-template.orig is the oh-my-zsh template original file backup.
-
 ---
 
 [you can change your Ctrl to CAPS via this link](http://www.atjiang.com/pragmatic-tmux-configure/)
@@ -103,3 +125,13 @@ sudo dpkg-reconfigure keyboard-configuration
 ```
 ---
 ## [Emacs Wiki : MovingTheCtrlKey](https://www.emacswiki.org/emacs/MovingTheCtrlKey)
+---
+### Ubuuntu 17.10 can use gnome-tweak-tool to change the CTRL to CAPS LOCK key
+![gnome-tweak-tool cahnge CTRL2CAPS](screenshot/gnome-tweak-tool_changeCTRL2CAPS.png)
+
+My zsh plugins
+---
+```git pip python systemd tmux docker docker-compose encode64```
+
+u need install cloudapp via terminal
+`gem install cloudapp_api`

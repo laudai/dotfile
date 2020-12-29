@@ -1,0 +1,37 @@
+{
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "python.jediEnabled": false,
+    "python.languageServer": "Microsoft",
+    "window.zoomLevel": 0,
+    // Terminal Setting
+    "terminal.integrated.fontFamily": "'DejaVu Sans Mono','Monospace'", //字型
+    "terminal.integrated.fontSize": 16, //字體大小
+    // Editor Setting
+    "editor.fontSize": 16, //編輯區字體大小
+    "editor.renderLineHighlight": "all", //將當前行標示全開
+    "editor.renderControlCharacters": true, //開啟字元轉換控制
+    "editor.renderWhitespace": "boundary", //空白字元轉換
+    "editor.wordWrap": "on", //程式碼自動換行
+    "editor.formatOnSave": true, ///檔案儲存自動格式化
+    "editor.minimap.enabled": true,
+    // Window
+    "window.menuBarVisibility": "toggle", //按alt開關功能列表
+    "[Log]": {
+        "editor.fontSize": 20
+    },
+    // vim setting
+    "vim.hlsearch": true,
+    "vim.incsearch": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "j",
+                "k"
+            ],
+            "after": [
+                "<Esc>"
+            ]
+        }
+    ],
+}

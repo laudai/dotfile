@@ -1,0 +1,7 @@
+[user]
+	email = laudaihe@gmail.com
+	name = laudai
+[core]
+	editor = vim
+[alias]
+	adog = log --all --decorate --oneline --graph
