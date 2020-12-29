@@ -101,10 +101,14 @@ all you can get via `sudo apt install `
 * `iostat` or `sar` (Optional requirement) for tmux-cpu
 
 ---
+My zsh plugins
+---
+```git pip python systemd tmux docker docker-compose encode64 zsh-autosuggestions autojump zsh-syntax-highlighting sudo vscode```
+
 ##### tmux_note.txt is a file that remind some tmux setting
 ##### zshrc.zsh-template.orig is the oh-my-zsh template original file backup.
----
 
+---
 [you can change your Ctrl to CAPS via this link](http://www.atjiang.com/pragmatic-tmux-configure/)
 ```
 绑定 CAPS LOCK 键到 CTRL 键
@@ -128,10 +132,3 @@ sudo dpkg-reconfigure keyboard-configuration
 ---
 ### Ubuuntu 17.10 can use gnome-tweak-tool to change the CTRL to CAPS LOCK key
 ![gnome-tweak-tool cahnge CTRL2CAPS](screenshot/gnome-tweak-tool_changeCTRL2CAPS.png)
-
-My zsh plugins
----
-```git pip python systemd tmux docker docker-compose encode64```
-
-u need install cloudapp via terminal
-`gem install cloudapp_api`
