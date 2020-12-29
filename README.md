@@ -40,31 +40,33 @@ or
 **My addition keybind**
 ---
 ```
-C-S-Right :add 200 lines to right
-C-S-Left : add 200 lines to left
 <prefix> C : creat a new windw from current path to  next index
+<prefix> C-b : clear screen & screen history
 M-k : confirm before kill current session
+<prefix> C-k : confirm before kill current window
 C-o : rotate the current window
 M-| : set layout main vertical
 M-_ : set layout main horizontal
 C-| : set layout even horizontal
 C-_ : set layout even vertical
 C-t : set layout tiled
-<prefix> C-k : confirm before kill current window
 <prefix> C-t : via a choose window to move current pane to window
 <prefix> C-j : prompt a cmd to join <window>.<pane> to this pane
-<prefix> C-b : clear screen & screen history
-<prefix> M-n : set repeat 0.6s , titles off , display time 0.75s
-<prefix> M-s : set repeat 1s , titles on , display time 1.5s
-<prefix> M-v : swap current pane to last vistied pane
-<prefix> S : prompt a cmd to new session
-<prefix> T : move window to next unused number
-<prefix> @ : prompt a cmd to change window's index
-M-1~9 : select current windows's pane
-M-s : synchronize all panes
 <prefix> o : select next pane (repeat)
 <prefix> / : select last window
 <prefix> M-s : prompt a cmd to swap current window's index to target index
+<prefix> M-f : set repeat 0.6s , titles off , display time 0.75s
+<prefix> M-n : set repeat 1s , titles on , display time 1.5s
+<prefix> M-v : swap current pane to last vistied pane
+<prefix> T : move window to next unused number
+<prefix> S : prompt a cmd to new session
+<prefix> @ : prompt a cmd to change window's index
+M-1~9 : select current windows's pane
+M-s : synchronize all panes
+C-S-Up :add 50 lines to up
+C-S-Down :add 50 lines to down
+C-S-Left : add 50 lines to left
+C-S-Right : add 50 lines to right
 ```
 M- which is the Meta key (i.e. Alt on most keyboards)
 S- means Shift key
@@ -89,12 +91,10 @@ You can find more example tmux.conf from
 Requirements
 ---
 #### for workspace.sh
-all you can get via `sudo apt-get install `
-* `fortunes`
-* `lolcat`
-* `cowsay`
-* `htop`
-* `cmatrix`
+all you can get via `sudo apt install `
+* `ipython3`, `htop`, `speedtest-cli`, `glances`, `mc`, `screenfetch`
+* `fortunes`, `lolcat`, `cowsay`, `cmatrix`
+
 #### for tmux plugin
 * `xsel` (recommended) or `xclip` for tmux-yank
 * `urlview` for tmux-urlview
