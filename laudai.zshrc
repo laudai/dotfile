@@ -109,6 +109,9 @@ source $ZSH/oh-my-zsh.sh
 
 # Keybindings
 bindkey '^[\' autosuggest-toggle # alt-\
+# How to switch comfortably to vi command mode on the zsh command line?
+# https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
+bindkey -M viins 'jk' vi-cmd-mode
 # keybindings reference
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
 # https://github.com/ThiefMaster/zsh-config/blob/master/zshrc.d/keybinds.zsh
