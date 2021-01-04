@@ -162,6 +162,10 @@ alias grf="git reflog"
 #alias python="/usr/bin/python3"
 #alias pip="/usr/bin/pip3"
 
+# curl alias
+alias wttrk="curl wttr.in/kaohsiung"
+alias wttrt="curl wttr.in/taipei"
+
 # export
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
