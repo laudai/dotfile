@@ -69,7 +69,23 @@ ZSH_THEME="cloud"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git pip python systemd tmux docker docker-compose encode64 zsh-autosuggestions autojump zsh-syntax-highlighting sudo vscode vi-mode)
+plugins=(
+	git
+	pip
+	python
+	systemd
+	tmux
+	docker
+	docker-compose
+	encode64
+	autojump
+	zsh-autosuggestions
+	zsh-syntax-highlighting
+	sudo
+	vscode
+	vi-mode
+	zsh-navigation-tools
+)
 
 # Default ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
 # See more document via man zshzle
@@ -165,6 +181,10 @@ alias grf="git reflog"
 # curl alias
 alias wttrk="curl wttr.in/kaohsiung"
 alias wttrt="curl wttr.in/taipei"
+
+#  zsh-navigation-tools plugin alias
+alias naliases=n-aliases ncd=n-cd nenv=n-env nfunctions=n-functions nhistory=n-history
+alias nkill=n-kill noptions=n-options npanelize=n-panelize nhelp=n-help
 
 # export
 export PYENV_ROOT="$HOME/.pyenv"
