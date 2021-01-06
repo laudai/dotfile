@@ -1,74 +1,78 @@
-" Author : laudai
-"
+"-------------------
+"| Author : laudai |
+"-------------------
 "
 " Use Vim settings, rather than Vi settings (much better!).
 " " This must be first, because it changes other options as a side effect.
+
+" VI Setting
+set number "nu"
+set relativenumber "rnu"
+"ai, 自動縮排，如果此行從第四字元開始，按下Enter後，下行就會從第四字元開始。Default is noai"
+set autoindent
+
+" VIM Setting
+"nocp, no compatible to vi,can use vim plugin.Default is nocp"
 set nocompatible
+set background=dark "bg"
+set t_Co=256 "number of colors"
+set laststatus=2 "ls, 下方的狀態橫Bar。Default is 1"
+set ruler "ru, 狀態列最右邊的資訊，共有Top, Bot, All, %"
+set shiftwidth=4 "sw, 使用>>的字元寬度，如果是0會使用tabstop設定"
+set softtabstop=4 "sts"
+set tabstop=4 "ts"
+"set expandtab=4 "et, 還不確定是什麼功能"
+set hlsearch "hls, highlith all its matches."
+" 將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
+" number<C-a> or number<C-x>
+set nrformats=
+" works likes bash shell
+" set wildmode=longest,list
+" works likes zsh
+set wildmenu "wmnu, default is off"
+set wildmode=full "wim, default is full"
+set history=200 "set history number, default is 50
+set incsearch "is, 即時前往符合搜尋條件的字,default is off"
+set pastetoggle=<F7> "pt, toggle vim paste mode"
 
 
-" 設定狀態
-
-set number
-set autoindent "自動縮排"
-set laststatus=2
-set t_Co=256
-set ruler
-
-" 設定背景
-set bg =dark
-
-" 設定軟體狀態
-set shiftwidth=4 ""bcz I write python , 
-set tabstop=4 ""bcz I write python
-set softtabstop=4
-
-" 設定插入模式中斷快速鍵
-imap jk <ESC>
-" 設定命令模式中斷快速鍵
-cmap jk <ESC>
-
-" 在插入模式重新edit檔案
-imap <C-]> <ESC>:e<CR>
-" 在普通模式重新edit檔案
-nmap <C-]> <ESC>:e<CR>
-
+" Keybindings
+" map-modes
+":map   :noremap  :unmap     Normal, Visual, Select, Operator-pending
+":nmap  :nnoremap :nunmap    Normal
+":vmap  :vnoremap :vunmap    Visual and Select
+":smap  :snoremap :sunmap    Select
+":xmap  :xnoremap :xunmap    Visual
+":omap  :onoremap :ounmap    Operator-pending
+":map!  :noremap! :unmap!    Insert and Command-line
+":imap  :inoremap :iunmap    Insert
+":lmap  :lnoremap :lunmap    Insert, Command-line, Lang-Arg
+":cmap  :cnoremap :cunmap    Command-line
+":tmap  :tnoremap :tunmap    Terminal-Job
+" nnoremap : Normal no recursion map
+map! jk <ESC>
+imap <C-]> <ESC>:e<CR> "re-edit this file in insert mode"
+nmap <C-]> <ESC>:e<CR> "re-edit this file in normal mode"
 " Insert newline without entering insert mode
 " https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
-" nnoremap normal no recursion map
 nn o o<Esc>k
 nn O O<Esc>j
+" Shifting blocks visually
+" https://vim.fandom.com/wiki/Shifting_blocks_visually
+vnoremap > >gv
+vnoremap < <gv
+nnoremap <Tab> >>_
+nnoremap <S-Tab> <<_
+inoremap <S-Tab> <C-D>
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
 
-
+"  VIM学习笔记 键盘映射 (Map)
+" http://yyq123.blogspot.com/2010/12/vim-map.html
 " 快捷鍵設定教學
 " 中文版	http://haoxiang.org/2011/09/vim-modes-and-mappin/
 " 英文版	https://medium.com/vim-drops/understand-vim-mappings-and-create-your-own-shortcuts-f52ee4a6b8ed
 
-
-" 設定搜尋顏色
-set hlsearch " it can set hls 
-
-" 將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
-" number<C-a> or number<C-x>
-set nrformats=
-
-" 設定自補全模式
-" 中文教學: http://www.yinqisen.cn/blog-729.html
-" works likes bash shell
-" set wildmode=longest,list
-
-" works likes zsh
-set wmnu
-" wildmenu synonym is wmnu
-set wim=full
-" wildmode synonym is wim
-
-" set history number, default is 50
-set history =200
-
-"set incsearch: 即時搜尋輸入的關鍵字
-
-" 設定vim paste 開關
-set pastetoggle=<F7>
 
 """ This is copy from vim74 example
 
@@ -108,7 +112,15 @@ endif " has("autocmd")
 
 
 " Python header
- autocmd BufNewFile *.py 0put =\"#!/usr/bin/env python\<nl>\"|$
- autocmd BufNewFile *.py 1put =\"# encoding: utf8\<nl>\"|$
- autocmd BufNewFile *.py 2put =\"# Author : laudai\<nl>\"|$
- autocmd BufNewFile *.py 3put =\"\<nl>\"|$
+autocmd BufNewFile *.py 0put =\"#!/usr/bin/env python\<nl>\"|$
+autocmd BufNewFile *.py 1put =\"# encoding: utf8\<nl>\"|$
+autocmd BufNewFile *.py 2put =\"# Author : laudai\<nl>\"|$
+autocmd BufNewFile *.py 3put =\"\<nl>\"|$
+
+" Vim’s absolute, relative and hybrid line numbers
+" https://jeffkreeftmeijer.com/vim-number/
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
