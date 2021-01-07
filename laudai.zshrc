@@ -87,10 +87,6 @@ plugins=(
 	zsh-navigation-tools
 )
 
-# Default ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
-# See more document via man zshzle
-# use colour 0~7 avoid terminal only supports 8 colors
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=5,bg=none,bold,underline"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -123,28 +119,67 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Keybindings
+#    __ __           __    _           ___
+#   / //_/__  __  __/ /_  (_)___  ____/ (_)___  ____ ______
+#  / ,< / _ \/ / / / __ \/ / __ \/ __  / / __ \/ __ `/ ___/
+# / /| /  __/ /_/ / /_/ / / / / / /_/ / / / / / /_/ (__  )
+#/_/ |_\___/\__, /_.___/_/_/ /_/\__,_/_/_/ /_/\__, /____/
+#          /____/                            /____/
+
+# keybindings
 bindkey '^[\' autosuggest-toggle # alt-\
 # How to switch comfortably to vi command mode on the zsh command line?
 # https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
 bindkey -M viins 'jk' vi-cmd-mode
+# zsh-navigation-tools  keybindings
+zle -N znt-cd-widget
+bindkey "^B" znt-cd-widget
+zle -N znt-kill-widget
+bindkey "^Y" znt-kill-widget
 # keybindings reference
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
 # https://github.com/ThiefMaster/zsh-config/blob/master/zshrc.d/keybinds.zsh
 
 
-# SETTING
+#   _____      __  __  _
+#  / ___/___  / /_/ /_(_)___  ____ _
+#  \__ \/ _ \/ __/ __/ / __ \/ __ `/
+# ___/ /  __/ /_/ /_/ / / / / /_/ /
+#/____/\___/\__/\__/_/_/ /_/\__, /
+#                          /____/
+
+# setting
 HIST_STAMPS="yyyy-mm-dd"
 
-# To remove any command from the zsh history file
-# this method is from https://goo.gl/sTPu62
-histrm() { LC_ALL=C sed --in-place '/$1/d' $HISTFILE }
+# Default ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+# See more document via man zshzle
+# use colour 0~7 avoid terminal only supports 8 colors
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=5,bg=none,bold,underline"
+
+# [zsh comments nearly invisible on command-line](https://unix.stackexchange.com/questions/577586/zsh-comments-nearly-invisible-on-command-line)
+# https://github.com/zsh-users/zsh-syntax-highlighting/tree/master/highlighters/main
+# Declare the variable
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[comment]="fg=white,bold,underline"
+ZSH_HIGHLIGHT_STYLES[builtin]="bg=green"
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]="bg=magenta"
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]="bg=magenta"
 
 # let urlview to use firefox browser to show
 if [ -e '/usr/bin/firefox' ] ; then
   export BROWSER='/usr/bin/firefox'
 fi
 
+#    ______                 __  _
+#   / ____/_  ______  _____/ /_(_)___  ____
+#  / /_  / / / / __ \/ ___/ __/ / __ \/ __ \
+# / __/ / /_/ / / / / /__/ /_/ / /_/ / / / /
+#/_/    \__,_/_/ /_/\___/\__/_/\____/_/ /_/
+
+# function
+# To remove any command from the zsh history file
+# this method is from https://goo.gl/sTPu62
+histrm() { LC_ALL=C sed --in-place '/$1/d' $HISTFILE }
 
 # cd folder and ls item at the same time
 # this method is from https://goo.gl/92NCHU
@@ -153,12 +188,19 @@ function cdls() {
   ls
 }
 
+# new folder and enter the folder
 function mkcdf() {
   mkdir $1 
   cd $1
-  # new folder and enter the folder
 }
 
+#     ___    ___
+#    /   |  / (_)___ ______
+#   / /| | / / / __ `/ ___/
+#  / ___ |/ / / /_/ (__  )
+# /_/  |_/_/_/\__,_/____/
+
+# alias
 # docker alias
 alias dcp="docker-compose"
 alias dcls="docker container ls"
@@ -182,13 +224,34 @@ alias grf="git reflog"
 alias wttrk="curl wttr.in/kaohsiung"
 alias wttrt="curl wttr.in/taipei"
 
-#  zsh-navigation-tools plugin alias
+# zsh-navigation-tools plugin alias
 alias naliases=n-aliases ncd=n-cd nenv=n-env nfunctions=n-functions nhistory=n-history
 alias nkill=n-kill noptions=n-options npanelize=n-panelize nhelp=n-help
+
+# suffix alias
+alias -s {md,py,text,vimrc,zshrc,conf}=vim
+alias -s sh=bash
+
+# global alais
+alias -g G="| grep -i"
+
+# edit and source config
+alias ez="$EDITOR $HOME/.zshrc"
+alias et="$EDITOR $HOME/.tmux.conf"
+alias ev="$EDITOR $HOME/.vimrc"
+alias sz="source $HOME/.zshrc"
+
+#    ______                      __
+#   / ____/  ______  ____  _____/ /_
+#  / __/ | |/_/ __ \/ __ \/ ___/ __/
+# / /____>  </ /_/ / /_/ / /  / /_
+#/_____/_/|_/ .___/\____/_/   \__/
 
 # export
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
+export EDITOR="vim"
+export VISUAL="$EDITOR"
 
 # pyenv , pyenv virtualenv initalize
 if command -v pyenv 1>/dev/null 2>&1; then
