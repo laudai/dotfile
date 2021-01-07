@@ -61,11 +61,9 @@ nn O O<Esc>j
 " https://vim.fandom.com/wiki/Shifting_blocks_visually
 vnoremap > >gv
 vnoremap < <gv
-nnoremap <Tab> >>_
-nnoremap <S-Tab> <<_
 inoremap <S-Tab> <C-D>
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
+vnoremap <Tab> >v
+vnoremap <S-Tab> <v
 
 "  VIM学习笔记 键盘映射 (Map)
 " http://yyq123.blogspot.com/2010/12/vim-map.html
