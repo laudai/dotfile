@@ -1,3 +1,12 @@
+#     _                    ____
+#  \_|_)                  (|   \       o
+#    |     __,             |    | __,
+#   _|    /  |  |   |     _|    |/  |  |
+#  (/\___/\_/|_/ \_/|_/  (/\___/ \_/|_/|_/
+#
+#  Github : https://github.com/laudai
+#  Medium : https://laudaihe.medium.com/
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 

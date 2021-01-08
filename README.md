@@ -1,23 +1,29 @@
 LauDai dotfile config
 ===
-Author: LauDai
+**_Author : LauDai_**
 
-How to use tmux
+**Contents**
+* <a href=#tag-tmux>How to use tmux</a>
+	* <a href=#tag-tmux-Colors>Colors</a>
+	* <a href=#tag-tmux-keybindings>My tmux keybindings</a>
+	* <a href=#tag-tmux-screenshot>tmux screenshot</a>
+* <a href=#tag-zsh>Zsh</a>
+
+# <a id="tag-tmux" href="#tag-tmux">How to use tmux</a>
 ---
+*My tmux configure is running in tmux 3.0a version*
 
-*My tmux configure is running in tmux 2.5 version*
-
-#### Colors
+## <a id="tag-tmux-Color" href=#tag-tmux-Colors>Colors</a>
 In tmux Manual
 ```
 The colour is one of: black, red, green, yellow, blue, magenta, cyan, white, aixterm bright variants (if supported: brightred, brightgreen, and so on), colour0 to colour255 from the 256-colour set, default, or a hexadecimal RGB string such as ‘#ffffff’, which chooses the closest match from the default 256-colour set.
 ```
 #### Check your terminal color support colors
-There are two file can test your terminal color
+There are two file can test your terminal color.
 
 `$bash color_test1.sh`
 or
-`$bash color_test1.sh`
+`$bash color_test2.sh`
 
 #### You can type in ternimal to show your ternimal supoort colors
 `$tput colors`
@@ -36,8 +42,7 @@ Show tmux bind kyes
 or
 `:list-keys`
 
-
-**My addition keybind**
+## <a id="#tag-tmux-keybindings" href=#tag-tmux-keybindings>My tmux keybindings</a>
 ---
 ```
 <prefix> C : creat a new windw from current path to  next index
@@ -68,21 +73,17 @@ C-S-Down :add 50 lines to down
 C-S-Left : add 50 lines to left
 C-S-Right : add 50 lines to right
 ```
-M- which is the Meta key (i.e. Alt on most keyboards)
-S- means Shift key
+M - which is the Meta key (i.e. Alt on most keyboards) <br>
+S - means Shift key <br>
 
 **In copy-mode**
 
->All copy-mode use VI-mode
-plugins use plugin tmux-yank
+> Copy-mode use vi-mode, use tmux-yank plugin.
 
 in copy-mode-vi will binding `Space` key to send begin-selection<br/>
 `bind-key    -T copy-mode-vi Space             send-keys -X begin-selection`
 
-you can open a highlighted text in copy-mode via press `o` or `Ctrl-o` to open file by `xdg-open` or `$EDITOR` respectively .
-power by tmux-open pulgin
-
-Screenshot for tmux
+## <a id="#tag-tmux-screenshot" href=#tag-tmux-screenshot>tmux screenshot</a>
 ![tmux2.5 screenshoot](screenshot/tmux2.5.png)
 
 You can find more example tmux.conf from
@@ -90,20 +91,22 @@ You can find more example tmux.conf from
 
 Requirements
 ---
-#### for workspace.sh
+#### For workspace.sh
 all you can get via `sudo apt install `
 * `ipython3`, `htop`, `speedtest-cli`, `glances`, `mc`, `screenfetch`
 * `fortunes`, `lolcat`, `cowsay`, `cmatrix`
 
-#### for tmux plugin
+#### For tmux plugin
 * `xsel` (recommended) or `xclip` for tmux-yank
 * `urlview` for tmux-urlview
 * `iostat` or `sar` (Optional requirement) for tmux-cpu
 
----
+You can open a highlighted text in copy-mode via press `o` or `Ctrl-o` to open file by `xdg-open` or `$EDITOR` respectively .Power by tmux-open pulgin
+
+# <a href=#tag-zsh>Zsh</a>
 My zsh plugins
 ---
-```git pip python systemd tmux docker docker-compose encode64 zsh-autosuggestions autojump zsh-syntax-highlighting sudo vscode```
+```git pip python systemd tmux docker docker-compose encode64 autojump zsh-autosuggestions zsh-syntax-highlighting sudo vscode vi-mode zsh-navigation-tools```
 
 ##### tmux_note.txt is a file that remind some tmux setting
 ##### zshrc.zsh-template.orig is the oh-my-zsh template original file backup.

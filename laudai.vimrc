@@ -1,7 +1,12 @@
-"-------------------
-"| Author : laudai |
-"-------------------
+"     _                    ____
+"  \_|_)                  (|   \       o
+"    |     __,             |    | __,
+"   _|    /  |  |   |     _|    |/  |  |
+"  (/\___/\_/|_/ \_/|_/  (/\___/ \_/|_/|_/
 "
+"  Github : https://github.com/laudai
+"  Medium : https://laudaihe.medium.com/
+
 " Use Vim settings, rather than Vi settings (much better!).
 " " This must be first, because it changes other options as a side effect.
 
