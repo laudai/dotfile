@@ -174,6 +174,10 @@ ZSH_HIGHLIGHT_STYLES[builtin]="bg=green"
 ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]="bg=magenta"
 ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]="bg=magenta"
 
+VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+VI_MODE_SET_CURSOR=true
+MODE_INDICATOR='%B%F{blue}<%b<<%f'
+
 # let urlview to use firefox browser to show
 if [ -e '/usr/bin/firefox' ] ; then
   export BROWSER='/usr/bin/firefox'
@@ -238,7 +242,7 @@ alias naliases=n-aliases ncd=n-cd nenv=n-env nfunctions=n-functions nhistory=n-h
 alias nkill=n-kill noptions=n-options npanelize=n-panelize nhelp=n-help
 
 # suffix alias
-alias -s {md,py,text,vimrc,zshrc,conf}=vim
+alias -s {md,py,txt,vimrc,zshrc,conf}=vim
 alias -s sh=bash
 
 # global alais
