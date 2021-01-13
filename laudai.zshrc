@@ -140,6 +140,9 @@ bindkey '^[\' autosuggest-toggle # alt-\
 # How to switch comfortably to vi command mode on the zsh command line?
 # https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
 bindkey -M viins 'jk' vi-cmd-mode
+bindkey -M viins '^[e' select-emacs
+bindkey -M vicmd '^[e' select-emacs
+bindkey -M emacs '^[v' select-vi
 # zsh-navigation-tools  keybindings
 zle -N znt-cd-widget
 bindkey "^B" znt-cd-widget
@@ -206,6 +209,19 @@ function mkcdf() {
   mkdir $1 
   cd $1
 }
+
+# change to vim insert mode and use emacs keymap
+function select-emacs() {
+  zle vi-insert
+  set -o emacs
+}
+zle -N select-emacs
+
+# use vi keymap
+function select-vi() {
+  set -o vi
+}
+zle -N select-vi
 
 #     ___    ___
 #    /   |  / (_)___ ______
