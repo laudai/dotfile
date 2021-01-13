@@ -39,6 +39,8 @@ set wildmode=full "wim, default is full"
 set history=200 "set history number, default is 50
 set incsearch "is, 即時前往符合搜尋條件的字,default is off"
 set pastetoggle=<F7> "pt, toggle vim paste mode"
+" enable X11-based-system clipboard, In Ubuntu & Debian, u need install vim-gtk3
+set clipboard=unnamedplus
 
 
 " Keybindings
