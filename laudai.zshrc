@@ -143,6 +143,8 @@ bindkey -M viins 'jk' vi-cmd-mode
 bindkey -M viins '^[e' select-emacs
 bindkey -M vicmd '^[e' select-emacs
 bindkey -M emacs '^[v' select-vi
+bindkey -M vicmd " e" end-of-line
+bindkey -M vicmd " a" beginning-of-line
 # zsh-navigation-tools  keybindings
 zle -N znt-cd-widget
 bindkey "^B" znt-cd-widget
@@ -240,6 +242,7 @@ alias cls="printf '\033c'"
 alias gquit="gnome-session-quit"
 alias gquit--no-prompt="gnome-session-quit --no-prompt"
 alias dotfile="cd ~/.dotfile"
+alias li="set -o | grep 'emacs\|^vi'"
 
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
