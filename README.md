@@ -44,12 +44,19 @@ or
 
 ## <a id="tag-tmux-keybindings" href=#tag-tmux-keybindings>My tmux keybindings</a>
 ---
+My prefix setting is C-a
 ```
+<prefix> | : split window horizontal 	(origin path)
+<prefix> _ : split window vertical 		(origin path)
+<prefix> \ : split window horizontal 	(current path)
+<prefix> - : split window vertical 		(current path)
 <prefix> C : creat a new windw from current path to  next index
 <prefix> C-b : clear screen & screen history
+<prefix> = : choose buffer (no zoom to window)
 M-k : confirm before kill current session
 <prefix> C-k : confirm before kill current window
-C-o : rotate the current window
+<prefix> C-o : rotate the current window upward 	(repeat)
+<prefix> M-o : rotate the current window downward 	(repeat)
 M-| : set layout main vertical
 M-_ : set layout main horizontal
 C-| : set layout even horizontal
