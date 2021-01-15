@@ -72,6 +72,22 @@ inoremap <S-Tab> <C-D>
 vnoremap <Tab> >v
 vnoremap <S-Tab> <v
 
+" <Leader> mapleader, <Leader> key default is '\'
+let mapleader="\<space>"
+nmap <Leader>n :noh<CR>
+nmap <Leader>q <ESC>:cq<CR>
+nmap <Leader>w <ESC>:w<CR>
+nnoremap <leader>ev :vsp ~/.vimrc<CR>
+nnoremap <leader>r :reg<CR>
+nnoremap <leader>rr :source ~/.vimrc<CR>
+" use system clipboard, also u can use xsel,xclip command.
+noremap <Leader>y "+y
+noremap <Leader>p "+p
+noremap <Leader>P "+P
+noremap <Leader>d "+dd
+inoremap <C-v> <ESC>"+pa
+vnoremap <C-c> "+y
+vnoremap <C-d> "+d
 "  VIM学习笔记 键盘映射 (Map)
 " http://yyq123.blogspot.com/2010/12/vim-map.html
 " 快捷鍵設定教學
