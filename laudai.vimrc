@@ -62,8 +62,8 @@ imap <C-]> <ESC>:e<CR> "re-edit this file in insert mode"
 nmap <C-]> <ESC>:e<CR> "re-edit this file in normal mode"
 " Insert newline without entering insert mode
 " https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
-nn o o<Esc>k
-nn O O<Esc>j
+nnoremap o o<Esc>k
+nnoremap O O<Esc>j
 " Shifting blocks visually
 " https://vim.fandom.com/wiki/Shifting_blocks_visually
 vnoremap > >gv
@@ -80,6 +80,9 @@ nmap <Leader>w <ESC>:w<CR>
 nnoremap <leader>ev :vsp ~/.vimrc<CR>
 nnoremap <leader>r :reg<CR>
 nnoremap <leader>rr :source ~/.vimrc<CR>
+nnoremap <C-p> :bp<CR>
+nnoremap <C-n> :bn<CR>
+
 " use system clipboard, also u can use xsel,xclip command.
 noremap <Leader>y "+y
 noremap <Leader>p "+p
