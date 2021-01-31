@@ -88,13 +88,16 @@ plugins=(
 	docker-compose
 	encode64
 	autojump
+	history-substring-search
 	zsh-autosuggestions
 	zsh-syntax-highlighting
 	sudo
 	vscode
 	vi-mode
 	zsh-navigation-tools
+	git-open
 )
+# plugin history-substring-search should load before zsh-syntax-highlighting to avoid syantax error
 
 
 source $ZSH/oh-my-zsh.sh
@@ -137,14 +140,17 @@ source $ZSH/oh-my-zsh.sh
 
 # keybindings
 bindkey '^[\' autosuggest-toggle # alt-\
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
 # How to switch comfortably to vi command mode on the zsh command line?
 # https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
 bindkey -M viins 'jk' vi-cmd-mode
-bindkey -M viins '^[e' select-emacs
-bindkey -M vicmd '^[e' select-emacs
-bindkey -M emacs '^[v' select-vi
+bindkey -M viins '^[e' _select-emacs
+bindkey -M vicmd '^[e' _select-emacs
+bindkey -M emacs '^[v' _select-vi
 bindkey -M vicmd " e" end-of-line
 bindkey -M vicmd " a" beginning-of-line
+bindkey -s '^[d' '^Uexit^M'
 # zsh-navigation-tools  keybindings
 zle -N znt-cd-widget
 bindkey "^B" znt-cd-widget
@@ -183,10 +189,6 @@ VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 VI_MODE_SET_CURSOR=true
 MODE_INDICATOR='%B%F{blue}<%b<<%f'
 
-# let urlview to use firefox browser to show
-if [ -e '/usr/bin/firefox' ] ; then
-  export BROWSER='/usr/bin/firefox'
-fi
 
 #    ______                 __  _
 #   / ____/_  ______  _____/ /_(_)___  ____
@@ -195,6 +197,7 @@ fi
 #/_/    \__,_/_/ /_/\___/\__/_/\____/_/ /_/
 
 # function
+# Function name with an underscore to not user-callable function.
 # To remove any command from the zsh history file
 # this method is from https://goo.gl/sTPu62
 histrm() { LC_ALL=C sed --in-place '/$1/d' $HISTFILE }
@@ -213,17 +216,17 @@ function mkcdf() {
 }
 
 # change to vim insert mode and use emacs keymap
-function select-emacs() {
+function _select-emacs() {
   zle vi-insert
   set -o emacs
 }
-zle -N select-emacs
+zle -N _select-emacs
 
 # use vi keymap
-function select-vi() {
+function _select-vi() {
   set -o vi
 }
-zle -N select-vi
+zle -N _select-vi
 
 #     ___    ___
 #    /   |  / (_)___ ______
@@ -243,6 +246,7 @@ alias gquit="gnome-session-quit"
 alias gquit--no-prompt="gnome-session-quit --no-prompt"
 alias dotfile="cd ~/.dotfile"
 alias li="set -o | grep 'emacs\|^vi'"
+alias di="dirs -v"
 
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
@@ -265,6 +269,8 @@ alias -s {md,py,txt,vimrc,zshrc,conf}=vim
 alias -s sh=bash
 
 # global alais
+# https://thorsten-hans.com/5-types-of-zsh-aliases
+# e.g. cd && ls -l G do
 alias -g G="| grep -i"
 
 # edit and source config
@@ -284,6 +290,12 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export EDITOR="vim"
 export VISUAL="$EDITOR"
+export MYVIMRC="$HOME/.vimrc"
+
+# let urlview to use firefox browser to show
+if [ -e '/usr/bin/firefox' ] ; then
+  export BROWSER='/usr/bin/firefox'
+fi
 
 # pyenv , pyenv virtualenv initalize
 if command -v pyenv 1>/dev/null 2>&1; then

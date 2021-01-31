@@ -82,6 +82,8 @@ C-S-Right : add 50 lines to right
 ```
 M - which is the Meta key (i.e. Alt on most keyboards) <br>
 S - means Shift key <br>
+※ Note: Can't send C-| to putty, windows terminal and MobaXterm. Maybe this is a bug!?
+※ Note: Can't send <prefix> C-h in MobaXterm. Maybe this is a bug in MobaXterm!?
 
 **In copy-mode**
 
@@ -113,7 +115,7 @@ You can open a highlighted text in copy-mode via press `o` or `Ctrl-o` to open f
 # <a id="tag-zsh" href=#tag-zsh>Zsh</a>
 My zsh plugins
 ---
-```git pip python systemd tmux docker docker-compose encode64 autojump zsh-autosuggestions zsh-syntax-highlighting sudo vscode vi-mode zsh-navigation-tools```
+```git pip python systemd tmux docker docker-compose encode64 autojump history-substring-search zsh-autosuggestions zsh-syntax-highlighting sudo vscode vi-mode zsh-navigation-tools git-open```
 
 ##### tmux_note.txt is a file that remind some tmux setting
 ##### zshrc.zsh-template.orig is the oh-my-zsh template original file backup.
