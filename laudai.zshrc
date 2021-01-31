@@ -140,8 +140,13 @@ source $ZSH/oh-my-zsh.sh
 
 # keybindings
 bindkey '^[\' autosuggest-toggle # alt-\
+bindkey -s '^[d' '^Uexit^M'
 bindkey '^P' history-substring-search-up
 bindkey '^N' history-substring-search-down
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'h' vi-backward-char
 # How to switch comfortably to vi command mode on the zsh command line?
 # https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
 bindkey -M viins 'jk' vi-cmd-mode
@@ -150,7 +155,6 @@ bindkey -M vicmd '^[e' _select-emacs
 bindkey -M emacs '^[v' _select-vi
 bindkey -M vicmd " e" end-of-line
 bindkey -M vicmd " a" beginning-of-line
-bindkey -s '^[d' '^Uexit^M'
 # zsh-navigation-tools  keybindings
 zle -N znt-cd-widget
 bindkey "^B" znt-cd-widget
