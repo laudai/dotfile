@@ -104,8 +104,8 @@ nnoremap <leader>r :reg<CR>
 nnoremap <leader>rr :source ~/.vimrc<CR>
 
 " use system clipboard, also u can use xsel,xclip command.
-noremap <Leader>y "+yy
-noremap <Leader>p "+p
+noremap <Leader>y "+y
+noremap <Leader>p "0p
 noremap <Leader>P "+P
 noremap <Leader>x "_x
 noremap <Leader>d "+dd
