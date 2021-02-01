@@ -14,3 +14,12 @@ code --install-extension coenraads.bracket-pair-colorizer-2
 code --install-extension vscodevim.vim
 code --install-extension DavidAnson.vscode-markdownlint
 code --install-extension shd101wyy.markdown-preview-enhanced
+code --install-extension formulahendry.auto-rename-tag
+code --install-extension aaron-bond.better-comments
+code --install-extension alefragnani.bookmarks
+code --install-extension github.vscode-pull-request-github
+code --install-extension eamodio.gitlens
+code --install-extension ritwickdey.liveserver
+code --install-extension patbenatar.advanced-new-file
+code --install-extension equinusocio.vsc-material-theme
+code --install-extension pkief.material-icon-theme
