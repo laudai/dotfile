@@ -23,3 +23,4 @@ code --install-extension ritwickdey.liveserver
 code --install-extension patbenatar.advanced-new-file
 code --install-extension equinusocio.vsc-material-theme
 code --install-extension pkief.material-icon-theme
+code --install-extension ms-vscode-remote.remote-ssh
