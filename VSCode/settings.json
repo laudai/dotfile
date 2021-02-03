@@ -38,6 +38,7 @@
   "vim.incsearch": true,
   "vim.leader": "<space>",
   "vim.useSystemClipboard": true,
+  "vim.handleKeys": { "<C-k>": false },
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "before": ["<leader>", "n"],
