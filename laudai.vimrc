@@ -75,8 +75,12 @@ vnoremap < <gv
 inoremap <S-Tab> <C-D>
 vnoremap <Tab> >v
 vnoremap <S-Tab> <v
-nnoremap <C-p> :bp<CR>
-nnoremap <C-n> :bn<CR>
+map <ESC>n <M-n>
+map <ESC>p <M-p>
+nnoremap <M-n> :tabn<CR> \| :echo 'Change to next tab'<CR>
+nnoremap <M-p> :tabp<CR> \| :echo 'Change to previous tab'<CR>
+nnoremap <C-p> :bp<CR> \| :echo 'Change to previous buffer'<CR>
+nnoremap <C-n> :bn<CR> \| :echo 'Change to next buffer'<CR>
 nmap q; q:
 nmap ;q :q<CR>
 " Toggle Cursorline on/off with one key press
@@ -102,6 +106,7 @@ nmap <Leader>w <ESC>:w<CR>
 nnoremap <leader>ev :vsp ~/.vimrc<CR>
 nnoremap <leader>r :reg<CR>
 nnoremap <leader>rr :source ~/.vimrc<CR>
+nmap <leader>dd :bd<CR>
 
 " use system clipboard, also u can use xsel,xclip command.
 noremap <Leader>y "+y

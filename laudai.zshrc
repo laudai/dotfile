@@ -79,23 +79,23 @@ ZSH_THEME="cloud"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	git
-	pip
-	python
-	systemd
-	tmux
-	docker
-	docker-compose
-	encode64
-	autojump
-	history-substring-search
-	zsh-autosuggestions
-	zsh-syntax-highlighting
-	sudo
-	vscode
-	vi-mode
-	zsh-navigation-tools
-	git-open
+    git
+    pip
+    python
+    systemd
+    tmux
+    docker
+    docker-compose
+    encode64
+    autojump
+    history-substring-search
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    sudo
+    vscode
+    vi-mode
+    zsh-navigation-tools
+    git-open
 )
 # plugin history-substring-search should load before zsh-syntax-highlighting to avoid syantax error
 
@@ -215,7 +215,7 @@ function cdls() {
 
 # new folder and enter the folder
 function mkcdf() {
-  mkdir $1 
+  mkdir $1
   cd $1
 }
 
