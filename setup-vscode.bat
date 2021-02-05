@@ -5,7 +5,7 @@ echo.
 echo Check User/Documents/dotfile path if exist?
 IF exist %USERPROFILE%\Documents\dotfile (echo Yes!) ELSE (echo oh no QAQ)
 echo.
-IF exist %USERPROFILE%\Documents\dotfiles (
+IF exist %USERPROFILE%\Documents\dotfile (
 ::MKLINK [[/D] | [/H] | [/J]] Link Target
     mklink /H %AppData%\Code\User\settings.json %USERPROFILE%\Documents\dotfile\VSCode\settings.json
     mklink /H %AppData%\Code\User\keybindings.json %USERPROFILE%\Documents\dotfile\VSCode\keybindings.json
