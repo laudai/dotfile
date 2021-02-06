@@ -33,26 +33,86 @@
   "[Log]": {
     "editor.fontSize": 20
   },
+  // Specific File Formatter
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
   // vim setting
   "vim.hlsearch": true,
   "vim.incsearch": true,
   "vim.leader": "<space>",
   "vim.useSystemClipboard": true,
-  "vim.handleKeys": { "<C-k>": false },
+  "vim.handleKeys": {
+    "<C-k>": false
+  },
   "vim.normalModeKeyBindingsNonRecursive": [
     {
-      "before": ["<leader>", "n"],
-      "commands": [":noh"]
+      "before": [
+        "<leader>",
+        "n"
+      ],
+      "commands": [
+        ":noh"
+      ]
     },
     {
-      "before": ["<leader>", "w"],
-      "commands": [":w"]
-    }
+      "before": [
+        "<leader>",
+        "w"
+      ],
+      "commands": [
+        ":w"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "t",
+        "t"
+      ],
+      "commands": [
+        ":tabe"
+        //workbench.action.files.newUntitledFile
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "o"
+      ],
+      "commands": [
+        ":tabo"
+        //@command:workbench.action.closeOtherEditors
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "p"
+      ],
+      "commands": [
+        "workbench.action.showCommands"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "t"
+      ],
+      "commands": [
+        "workbench.action.gotoSymbol"
+      ]
+    },
   ],
   "vim.insertModeKeyBindings": [
     {
-      "before": ["j", "k"],
-      "after": ["<Esc>"]
+      "before": [
+        "j",
+        "k"
+      ],
+      "after": [
+        "<Esc>"
+      ]
     }
-  ]
+  ],
 }
