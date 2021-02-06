@@ -83,6 +83,15 @@ nnoremap <C-p> :bp<CR> \| :echo 'Change to previous buffer'<CR>
 nnoremap <C-n> :bn<CR> \| :echo 'Change to next buffer'<CR>
 nmap q; q:
 nmap ;q :q<CR>
+map <ESC>j <M-j>
+map <ESC>k <M-k>
+nn <M-j> 5j \| :echo 'Downward 5 linewise.'<CR>
+nn <M-k> 5k \| :echo 'Upward 5 linewise.'<CR>
+nn <C-j> <C-w>j
+nn <C-k> <C-w>k
+nn <C-l> <C-w>l
+nn <C-h> <C-w>h
+
 " Toggle Cursorline on/off with one key press
 " https://stackoverflow.com/questions/1497404/toggle-cursorline-on-off-with-one-key-press
 " Mapping 'fast' keycodes
@@ -97,16 +106,22 @@ map <ESC>[1;5Q <C-F2>
 map <C-F2> :set cursorcolumn!<CR>
 map <ESC>[1;6Q <C-S-F2>
 map <C-S-F2> :set cursorcolumn!<Bar>set cursorline!<CR>
+" Toggle relativenumber
+map <ESC>[1;6R <C-S-F3>
+map <C-S-F3> :set rnu!<CR>
 
-" <Leader> mapleader, <Leader> key default is '\'
+" <leader> mapleader, <leader> key default is '\'
 let mapleader="\<space>"
-nmap <Leader>n :noh<CR>
-nmap <Leader>q <ESC>:cq<CR>
-nmap <Leader>w <ESC>:w<CR>
+nmap <leader>n :noh<CR>
+nmap <leader>qq <ESC>:cq<CR>
+nmap <leader>c <ESC>:tabc<CR>
+nmap <leader>w <ESC>:w<CR>
 nnoremap <leader>ev :vsp ~/.vimrc<CR>
 nnoremap <leader>r :reg<CR>
 nnoremap <leader>rr :source ~/.vimrc<CR>
 nmap <leader>dd :bd<CR>
+nmap <leader>tt :tabe<CR>
+nmap <leader>to :tabo<CR>
 
 " use system clipboard, also u can use xsel,xclip command.
 noremap <Leader>y "+y
