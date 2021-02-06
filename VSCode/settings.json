@@ -33,6 +33,9 @@
   "[Log]": {
     "editor.fontSize": 20
   },
+  "breadcrumbs.enabled": true, // The editor has a navigation bar above its contents called Breadcrumbs.
+  "zenMode.hideStatusBar": false,
+  "zenMode.hideTabs": false,
   // Specific File Formatter
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
