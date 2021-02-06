@@ -53,7 +53,7 @@ My prefix setting is C-a
 <prefix> C : creat a new windw from current path to  next index
 <prefix> C-b : clear screen & screen history
 <prefix> = : choose buffer (no zoom to window)
-M-k : confirm before kill current session
+<prefix> M-k : confirm before kill current session
 <prefix> C-k : confirm before kill current window
 <prefix> C-o : rotate the current window upward 	(repeat)
 <prefix> M-o : rotate the current window downward 	(repeat)
