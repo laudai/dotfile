@@ -159,6 +159,8 @@ Plug 'wellle/targets.vim'
 " Developing python with vim, what plugin to choose? (python-mode vs. jedi-vim)
 Plug 'davidhalter/jedi-vim'
 " Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'easymotion/vim-easymotion'
+Plug 'justinmk/vim-sneak'
 "
 " Initialize plugin system
 call plug#end()
