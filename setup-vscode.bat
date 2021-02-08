@@ -7,9 +7,12 @@ IF exist %USERPROFILE%\Documents\dotfile (echo Yes!) ELSE (echo oh no QAQ)
 echo.
 IF exist %USERPROFILE%\Documents\dotfile (
 ::MKLINK [[/D] | [/H] | [/J]] Link Target
-    mklink /H %AppData%\Code\User\settings.json %USERPROFILE%\Documents\dotfile\VSCode\settings.json
-    mklink /H %AppData%\Code\User\keybindings.json %USERPROFILE%\Documents\dotfile\VSCode\keybindings.json
-    mklink /H %AppData%\Code\User\snippets\python.json %USERPROFILE%\Documents\dotfile\VSCode\python.json
+    rem Use Symbolic link to link file
+    :: Windows下硬連結、軟連結和快捷方式
+    :: http://www.4i4u.com/blog/windows-link-shortcut/
+    mklink %AppData%\Code\User\settings.json %USERPROFILE%\Documents\dotfile\VSCode\settings.json
+    mklink %AppData%\Code\User\keybindings.json %USERPROFILE%\Documents\dotfile\VSCode\keybindings.json
+    mklink %AppData%\Code\User\snippets\python.json %USERPROFILE%\Documents\dotfile\VSCode\python.json
     code --install-extension ms-python.python
     code --install-extension tht13.python
     code --install-extension ms-ceintl.vscode-language-pack-zh-hant
