@@ -3,10 +3,6 @@
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
   "python.jediEnabled": true,
   "python.languageServer": "Jedi",
-  "window.zoomLevel": 0,
-  // Terminal Setting
-  "terminal.integrated.fontFamily": "'Fira Code', 'DejaVu Sans Mono','Monospace'", //字型
-  "terminal.integrated.fontSize": 16, //字體大小
   // Editor Setting
   "editor.fontLigatures": true,
   "editor.fontSize": 16, //編輯區字體大小
@@ -28,11 +24,18 @@
     "editor.selectionBackground": "#5A5AAD",
     "editor.findMatchHighlightBackground": "#8C8C00"
   },
-  // Window
-  "window.menuBarVisibility": "toggle", //按alt開關功能列表
+  // Panel
+  // Panel - Terminal Setting
+  "terminal.integrated.fontFamily": "'Fira Code', 'DejaVu Sans Mono','Monospace'", //字型
+  "terminal.integrated.fontSize": 16, //字體大小
+  // Panel - Output
   "[Log]": {
-    "editor.fontSize": 20
+    // Source : https://igorbrejc.net/vscode-output-font-size
+    "editor.fontSize": 16
   },
+  // Misc
+  "window.zoomLevel": 0,
+  "window.menuBarVisibility": "toggle", //按alt開關功能列表
   "breadcrumbs.enabled": true, // The editor has a navigation bar above its contents called Breadcrumbs.
   "zenMode.hideStatusBar": false,
   "zenMode.hideTabs": false,
