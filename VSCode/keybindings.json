@@ -48,5 +48,21 @@
   {
     "key": "ctrl+pagedown",
     "command": "-workbench.action.nextEditor"
+  },
+  {
+    "key": "ctrl+k /",
+    "command": "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
+  },
+  {
+    "key": "ctrl+tab",
+    "command": "-workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
+  },
+  {
+    "key": "ctrl+k ctrl+/",
+    "command": "workbench.action.quickOpenLeastRecentlyUsedEditorInGroup"
+  },
+  {
+    "key": "ctrl+shift+tab",
+    "command": "-workbench.action.quickOpenLeastRecentlyUsedEditorInGroup"
   }
 ]
