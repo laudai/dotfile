@@ -82,7 +82,7 @@ nnoremap <M-p> :tabp<CR> \| :echo 'Change to previous tab'<CR>
 nnoremap <C-p> :bp<CR> \| :echo 'Change to previous buffer'<CR>
 nnoremap <C-n> :bn<CR> \| :echo 'Change to next buffer'<CR>
 nmap q; q:
-nmap ;q :q<CR>
+nmap qq :q<CR>
 map <ESC>j <M-j>
 map <ESC>k <M-k>
 nn <M-j> 5j \| :echo 'Downward 5 linewise.'<CR>
