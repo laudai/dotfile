@@ -55,6 +55,15 @@
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "before": [
+        "q",
+        "q"
+      ],
+      "commands": [
+        "workbench.action.closeActiveEditor"
+      ]
+    },
+    {
+      "before": [
         "<leader>",
         "n"
       ],
@@ -65,10 +74,39 @@
     {
       "before": [
         "<leader>",
+        "q",
+        "q"
+      ],
+      "commands": [
+        ":q!"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
         "w"
       ],
       "commands": [
         ":w"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "r"
+      ],
+      "commands": [
+        ":reg"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "r",
+        "r"
+      ],
+      "commands": [
+        "workbench.action.reloadWindow"
       ]
     },
     {
@@ -85,6 +123,7 @@
     {
       "before": [
         "<leader>",
+        "t",
         "o"
       ],
       "commands": [
@@ -113,13 +152,21 @@
     {
       "before": [
         "<leader>",
-        "q",
-        "q"
+        "m"
       ],
       "commands": [
-        "workbench.action.closeActiveEditor"
+        "bookmarks.toggle"
       ]
     },
+    {
+      "before": [
+        "<leader>",
+        "b"
+      ],
+      "commands": [
+        "bookmarks.list"
+      ]
+    }
   ],
   "vim.insertModeKeyBindings": [
     {
