@@ -19,7 +19,7 @@ set autoindent
 
 " VIM Setting
 "nocp, no compatible to vi,can use vim plugin.Default is nocp"
-set nocompatible
+set nocompatible "disable backwards compatibility with vi
 set background=dark "bg"
 set t_Co=256 "number of colors"
 set laststatus=2 "ls, 下方的狀態橫Bar。Default is 1"
@@ -42,6 +42,7 @@ set incsearch "is, 即時前往符合搜尋條件的字,default is off"
 set pastetoggle=<F7> "pt, toggle vim paste mode"
 " enable X11-based-system clipboard, In Ubuntu & Debian, u need install vim-gtk3
 set clipboard=unnamedplus
+filetype plugin indent on " enable filetype plugins and indent
 
 " Highlight setting
 highlight CursorLine cterm=bold,underline ctermbg=black ctermfg=None
@@ -91,6 +92,9 @@ nn <C-j> <C-w>j
 nn <C-k> <C-w>k
 nn <C-l> <C-w>l
 nn <C-h> <C-w>h
+nn ;; :
+nn H ^
+nn L g_
 
 " Toggle Cursorline on/off with one key press
 " https://stackoverflow.com/questions/1497404/toggle-cursorline-on-off-with-one-key-press
@@ -122,6 +126,9 @@ nnoremap <leader>rr :source ~/.vimrc<CR>
 nmap <leader>dd :bd<CR>
 nmap <leader>tt :tabe<CR>
 nmap <leader>to :tabo<CR>
+nn <leader>H H
+nn <leader>M M
+nn <leader>L L
 
 " use system clipboard, also u can use xsel,xclip command.
 noremap <Leader>y "+y
