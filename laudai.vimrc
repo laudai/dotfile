@@ -29,6 +29,9 @@ set softtabstop=4 "sts"
 set tabstop=4 "ts"
 "set expandtab=4 "et, 還不確定是什麼功能"
 set hlsearch "hls, highlith all its matches."
+set incsearch "is, 即時前往符合搜尋條件的字
+set ignorecase "ic, 忽略大小寫
+set smartcase "scs, 智慧搜尋
 " 將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
 " number<C-a> or number<C-x>
 set nrformats=
@@ -38,7 +41,6 @@ set nrformats=
 set wildmenu "wmnu, default is off"
 set wildmode=full "wim, default is full"
 set history=200 "set history number, default is 50
-set incsearch "is, 即時前往符合搜尋條件的字,default is off"
 set pastetoggle=<F7> "pt, toggle vim paste mode"
 " enable X11-based-system clipboard, In Ubuntu & Debian, u need install vim-gtk3
 set clipboard=unnamedplus
@@ -46,6 +48,9 @@ filetype plugin indent on " enable filetype plugins and indent
 
 " Highlight setting
 highlight CursorLine cterm=bold,underline ctermbg=black ctermfg=None
+
+" Abbreviations setting ,ab
+iab [] []()<left><left><left>
 
 
 " Keybindings
@@ -64,11 +69,11 @@ highlight CursorLine cterm=bold,underline ctermbg=black ctermfg=None
 " nnoremap : Normal no recursion map
 map! jk <ESC>
 imap <C-]> <ESC>:e<CR> "re-edit this file in insert mode"
-nmap <C-]> <ESC>:e<CR> "re-edit this file in normal mode"
+inoremap <C-v><C-v> <C-v>
 " Insert newline without entering insert mode
 " https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
-nnoremap o o<Esc>k
-nnoremap O O<Esc>j
+nnoremap oo o<Esc>k
+nnoremap OO O<Esc>j
 " Shifting blocks visually
 " https://vim.fandom.com/wiki/Shifting_blocks_visually
 vnoremap > >gv
@@ -82,17 +87,22 @@ nnoremap <M-n> :tabn<CR> \| :echo 'Change to next tab'<CR>
 nnoremap <M-p> :tabp<CR> \| :echo 'Change to previous tab'<CR>
 nnoremap <C-p> :bp<CR> \| :echo 'Change to previous buffer'<CR>
 nnoremap <C-n> :bn<CR> \| :echo 'Change to next buffer'<CR>
-nmap q; q:
 nmap qq :q<CR>
+nmap q; q:
 map <ESC>j <M-j>
 map <ESC>k <M-k>
-nn <M-j> 5j \| :echo 'Downward 5 linewise.'<CR>
-nn <M-k> 5k \| :echo 'Upward 5 linewise.'<CR>
+nn <M-j> :.m+1<CR>
+nn <M-k> :.m-2<CR>
+" You can't send C-j to vim in gnome-terminal. It will parse to C-M.
+" But you can use it in Windows terminal, guake terminal.
 nn <C-j> <C-w>j
 nn <C-k> <C-w>k
 nn <C-l> <C-w>l
 nn <C-h> <C-w>h
-nn ;; :
+nn <C-\> <C-w>w
+nn a; :
+nn aj 5j \| :echo 'Downward 5 linewise.'<CR>
+nn ak 5k \| :echo 'Upward 5 linewise.'<CR>
 nn H ^
 nn L g_
 
@@ -125,6 +135,7 @@ nnoremap <leader>r :reg<CR>
 nnoremap <leader>rr :source ~/.vimrc<CR>
 nmap <leader>dd :bd<CR>
 nmap <leader>tt :tabe<CR>
+nmap <leader>te :tabe<space>
 nmap <leader>to :tabo<CR>
 nn <leader>H H
 nn <leader>M M
@@ -160,7 +171,8 @@ call plug#begin('~/.vim/plugged')
 " airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" targets.vim, add various text objects
+" edit file more smoothly
+Plug 'tpope/vim-surround'
 Plug 'wellle/targets.vim'
 " https://python.libhunt.com/compare-python-mode-vs-jedi-vim
 " Developing python with vim, what plugin to choose? (python-mode vs. jedi-vim)
