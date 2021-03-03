@@ -17,7 +17,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.stickyTabStops": true, //游標選取時，會依照tab停駐點方式選取
   "editor.minimap.enabled": true,
-  //Workbench setting
+  // Workbench setting
   "workbench.colorTheme": "Material Theme High Contrast",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.colorCustomizations": {
@@ -37,6 +37,7 @@
   "window.zoomLevel": 0,
   "window.menuBarVisibility": "toggle", //按alt開關功能列表
   "breadcrumbs.enabled": true, // The editor has a navigation bar above its contents called Breadcrumbs.
+  "files.trimTrailingWhitespace": true,
   "zenMode.hideStatusBar": false,
   // Source : https://stackoverflow.com/questions/49196146/how-do-you-show-tabs-in-zen-mode-of-visual-studio-code
   "zenMode.hideTabs": false, // 如果沒有開啟的話，會像Vim一樣只會顯示當前視窗的Buffer，不會將全部已開啟Tab展示
