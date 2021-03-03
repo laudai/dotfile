@@ -65,6 +65,23 @@
     },
     {
       "before": [
+        "H"
+      ],
+      "after": [
+        "^"
+      ]
+    },
+    {
+      // This is a bug ?
+      "before": [
+        "L"
+      ],
+      "after": [
+        "g_"
+      ]
+    },
+    {
+      "before": [
         "<leader>",
         "n"
       ],
@@ -130,6 +147,33 @@
       "commands": [
         ":tabo"
         //@command:workbench.action.closeOtherEditors
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "H"
+      ],
+      "after": [
+        "H"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "M"
+      ],
+      "after": [
+        "M"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "L"
+      ],
+      "after": [
+        "L"
       ]
     },
     {
