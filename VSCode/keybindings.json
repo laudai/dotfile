@@ -1,5 +1,6 @@
 // 將按鍵繫結關係放在此檔案中以覆寫預設
 [
+  // Terminal
   {
     "key": "ctrl+a j",
     "command": "workbench.action.terminal.focusNext",
@@ -25,14 +26,7 @@
     "command": "workbench.action.terminal.kill",
     "when": "terminalFocus && terminalProcessSupported"
   },
-  {
-    "key": "Shift+Alt+m",
-    "command": "editor.action.toggleMinimap"
-  },
-  {
-    "key": "ctrl+alt+/",
-    "command": "toggleVim"
-  },
+  // Tab
   {
     "key": "ctrl+tab",
     "command": "workbench.action.nextEditor"
@@ -64,5 +58,20 @@
   {
     "key": "ctrl+shift+tab",
     "command": "-workbench.action.quickOpenLeastRecentlyUsedEditorInGroup"
+  },
+  // Misc
+  {
+    "key": "Shift+Alt+m",
+    "command": "editor.action.toggleMinimap"
+  },
+  // Vim Keybindings
+  {
+    "key": "ctrl+alt+/",
+    "command": "toggleVim"
+  },
+  {
+    "key": "ctrl+k ctrl+k",
+    "command": "extension.vim_ctrl+k",
+    "when": "editorTextFocus && vim.active && vim.mode== 'Insert' && !inDebugRepl"
   }
 ]
