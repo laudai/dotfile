@@ -28,6 +28,7 @@ set shiftwidth=4 "sw, 使用>>的字元寬度，如果是0會使用tabstop設定
 set softtabstop=4 "sts"
 set tabstop=4 "ts"
 "set expandtab=4 "et, 還不確定是什麼功能"
+" search-setting
 set hlsearch "hls, highlith all its matches."
 set incsearch "is, 即時前往符合搜尋條件的字
 set ignorecase "ic, 忽略大小寫
@@ -42,9 +43,11 @@ set wildmenu "wmnu, default is off"
 set wildmode=full "wim, default is full"
 set history=200 "set history number, default is 50
 set pastetoggle=<F7> "pt, toggle vim paste mode"
+" edit-setting
 " enable X11-based-system clipboard, In Ubuntu & Debian, u need install vim-gtk3
 set clipboard=unnamedplus
 filetype plugin indent on " enable filetype plugins and indent
+set undofile
 
 " Highlight setting
 highlight CursorLine cterm=bold,underline ctermbg=black ctermfg=None
