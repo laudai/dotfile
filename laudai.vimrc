@@ -33,9 +33,6 @@ set hlsearch "hls, highlith all its matches."
 set incsearch "is, 即時前往符合搜尋條件的字
 set ignorecase "ic, 忽略大小寫
 set smartcase "scs, 智慧搜尋
-" 將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
-" number<C-a> or number<C-x>
-set nrformats=
 " works likes bash shell
 " set wildmode=longest,list
 " works likes zsh
@@ -48,6 +45,12 @@ set pastetoggle=<F7> "pt, toggle vim paste mode"
 set clipboard=unnamedplus
 filetype plugin indent on " enable filetype plugins and indent
 set undofile
+set autochdir " acd, 當開啟多個不同資料夾檔案時，會自動切換到目前編輯檔案路徑
+set autoread " ar, 當文件僅在vim外部進行修改，可進行自動讀檔(有焦點使用限制）
+" misc-setting
+" 將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
+" number<C-a> or number<C-x>
+set nrformats=
 
 " Highlight setting
 highlight CursorLine cterm=bold,underline ctermbg=black ctermfg=None
