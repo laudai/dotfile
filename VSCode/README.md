@@ -1,6 +1,7 @@
 # Visual Studio Code settings
 
 ## Installed plugins
+
 - [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 - [Python for VSCode](https://marketplace.visualstudio.com/items?itemName=tht13.python)
 - [Chinese (Traditional) Language Pack for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-zh-hant)
@@ -23,18 +24,37 @@
 - [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
 - [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 - [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [Polacode](https://marketplace.visualstudio.com/items?itemName=pnp.polacode)
+- [open in browser](https://marketplace.visualstudio.com/items?itemName=techer.open-in-browser)
+- [vscode-icons](https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons)
+- [DotENV](https://marketplace.visualstudio.com/items?itemName=mikestead.dotenv)
+- [TODO Highlight](https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight)
+- [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+- [Settings Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync)
 
 ## Addtion Keybinding
+
 ### Terminal
-* ctrl+a j	:focusNext Terminal
-* ctrl+a k	:focusPrevious Terminal
-* ctrl+a h	:focusPreviousPane
-* ctrl+a l	:focusNextPane
-* ctrl+a ctrl+k	:kill the active Terminal
+
+- ctrl+a j :focusNext Terminal
+- ctrl+a k :focusPrevious Terminal
+- ctrl+a h :focusPreviousPane
+- ctrl+a l :focusNextPane
+- ctrl+a ctrl+k :kill the active Terminal
 
 ### Minimap
-* shift+alt+m	:toggle the Minimap
+
+- shift+alt+m :toggle the Minimap
+
+### Move in Editor / Group
+
+- ctrl+tab :next Editor
+- ctrl+shift+tab :previous Editor
+- ctrl+k / :recently used editor in Group
+- ctrl+k ctrl+/ :least recently used editor in Group
 
 ### Vim
-* ctrl+alt+\	:toggle Vim mode
-* jk	:<ESC> key(insert mode)
+
+- ctrl+k ctrl+k :use vim ctrl+k
+- ctrl+alt+/ :toggle Vim mode
+- jk :<ESC> key(insert mode)(In vim setting)

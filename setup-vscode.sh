@@ -25,3 +25,10 @@ code --install-extension equinusocio.vsc-material-theme
 code --install-extension pkief.material-icon-theme
 code --install-extension ms-vscode-remote.remote-ssh
 code --install-extension esbenp.prettier-vscode
+code --install-extension pnp.polacode
+code --install-extension techer.open-in-browser
+code --install-extension vscode-icons-team.vscode-icons
+code --install-extension mikestead.dotenv
+code --install-extension wayou.vscode-todo-highlight
+code --install-extension editorconfig.editorconfig
+code --install-extension shan.code-settings-sync
