@@ -1,8 +1,6 @@
 {
   "editor.suggestSelection": "first",
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-  "python.jediEnabled": true,
-  "python.languageServer": "Jedi",
   // Editor Setting
   "editor.fontLigatures": true,
   "editor.fontSize": 16, //編輯區字體大小
@@ -45,6 +43,18 @@
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
+  "[python]": {
+    "editor.defaultFormatter": "null"
+  },
+  "python.jediEnabled": true,
+  "python.languageServer": "Jedi",
+  // vscode python formatting
+  // https://dev.to/eegli/quick-guide-to-python-formatting-in-vs-code-2040
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": [
+    "--line-length",
+    "120"
+  ],
   // Vim Setting
   "vim.hlsearch": true,
   "vim.incsearch": true,
