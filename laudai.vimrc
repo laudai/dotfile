@@ -177,13 +177,13 @@ call plug#begin('~/.vim/plugged')
 " airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" edit file more smoothly
-Plug 'tpope/vim-surround'
-Plug 'wellle/targets.vim'
 " https://python.libhunt.com/compare-python-mode-vs-jedi-vim
 " Developing python with vim, what plugin to choose? (python-mode vs. jedi-vim)
 Plug 'davidhalter/jedi-vim'
 " Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+" edit file more smoothly
+Plug 'tpope/vim-surround'
+Plug 'wellle/targets.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'justinmk/vim-sneak'
 "

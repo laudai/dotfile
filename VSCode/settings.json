@@ -45,7 +45,7 @@
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  // vim setting
+  // Vim Setting
   "vim.hlsearch": true,
   "vim.incsearch": true,
   "vim.leader": "<space>",
@@ -53,6 +53,11 @@
   "vim.handleKeys": {
     "<C-k>": false
   },
+  // vim plugin
+  "vim.easymotion": true,
+  "vim.sneak": true,
+  "vim.surround": true,
+  // vim keybindings
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "before": [
@@ -224,7 +229,4 @@
       ]
     }
   ],
-  // vim plugin
-  "vim.sneak": true,
-  "vim.easymotion": true,
 }
