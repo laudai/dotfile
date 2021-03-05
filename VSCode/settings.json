@@ -43,9 +43,9 @@
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  "[python]": {
-    "editor.defaultFormatter": "null"
-  },
+  // "[python]": {
+  //   "editor.defaultFormatter": "null"
+  // },
   "python.jediEnabled": true,
   "python.languageServer": "Jedi",
   // vscode python formatting
