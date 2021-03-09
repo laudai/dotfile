@@ -111,6 +111,8 @@ nn aj 5j \| :echo 'Downward 5 linewise.'<CR>
 nn ak 5k \| :echo 'Upward 5 linewise.'<CR>
 nn H ^
 nn L g_
+nn Y y$
+nn <C-v><C-v> <C-v>
 
 " Toggle Cursorline on/off with one key press
 " https://stackoverflow.com/questions/1497404/toggle-cursorline-on-off-with-one-key-press
