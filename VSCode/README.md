@@ -36,25 +36,25 @@
 
 ### Terminal
 
-- ctrl+a j :focusNext Terminal
-- ctrl+a k :focusPrevious Terminal
-- ctrl+a h :focusPreviousPane
-- ctrl+a l :focusNextPane
-- ctrl+a ctrl+k :kill the active Terminal
+- ctrl+a j : focusNext Terminal
+- ctrl+a k : focusPrevious Terminal
+- ctrl+a h : focusPreviousPane
+- ctrl+a l : focusNextPane
+- ctrl+a ctrl+k : kill the active Terminal
 
 ### Minimap
 
-- shift+alt+m :toggle the Minimap
+- shift+alt+m : toggle the Minimap
 
 ### Move in Editor / Group
 
-- ctrl+tab :next Editor
-- ctrl+shift+tab :previous Editor
-- ctrl+k / :recently used editor in Group
-- ctrl+k ctrl+/ :least recently used editor in Group
+- ctrl+tab : next Editor
+- ctrl+shift+tab : previous Editor
+- ctrl+k / : recently used editor in Group
+- ctrl+k ctrl+/ : least recently used editor in Group
 
 ### Vim
 
-- ctrl+k ctrl+k :use vim ctrl+k
-- ctrl+alt+/ :toggle Vim mode
-- jk :<ESC> key(insert mode)(In vim setting)
+- ctrl+k ctrl+k : use vim ctrl+k
+- ctrl+alt+/ : toggle Vim mode
+- jk : \<ESC> key(insert mode)(In vim setting)
