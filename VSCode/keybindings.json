@@ -73,5 +73,15 @@
     "key": "ctrl+k ctrl+k",
     "command": "extension.vim_ctrl+k",
     "when": "editorTextFocus && vim.active && vim.mode== 'Insert' && !inDebugRepl"
+  },
+  {
+    "key": "alt+j",
+    "command": "editor.action.moveLinesDownAction",
+    "when": "editorTextFocus && !editorReadonly && vim.active"
+  },
+  {
+    "key": "alt+k",
+    "command": "editor.action.moveLinesUpAction",
+    "when": "editorTextFocus && !editorReadonly && vim.active"
   }
 ]

@@ -97,6 +97,17 @@
     },
     {
       "before": [
+        "a",
+        ";"
+      ],
+      "after": [
+        ":"
+        // use commands
+        //"vim.showQuickpickCmdLine"
+      ]
+    },
+    {
+      "before": [
         "<leader>",
         "n"
       ],
