@@ -157,6 +157,16 @@
     {
       "before": [
         "<leader>",
+        "d"
+      ],
+      "after": [
+        // This is a bug ?
+        "^dg_"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
         "t",
         "t"
       ],

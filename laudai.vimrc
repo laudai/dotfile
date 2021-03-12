@@ -142,6 +142,8 @@ nnoremap <leader>ev :vsp ~/.vimrc<CR>
 nnoremap <leader>r :reg<CR>
 nnoremap <leader>rr :source ~/.vimrc<CR>
 nmap <leader>dd :bd<CR>
+nmap <leader>d ^dg_ \| :echo "Delete whole line without linewise from
+    \ non-block to non-block char!"<CR>
 nmap <leader>tt :tabe<CR>
 nmap <leader>te :tabe<space>
 nmap <leader>to :tabo<CR>
@@ -154,7 +156,6 @@ noremap <Leader>y "+y
 noremap <Leader>p "0p
 noremap <Leader>P "+P
 noremap <Leader>x "_x
-noremap <Leader>d "+dd
 inoremap <C-v> <ESC>"+pa
 vnoremap <C-c> "+y
 vnoremap <C-d> "+d
