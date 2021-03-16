@@ -251,6 +251,17 @@
     {
       "before": [
         "<leader>",
+        "x"
+      ],
+      "after": [
+        "\"",
+        "_",
+        "x"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
         "t"
       ],
       "commands": [
@@ -287,4 +298,17 @@
       ]
     }
   ],
+  "vim.visualModeKeyBindings": [
+    {
+      "before": [
+        "<leader>",
+        "x"
+      ],
+      "after": [
+        "\"",
+        "_",
+        "x"
+      ]
+    }
+  ]
 }
