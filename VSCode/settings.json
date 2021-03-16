@@ -218,8 +218,23 @@
         "<leader>",
         "p"
       ],
-      "commands": [
-        "workbench.action.showCommands"
+      "after": [
+        "\"",
+        "0",
+        "p"
+        //old commands
+        //"workbench.action.showCommands"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "P"
+      ],
+      "after": [
+        "\"",
+        "+",
+        "P"
       ]
     },
     {
