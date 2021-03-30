@@ -16,7 +16,7 @@
   "editor.stickyTabStops": true, //游標選取時，會依照tab停駐點方式選取
   "editor.minimap.enabled": true,
   // https://github.com/microsoft/vscode/issues/20947
-  "editor.minimap.rendeerCharacters": false, // minimap render block instead of character
+  "editor.minimap.renderCharacters": false, // minimap render block instead of character
   // Workbench setting
   "workbench.colorTheme": "Material Theme High Contrast",
   "workbench.iconTheme": "material-icon-theme",
