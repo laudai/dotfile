@@ -49,6 +49,9 @@
   },
   "python.jediEnabled": true,
   "python.languageServer": "Jedi",
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.pylintEnabled": false,
   // vscode python formatting
   // https://dev.to/eegli/quick-guide-to-python-formatting-in-vs-code-2040
   "python.formatting.provider": "black",
