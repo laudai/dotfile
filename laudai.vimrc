@@ -113,6 +113,10 @@ nn H ^
 nn L g_
 nn Y y$
 nn <C-v><C-v> <C-v>
+" set manual store/restore vim session
+set <S-F4>=[1;2S
+nn <S-F4> :mksession! ~/.vim_manual_session.vim<CR> \| :echo 'stores session to ~/.vim_manual_session.vim'<CR>
+nn <F4> :source ~/.vim_manual_session.vim<CR> \| :echo 'restores session from ~/.vim_manual_session.vim'<CR>
 
 " Toggle Cursorline on/off with one key press
 " https://stackoverflow.com/questions/1497404/toggle-cursorline-on-off-with-one-key-press
@@ -135,18 +139,18 @@ map <C-S-F3> :set rnu!<CR>
 " <leader> mapleader, <leader> key default is '\'
 let mapleader="\<space>"
 nmap <leader>n :noh<CR>
-nmap <leader>qq <ESC>:cq<CR>
-nmap <leader>c <ESC>:tabc<CR>
 nmap <leader>w <ESC>:w<CR>
+nmap <leader>d ^dg_ \| :echo "Delete whole line without linewise from
+nmap <leader>dd :bd<CR>
+nmap <leader>qq <ESC>:cq<CR>
 nnoremap <leader>ev :vsp ~/.vimrc<CR>
 nnoremap <leader>r :reg<CR>
 nnoremap <leader>rr :source ~/.vimrc<CR>
-nmap <leader>dd :bd<CR>
-nmap <leader>d ^dg_ \| :echo "Delete whole line without linewise from
     \ non-block to non-block char!"<CR>
 nmap <leader>tt :tabe<CR>
 nmap <leader>te :tabe<space>
 nmap <leader>to :tabo<CR>
+nmap <leader>tc <ESC>:tabc<CR>
 nn <leader>H H
 nn <leader>M M
 nn <leader>L L
