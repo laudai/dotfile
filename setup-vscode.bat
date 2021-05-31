@@ -2,7 +2,11 @@
 echo This script can set hardlink to your VSCode settings.json, keybindings.json etc on your Windows OS.
 echo.
 
-echo Check User/Documents/dotfile path if exist?
+echo Check User\AppData\Roaming\Code\User path if exist?
+IF exist %AppData%\Code\User (echo Yes!) ELSE (echo oh no QAQ)
+echo.
+
+echo Check User\Documents\dotfile path if exist?
 IF exist %USERPROFILE%\Documents\dotfile (echo Yes!) ELSE (echo oh no QAQ)
 echo.
 IF exist %USERPROFILE%\Documents\dotfile (
