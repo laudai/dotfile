@@ -64,6 +64,14 @@
     "key": "Shift+Alt+m",
     "command": "editor.action.toggleMinimap"
   },
+  {
+    "key": "ctrl+shift+q",
+    "command": "workbench.action.quit"
+  },
+  {
+    "key": "ctrl+q",
+    "command": "-workbench.action.quit"
+  }
   // Editor and Group
   {
     "key": "ctrl+k h",
