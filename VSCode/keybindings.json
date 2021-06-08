@@ -71,7 +71,7 @@
   {
     "key": "ctrl+q",
     "command": "-workbench.action.quit"
-  }
+  },
   // Editor and Group
   {
     "key": "ctrl+k h",
@@ -96,7 +96,7 @@
   {
     "key": "ctrl+a n",
     "command": "workbench.action.evenEditorWidths"
-  }
+  },
   // Plugin
   // Plugin-bookmarks
   {
