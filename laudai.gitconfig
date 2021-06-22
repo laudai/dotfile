@@ -3,5 +3,6 @@
 	name = laudai
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore_global
 [alias]
 	adog = log --all --decorate --oneline --graph
