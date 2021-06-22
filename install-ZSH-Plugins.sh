@@ -3,7 +3,7 @@
 # autojump
 git clone git://github.com/wting/autojump.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autojump
 cd ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autojump
-python3 ./install.py
+/usr/bin/env python3 ./install.py
 # zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 #  zsh-syntax-highlighting
