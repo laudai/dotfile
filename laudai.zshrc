@@ -278,7 +278,8 @@ alias -s sh=bash
 # global alais
 # https://thorsten-hans.com/5-types-of-zsh-aliases
 # e.g. cd && ls -l G do
-alias -g G="| grep -i"
+alias -g G=" | grep -i"
+alias -g xc=" | xclip -selection clipboard"
 
 # edit and source config
 alias ez="$EDITOR $HOME/.zshrc"
