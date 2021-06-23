@@ -119,6 +119,11 @@
     "command": "-bookmarks.jumpToPrevious",
     "when": "editorTextFocus"
   },
+  // Settings Cycler keybindings
+  {
+    "key": "ctrl+shift+F3",
+    "command": "settings.cycle.linenumber",
+  }
   // Vim Keybindings
   {
     "key": "ctrl+alt+/",

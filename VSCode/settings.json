@@ -17,6 +17,7 @@
   "editor.minimap.enabled": true,
   // https://github.com/microsoft/vscode/issues/20947
   "editor.minimap.renderCharacters": false, // minimap render block instead of character
+  "editor.lineNumbers": "relative",
   // Workbench setting
   "workbench.colorTheme": "Material Theme High Contrast",
   "workbench.iconTheme": "material-icon-theme",
@@ -64,6 +65,21 @@
   "python.formatting.blackArgs": [
     "--line-length",
     "120"
+  ],
+  // Settings Cycler
+  "settings.cycle": [
+    {
+      "id": "linenumber", // must be unique
+      "overrideWorkspaceSettings": false,
+      "values": [
+        {
+          "editor.lineNumbers": "relative"
+        },
+        {
+          "editor.lineNumbers": "on"
+        }
+      ]
+    }
   ],
   // Vim Setting
   "vim.hlsearch": true,
