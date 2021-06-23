@@ -35,4 +35,3 @@ code --install-extension mikestead.dotenv  --force
 code --install-extension wayou.vscode-todo-highlight  --force
 code --install-extension editorconfig.editorconfig  --force
 code --install-extension shan.code-settings-sync  --force
-code --install-extension extr0py.vscode-relative-line-numbers --force
