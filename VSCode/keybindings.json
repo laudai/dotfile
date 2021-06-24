@@ -97,6 +97,15 @@
     "key": "ctrl+a n",
     "command": "workbench.action.evenEditorWidths"
   },
+  // Focus on
+  {
+    "key": "shift+alt+e",
+    "command": "workbench.files.action.focusFilesExplorer"
+  },
+  {
+    "key": "ctrl+a space",
+    "command": "workbench.action.toggleSidebarVisibility"
+  },
   // Plugin
   // Plugin-bookmarks
   {
