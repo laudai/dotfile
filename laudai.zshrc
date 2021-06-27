@@ -256,6 +256,7 @@ alias li="set -o | grep 'emacs\|^vi'"
 alias di="dirs -v"
 alias slltrue="gsettings set org.gnome.desktop.screensaver lock-enabled true && gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend true" # sll for set gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
 alias sllfalse="gsettings set org.gnome.desktop.screensaver lock-enabled false && gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend false" # sll for set gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
+alias kagt="killall gnome-terminal-server"
 
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
