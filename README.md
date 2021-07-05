@@ -72,7 +72,8 @@ C-_ : set layout even vertical
 C-t : set layout tiled
 <prefix> C-t : via a choose window to move current pane to window
 <prefix> C-j : prompt a cmd to join <window>.<pane> to this pane
-<prefix> o : select next pane (repeat)
+<prefix> o : kill all panes but the current pane in this window
+<prefix> O : select next pane (repeat)
 <prefix> / : select last window
 <prefix> M-s : prompt a cmd to swap current window's index to target index
 <prefix> M-f : set repeat 0.6s , titles off , display time 0.75s
