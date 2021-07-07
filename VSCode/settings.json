@@ -285,6 +285,7 @@
         "x"
       ]
     },
+    // Bind only for VSCode in Vim keymap
     {
       "before": [
         "<leader>",
@@ -311,7 +312,29 @@
       "commands": [
         "bookmarks.list"
       ]
-    }
+    },
+    {
+      "before": [
+        "<leader>",
+        "s",
+        "j"
+      ],
+      "commands": [
+        "workbench.action.openSettingsJson"
+        // open vscode settings json file
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "k",
+        "j"
+      ],
+      "commands": [
+        "workbench.action.openGlobalKeybindingsFile"
+        // open vscode keybindings json file
+      ]
+    },
   ],
   "vim.insertModeKeyBindings": [
     {
