@@ -263,6 +263,9 @@ alias kagt="killall gnome-terminal-server"
 alias glodsd="glods --date=local" # must use with zsh git plugin
 alias grf="git reflog"
 
+# oh-my-zsh plugin git alias
+alias gmd="less ~/.oh-my-zsh/plugins/git/README.md 2> /dev/null || echo 'File not founded.'"
+
 # python alias
 #alias python="/usr/bin/python3"
 #alias pip="/usr/bin/pip3"
