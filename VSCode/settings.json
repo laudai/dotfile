@@ -37,7 +37,8 @@
   },
   // Misc
   "window.zoomLevel": 0,
-  "window.menuBarVisibility": "toggle", //按alt開關功能列表
+  "window.menuBarVisibility": "compact", //按alt開關功能列表
+  "window.titleBarStyle": "custom", // native & custom. default is native
   "breadcrumbs.enabled": true, // The editor has a navigation bar above its contents called Breadcrumbs.
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": false,
