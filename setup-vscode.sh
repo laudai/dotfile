@@ -36,3 +36,7 @@ code --install-extension wayou.vscode-todo-highlight  --force
 code --install-extension editorconfig.editorconfig  --force
 code --install-extension shan.code-settings-sync  --force
 code --install-extension hoovercj.vscode-settings-cycler --force
+code --install-extension gruntfuggly.todo-tree --force
+code --install-extension spywhere.guides --force
+code --install-extension mhutchie.git-graph --force
+code --install-extension donjayamanne.githistory --force
