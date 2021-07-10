@@ -236,6 +236,26 @@ function _select-vi() {
 }
 zle -N _select-vi
 
+# toggle your gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
+toggle-sll() {
+  local lock_enabled=$(gsettings get org.gnome.desktop.screensaver lock-enabled)
+  local ubuntu_lock_on_suspend=$(gsettings get org.gnome.desktop.screensaver ubuntu-lock-on-suspend)
+
+  if [[ $lock_enabled == true && $ubuntu_lock_on_suspend == true ]]; then
+	  echo -e -n "Your screen lock_enabled and ubuntu_lock_on_suspend are all true."
+	  echo -e -n "Trun screen lock_enabled and ubuntu_lock_on_suspend to false."
+	  gsettings set org.gnome.desktop.screensaver lock-enabled false
+	  gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend false
+
+  else
+	  echo -e -n "Your screen lock_enabled or ubuntu_lock_on_suspend is false."
+	  echo -e -n "Trun screen lock_enabled and ubuntu_lock_on_suspend all true."
+	  gsettings set org.gnome.desktop.screensaver lock-enabled true
+	  gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend true
+  fi
+}
+
+
 #     ___    ___
 #    /   |  / (_)___ ______
 #   / /| | / / / __ `/ ___/
@@ -255,8 +275,6 @@ alias gquit--no-prompt="gnome-session-quit --no-prompt"
 alias dotfile="cd ~/.dotfile"
 alias li="set -o | grep 'emacs\|^vi'"
 alias di="dirs -v"
-alias slltrue="gsettings set org.gnome.desktop.screensaver lock-enabled true && gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend true" # sll for set gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
-alias sllfalse="gsettings set org.gnome.desktop.screensaver lock-enabled false && gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend false" # sll for set gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
 alias kagt="killall gnome-terminal-server"
 
 # git alias
