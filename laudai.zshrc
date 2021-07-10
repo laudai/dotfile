@@ -26,8 +26,8 @@ ZSH_THEME="cloud"
 #steeef.zsh-theme
 #powerlevel10k/powerlevel10k # need install
 
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-if [ -f "$CURRENT_DIR/color.txt" ];then  source "$CURRENT_DIR/color.txt"; fi
+#CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$HOME/.dotfile/color.txt"
 
 #if [ "$HOST"="raspberrypi" ]
 #then
