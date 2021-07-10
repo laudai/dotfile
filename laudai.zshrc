@@ -26,6 +26,9 @@ ZSH_THEME="cloud"
 #steeef.zsh-theme
 #powerlevel10k/powerlevel10k # need install
 
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ -f "$CURRENT_DIR/color.txt" ];then  source "$CURRENT_DIR/color.txt"; fi
+
 #if [ "$HOST"="raspberrypi" ]
 #then
 #	ZSH_THEME="robbyrussell"
@@ -242,14 +245,14 @@ toggle-sll() {
   local ubuntu_lock_on_suspend=$(gsettings get org.gnome.desktop.screensaver ubuntu-lock-on-suspend)
 
   if [[ $lock_enabled == true && $ubuntu_lock_on_suspend == true ]]; then
-	  echo -e -n "Your screen lock_enabled and ubuntu_lock_on_suspend are all true."
-	  echo -e -n "Trun screen lock_enabled and ubuntu_lock_on_suspend to false."
+	  echo -e "Your screen lock_enabled and ubuntu_lock_on_suspend are all ${BOLD_GREEN}True${RESET}."
+	  echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend to ${BOLD_RED}False${RESET}."
 	  gsettings set org.gnome.desktop.screensaver lock-enabled false
 	  gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend false
 
   else
-	  echo -e -n "Your screen lock_enabled or ubuntu_lock_on_suspend is false."
-	  echo -e -n "Trun screen lock_enabled and ubuntu_lock_on_suspend all true."
+	  echo -e "Your screen lock_enabled or ubuntu_lock_on_suspend is ${BOLD_RED}False${RESET}."
+	  echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend all ${BOLD_GREEN}True${RESET}."
 	  gsettings set org.gnome.desktop.screensaver lock-enabled true
 	  gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend true
   fi
@@ -259,10 +262,10 @@ toggle-sll() {
 toggle-app-switcher_workspace-only() {
   local app_switcher_workspace=$(gsettings get org.gnome.shell.app-switcher current-workspace-only)
   if [[ $app_switcher_workspace == true ]]; then
-	  echo "Change app-switcher current-workspace-only to false."
+	  echo -e "Change app-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
 	  gsettings set org.gnome.shell.app-switcher current-workspace-only false
   elif [[ $app_switcher_workspace == false ]]; then
-	  echo "Change app-switcher current-workspace-only to true."
+	  echo -e "Change app-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
 	  gsettings set org.gnome.shell.app-switcher current-workspace-only true
   fi
 }
@@ -271,10 +274,10 @@ toggle-app-switcher_workspace-only() {
 toggle-window-switcher_workspace-only() {
   local app_switcher_workspace=$(gsettings get org.gnome.shell.window-switcher current-workspace-only)
   if [[ $app_switcher_workspace == true ]]; then
-	  echo "Change window-switcher current-workspace-only to false."
+	  echo "Change window-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
 	  gsettings set org.gnome.shell.window-switcher current-workspace-only false
   elif [[ $app_switcher_workspace == false ]]; then
-	  echo "Change window-switcher current-workspace-only to true."
+	  echo "Change window-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
 	  gsettings set org.gnome.shell.window-switcher current-workspace-only true
   fi
 }
