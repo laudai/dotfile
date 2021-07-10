@@ -255,6 +255,30 @@ toggle-sll() {
   fi
 }
 
+# toggle your gnome app-switcher current-workspace-only
+toggle-app-switcher_workspace-only() {
+  local app_switcher_workspace=$(gsettings get org.gnome.shell.app-switcher current-workspace-only)
+  if [[ $app_switcher_workspace == true ]]; then
+	  echo "Change app-switcher current-workspace-only to false."
+	  gsettings set org.gnome.shell.app-switcher current-workspace-only false
+  elif [[ $app_switcher_workspace == false ]]; then
+	  echo "Change app-switcher current-workspace-only to true."
+	  gsettings set org.gnome.shell.app-switcher current-workspace-only true
+  fi
+}
+
+# toggle your gnome window-switcher current-workspace-only
+toggle-window-switcher_workspace-only() {
+  local app_switcher_workspace=$(gsettings get org.gnome.shell.window-switcher current-workspace-only)
+  if [[ $app_switcher_workspace == true ]]; then
+	  echo "Change window-switcher current-workspace-only to false."
+	  gsettings set org.gnome.shell.window-switcher current-workspace-only false
+  elif [[ $app_switcher_workspace == false ]]; then
+	  echo "Change window-switcher current-workspace-only to true."
+	  gsettings set org.gnome.shell.window-switcher current-workspace-only true
+  fi
+}
+
 
 #     ___    ___
 #    /   |  / (_)___ ______
