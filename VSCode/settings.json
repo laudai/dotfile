@@ -15,7 +15,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.stickyTabStops": true, //游標選取時，會依照tab停駐點方式選取
   "editor.minimap.enabled": true,
-  "editor.renderIndentGuides": false // set renderIndentGuides to false for use Guides extension {default:true}
+  "editor.renderIndentGuides": false, // set renderIndentGuides to false for use Guides extension {default:true}
   // https://github.com/microsoft/vscode/issues/20947
   "editor.minimap.renderCharacters": false, // minimap render block instead of character
   "editor.lineNumbers": "relative",
