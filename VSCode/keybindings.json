@@ -110,7 +110,7 @@
     "key": "ctrl+k v",
     "command": "workbench.action.firstEditorInGroup",
     "when": "!editorTextFocus"
-  }
+  },
   // Plugin
   // Plugin-bookmarks
   {
