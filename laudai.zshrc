@@ -332,7 +332,7 @@ alias -s sh=bash
 # https://thorsten-hans.com/5-types-of-zsh-aliases
 # e.g. cd && ls -l G do
 alias -g G=" | grep -i"
-alias -g xc=" | head -c -1 | xclip -selection clipboard"
+alias -g xc=" | sed -z 's/\n$//' | xclip -selection clipboard"
 
 # edit and source config
 alias ez="$EDITOR $HOME/.zshrc"
