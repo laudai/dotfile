@@ -154,6 +154,7 @@ bindkey -M menuselect 'h' vi-backward-char
 bindkey '^Y^Y' undo # bind ^Y^Y undo like emacs ^Y keymaps
 bindkey '^[l' forward-word # alt-l
 bindkey '^[h' backward-word # alt-h
+bindkey '^[.' insert-last-word # alt-.
 # How to switch comfortably to vi command mode on the zsh command line?
 # https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
 bindkey -M viins 'jk' vi-cmd-mode
