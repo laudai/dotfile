@@ -352,6 +352,7 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 export EDITOR="vim"
 export VISUAL="$EDITOR"
 export MYVIMRC="$HOME/.vimrc"
+export DOTFILE="$HOME/.dotfile"
 
 # let urlview to use firefox browser to show
 if [ -e '/usr/bin/firefox' ] ; then
