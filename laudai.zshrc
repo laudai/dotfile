@@ -345,6 +345,7 @@ alias sz="source $HOME/.zshrc"
 #  / __/ | |/_/ __ \/ __ \/ ___/ __/
 # / /____>  </ /_/ / /_/ / /  / /_
 #/_____/_/|_/ .___/\____/_/   \__/
+#          /_/
 
 # export
 export PYENV_ROOT="$HOME/.pyenv"
