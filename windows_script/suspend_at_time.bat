@@ -18,7 +18,7 @@ echo.
 
 set /p reply="Enter your result (type y or yes to cancle): "
 :switch-case-result
-  goto :switch-cancle-result-%reply% 2>null || (
+  goto :switch-cancle-result-%reply% 2>nul || (
       echo No cancle the schedule
       echo.
       pause
