@@ -302,7 +302,6 @@ alias gquit="gnome-session-quit"
 alias gquit--no-prompt="gnome-session-quit --no-prompt"
 alias dotfile="cd ~/.dotfile"
 alias li="set -o | grep 'emacs\|^vi'"
-alias di="dirs -v"
 alias kagt="killall gnome-terminal-server"
 
 # git alias
