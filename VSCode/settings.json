@@ -336,6 +336,17 @@
         // open vscode keybindings json file
       ]
     },
+    {
+      "before": [
+        "<leader>",
+        "e",
+        "o"
+      ],
+      "commands": [
+        "workbench.action.closeEditorsInOtherGroups"
+        // close vscode editors in other groups
+      ]
+    },
   ],
   "vim.insertModeKeyBindings": [
     {
