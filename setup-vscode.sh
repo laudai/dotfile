@@ -40,3 +40,4 @@ code --install-extension gruntfuggly.todo-tree --force
 code --install-extension spywhere.guides --force
 code --install-extension mhutchie.git-graph --force
 code --install-extension donjayamanne.githistory --force
+code --install-extension leodevbro.blockman --force

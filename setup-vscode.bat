@@ -51,6 +51,7 @@ IF exist %USERPROFILE%\Documents\dotfile (
     code --install-extension spywhere.guides --force
     code --install-extension mhutchie.git-graph --force
     code --install-extension donjayamanne.githistory --force
+    code --install-extension leodevbro.blockman --force
 
     echo.
     echo Set hardlink ^& install extension completed!
