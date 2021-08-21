@@ -200,12 +200,12 @@ call plug#end()
 
 " Plugin setting
 " airline plugin
-let g:airline_theme='bubblegum'
+let g:airline_theme='base16_google'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '§'
-let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#left_sep = '‧'
+let g:airline#extensions#tabline#left_alt_sep = '┊'
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 " jedi-vim plugin
 let g:jedi#goto_command = "<leader>d"
 let g:jedi#goto_assignments_command = "<leader>g"
