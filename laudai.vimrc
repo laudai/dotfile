@@ -217,6 +217,14 @@ let g:jedi#completions_command = "<C-Space>"
 let g:jedi#auto_initialization = 1
 let g:jedi#popup_on_dot = 0
 autocmd FileType python setlocal completeopt-=preview
+" indentLine plugin
+let g:indentLine_enabled = 1
+let g:indentLine_setColors = 1
+let g:indentLine_color_term = 214
+"let g:indentLine_bgcolor_term = 240
+let g:indentLine_defaultGroup = 'SpecialKey'
+let g:indentLine_char = '§'
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
 """ This is copy from vim74 example
 
