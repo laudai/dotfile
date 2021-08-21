@@ -140,13 +140,13 @@ map <C-S-F3> :set rnu!<CR>
 let mapleader="\<space>"
 nmap <leader>n :noh<CR>
 nmap <leader>w <ESC>:w<CR>
-nmap <leader>d ^dg_ \| :echo "Delete whole line without linewise"<CR>
+nmap <leader>d ^dg_ \| :echo "Delete whole line without linewise from
+    \ non-block to non-block char!"<CR>
 nmap <leader>dd :bd<CR>
 nmap <leader>qq <ESC>:cq<CR>
 nnoremap <leader>ev :vsp ~/.vimrc<CR>
 nnoremap <leader>r :reg<CR>
 nnoremap <leader>rr :source ~/.vimrc<CR>
-    \ non-block to non-block char!"<CR>
 nmap <leader>tt :tabe<CR>
 nmap <leader>te :tabe<space>
 nmap <leader>to :tabo<CR>
