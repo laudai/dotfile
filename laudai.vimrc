@@ -193,6 +193,7 @@ Plug 'tpope/vim-surround'
 Plug 'wellle/targets.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'justinmk/vim-sneak'
+Plug 'yggdroot/indentline'
 "
 " Initialize plugin system
 call plug#end()
