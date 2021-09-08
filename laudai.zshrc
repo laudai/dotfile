@@ -304,6 +304,8 @@ alias dotfile="cd ~/.dotfile"
 alias li="set -o | grep 'emacs\|^vi'"
 alias kagt="killall gnome-terminal-server"
 
+# line alias
+alias line="chromium-browser chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html#popout > /dev/null 2>&1 &"
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
 alias grf="git reflog"
