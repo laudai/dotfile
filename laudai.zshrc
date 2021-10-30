@@ -246,16 +246,16 @@ toggle-sll() {
   local ubuntu_lock_on_suspend=$(gsettings get org.gnome.desktop.screensaver ubuntu-lock-on-suspend)
 
   if [[ $lock_enabled == true && $ubuntu_lock_on_suspend == true ]]; then
-	  echo -e "Your screen lock_enabled and ubuntu_lock_on_suspend are all ${BOLD_GREEN}True${RESET}."
-	  echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend to ${BOLD_RED}False${RESET}."
 	  gsettings set org.gnome.desktop.screensaver lock-enabled false
 	  gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend false
+	  echo -e "Your screen lock_enabled and ubuntu_lock_on_suspend are all ${BOLD_GREEN}True${RESET}."
+	  echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend to ${BOLD_RED}False${RESET}."
 
   else
-	  echo -e "Your screen lock_enabled or ubuntu_lock_on_suspend is ${BOLD_RED}False${RESET}."
-	  echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend all ${BOLD_GREEN}True${RESET}."
 	  gsettings set org.gnome.desktop.screensaver lock-enabled true
 	  gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend true
+	  echo -e "Your screen lock_enabled or ubuntu_lock_on_suspend is ${BOLD_RED}False${RESET}."
+	  echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend all ${BOLD_GREEN}True${RESET}."
   fi
 }
 
@@ -263,23 +263,35 @@ toggle-sll() {
 toggle-app-switcher_workspace-only() {
   local app_switcher_workspace=$(gsettings get org.gnome.shell.app-switcher current-workspace-only)
   if [[ $app_switcher_workspace == true ]]; then
-	  echo -e "Change app-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
 	  gsettings set org.gnome.shell.app-switcher current-workspace-only false
+	  echo -e "Change app-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
   elif [[ $app_switcher_workspace == false ]]; then
-	  echo -e "Change app-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
 	  gsettings set org.gnome.shell.app-switcher current-workspace-only true
+	  echo -e "Change app-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
   fi
 }
 
 # toggle your gnome window-switcher current-workspace-only
 toggle-window-switcher_workspace-only() {
-  local app_switcher_workspace=$(gsettings get org.gnome.shell.window-switcher current-workspace-only)
-  if [[ $app_switcher_workspace == true ]]; then
-	  echo "Change window-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
+  local window_switcher_workspace=$(gsettings get org.gnome.shell.window-switcher current-workspace-only)
+  if [[ $window_switcher_workspace == true ]]; then
 	  gsettings set org.gnome.shell.window-switcher current-workspace-only false
-  elif [[ $app_switcher_workspace == false ]]; then
-	  echo "Change window-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
+	  echo -e "Change window-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
+  elif [[ $window_switcher_workspace == false ]]; then
 	  gsettings set org.gnome.shell.window-switcher current-workspace-only true
+	  echo -e "Change window-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
+  fi
+}
+
+# toggle your gnome interface animations
+toggle-gnome-interface_animations() {
+  local gnome_interface_animations=$(gsettings get org.gnome.desktop.interface enable-animations)
+  if [[ $gnome_interface_animations == true ]]; then
+	  gsettings set org.gnome.desktop.interface enable-animations false
+	  echo -e "Change gnome interface animations to ${BOLD_RED}False${RESET}."
+  elif [[ $gnome_interface_animations == false ]]; then
+	  gsettings set org.gnome.desktop.interface enable-animations true
+	  echo -e "Change gnome interface animations to ${BOLD_GREEN}True${RESET}."
   fi
 }
 
