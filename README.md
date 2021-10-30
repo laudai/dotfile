@@ -78,6 +78,10 @@ C-t : set layout tiled
 <prefix> M-s : prompt a cmd to swap current window's index to target index
 <prefix> M-f : set repeat 0.6s , titles off , display time 0.75s
 <prefix> M-n : set repeat 1s , titles on , display time 1.5s
+<prefix> C-p : go to previous window (repeat)
+<prefix> C-n : go to next window (repeat)
+<prefix> { : swap current pane to previous pane (repeat)
+<prefix> } : swap current pane to previous pane (repeat)
 <prefix> M-v : swap current pane to last vistied pane
 <prefix> T : move window to next unused number
 <prefix> S : prompt a cmd to new session
