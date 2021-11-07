@@ -83,6 +83,10 @@ C-t : set layout tiled
 <prefix> { : swap current pane to previous pane (repeat)
 <prefix> } : swap current pane to previous pane (repeat)
 <prefix> M-v : swap current pane to last vistied pane
+<prefix> C-Right: move current pane to the right of pane (cycle)
+<prefix> C-Left: move current pane to the left of pane (cycle)
+<prefix> C-Up: move current pane to the up of pane (cycle)
+<prefix> C-Down: move current pane to the down of pane (cycle)
 <prefix> T : move window to next unused number
 <prefix> S : prompt a cmd to new session
 <prefix> @ : prompt a cmd to change window's index
