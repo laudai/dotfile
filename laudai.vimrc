@@ -142,7 +142,10 @@ nmap <leader>n :noh<CR>
 nmap <leader>w <ESC>:w<CR>
 nmap <leader>d ^dg_ \| :echo "Delete whole line without linewise from
     \ non-block to non-block char!"<CR>
-nmap <leader>dd :bd<CR>
+nmap <leader>bd :bd<CR>
+" buffer only can mapping via keybinding or use plugin BufOnly.vim
+" https://stackoverflow.com/questions/4545275/vim-close-all-buffers-but-this-one
+nmap <leader>bo :%bd\|e#<CR>
 nmap <leader>qq <ESC>:cq<CR>
 nnoremap <leader>ev :vsp ~/.vimrc<CR>
 nnoremap <leader>r :reg<CR>
