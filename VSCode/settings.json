@@ -339,12 +339,24 @@
     {
       "before": [
         "<leader>",
-        "e",
+        "g",
         "o"
       ],
       "commands": [
         "workbench.action.closeEditorsInOtherGroups"
-        // close vscode editors in other groups
+        // close others editor groups
+        // like vim keybindings c-w o
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "e",
+        "o"
+      ],
+      "commands": [
+        "workbench.action.closeOtherEditors"
+        // close other editors in group
       ]
     },
   ],
