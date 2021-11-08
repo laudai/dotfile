@@ -1,5 +1,11 @@
 # Visual Studio Code settings
 
+## VSCode User Interface
+
+[VSCode User Interface link](https://code.visualstudio.com/docs/getstarted/userinterface)
+
+![VSCode User Interface photo](/screenshot/vscode-user-interface.png)
+
 ## Installed plugins
 
 - [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
