@@ -351,6 +351,7 @@ alias -g xc=" | sed -z 's/\n$//' | xclip -selection clipboard"
 alias ez="$EDITOR $HOME/.zshrc"
 alias et="$EDITOR $HOME/.tmux.conf"
 alias ev="$EDITOR $HOME/.vimrc"
+alias es="$EDITOR $HOME/.config/starship.toml"
 alias sz="source $HOME/.zshrc"
 
 #    ______                      __
@@ -382,3 +383,6 @@ fi
 # nvm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+# starship
+eval "$(starship init zsh)"
