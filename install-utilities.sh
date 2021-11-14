@@ -4,6 +4,8 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 # install cross-shell prompt starship
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 mkdir -p ~/.config
+echo "Download Nerd Fonts from web for starship:"
+echo "https://www.nerdfonts.com/font-downloads"
 
 # install TPM (Tmux Plugin Manager)
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
