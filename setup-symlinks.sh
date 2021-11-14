@@ -1,5 +1,8 @@
-# Dotfiles
-ln -s ~/.dotfile/laudai.zshrc ~/.zshrc
+# Download dotfiles
+git clone https://github.com/laudai/dotfile.git ~/.dotfile
+
+# Dotfiles symlinks
+ln -fs ~/.dotfile/laudai.zshrc ~/.zshrc
 ln -s ~/.dotfile/laudai.vimrc ~/.vimrc
 ln -s ~/.dotfile/laudai.tmux.conf ~/.tmux.conf
 ln -s ~/.dotfile/laudai.gitconfig ~/.gitconfig
