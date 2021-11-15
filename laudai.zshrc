@@ -359,7 +359,7 @@ alias naliases=n-aliases ncd=n-cd nenv=n-env nfunctions=n-functions nhistory=n-h
 alias nkill=n-kill noptions=n-options npanelize=n-panelize nhelp=n-help
 
 # suffix alias
-alias -s {md,py,txt,vimrc,zshrc,conf}=vim
+alias -s {md,py,txt,vimrc,zshrc,conf,toml}=vim
 alias -s sh=bash
 
 # global alais
