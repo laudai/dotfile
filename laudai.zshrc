@@ -296,6 +296,27 @@ toggle-gnome-interface_animations() {
 }
 
 
+#    ______                      __
+#   / ____/  ______  ____  _____/ /_
+#  / __/ | |/_/ __ \/ __ \/ ___/ __/
+# / /____>  </ /_/ / /_/ / /  / /_
+#/_____/_/|_/ .___/\____/_/   \__/
+#          /_/
+
+# export
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export EDITOR="vim"
+export VISUAL="$EDITOR"
+export MYVIMRC="$HOME/.vimrc"
+export DOTFILE="$HOME/.dotfile"
+
+# let urlview to use firefox browser to show
+if [ -e '/usr/bin/firefox' ] ; then
+  export BROWSER='/usr/bin/firefox'
+fi
+
+
 #     ___    ___
 #    /   |  / (_)___ ______
 #   / /| | / / / __ `/ ___/
@@ -354,26 +375,14 @@ alias ev="$EDITOR $HOME/.vimrc"
 alias es="$EDITOR $HOME/.config/starship.toml"
 alias sz="source $HOME/.zshrc"
 
-#    ______                      __
-#   / ____/  ______  ____  _____/ /_
-#  / __/ | |/_/ __ \/ __ \/ ___/ __/
-# / /____>  </ /_/ / /_/ / /  / /_
-#/_____/_/|_/ .___/\____/_/   \__/
-#          /_/
 
-# export
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-export EDITOR="vim"
-export VISUAL="$EDITOR"
-export MYVIMRC="$HOME/.vimrc"
-export DOTFILE="$HOME/.dotfile"
+#    ____      _ __
+#   /  _/___  (_) /_
+#   / // __ \/ / __/
+# _/ // / / / / /_
+#/___/_/ /_/_/\__/
 
-# let urlview to use firefox browser to show
-if [ -e '/usr/bin/firefox' ] ; then
-  export BROWSER='/usr/bin/firefox'
-fi
-
+# init
 # pyenv , pyenv virtualenv initalize
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
