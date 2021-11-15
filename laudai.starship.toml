@@ -4,12 +4,15 @@
 # https://github.com/addy3494/startship_config/blob/main/starship.toml
 # https://mvolkmann.github.io/blog/starship/?v=1.0.18
 
+# Prompt
+# Configure the format of the prompt.
+format = "[☁ ](cyan)$all"
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 # Disable the blank line at the start of the prompt
 add_newline = true
-
-format = "[☁ ](cyan)$all"
+# Timeout for commands executed by starship (in milliseconds).
+command_timeout = 300
 
 # First param
 [username]
@@ -30,10 +33,10 @@ disabled = false
 # Third param
 [directory]
 style = "cyan"
-truncation_length = 0
+truncation_length = 2
 truncate_to_repo = false
 truncation_symbol = "repo: "
-read_only = ""
+read_only = "  "
 read_only_style = "red"
 
 # git
@@ -43,16 +46,16 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 [git_status]
 format = "$all_status$ahead_behind"
 style = "bright-white"
-ahead = "⇡ ×${count}"
-behind = "⇣ ×${count}"
-diverged = "⇕⇡ ×${ahead_count}⇣ ×${behind_count}"
-deleted = "✘ ×${count}"
-conflicted = "⚔ "
-untracked = "ண  ×${count}"
+ahead = "⇡ ×${count} "
+behind = "⇣ ×${count} "
+diverged = "⇕⇡ ×${ahead_count}⇣ ×${behind_count} "
+deleted = "✘ ×${count} "
+conflicted = "⚔  "
+untracked = "ண  ×${count} "
 stashed = " "
-modified = "⌨ ×${count}"
-staged = "✤  ×${count}"
-renamed = "➼ ×${count}"
+modified = "⌨  ×${count} "
+staged = "✤  ×${count} "
+renamed = "➼ ×${count} "
 
 [git_branch]
 format = "[$symbol$branch]($style) "
@@ -65,22 +68,24 @@ style = "bold white"
 
 # battery
 [battery]
-full_symbol = " "
-charging_symbol = "⚡️"
-discharging_symbol = " "
-empty_symbol = " "
+format = "[$symbol$percentage]($style) "
+full_symbol = ""
+charging_symbol = ""
+discharging_symbol = ""
+unknown_symbol = ""
+empty_symbol = ""
 
-[[battery.display]] # "bold red" style when capacity is between 0% and 10%
+[[battery.display]] # "underline bold italic red" style when capacity is between 0% and 15%
 threshold = 15
-style = "bold red"
+style = "underline bold italic red"
 
-[[battery.display]] # "bold yellow" style when capacity is between 10% and 30%
+[[battery.display]] # "underline italic yellow" style when capacity is between 15% and 50%
 threshold = 50
-style = "bold yellow"
+style = "underline italic yellow"
 
-[[battery.display]] # "bold green" style when capacity is between 10% and 30%
+[[battery.display]] # "green" style when capacity is between 10% and 30%
 threshold = 80
-style = "bold green"
+style = "green"
 
 [time]
 format = "$time($style) "
@@ -93,13 +98,14 @@ disabled = true
 
 [memory_usage]
 format = "$symbol[${ram}( | ${swap})]($style) "
-threshold = 70
+threshold = 85
 style = "bold dimmed white"
+symbol = "☢ "
 disabled = false
 
 [cmd_duration]
 min_time = 10_000  # Show command duration over 10,000 milliseconds (=10 sec)
-format = " took [$duration]($style)"
+format = " took [$duration]($style) "
 style = "bold bright-white"
 
 [status]
@@ -109,12 +115,13 @@ map_symbol = true
 disabled = false
 
 [character]
-success_symbol = "[➜](bold green)"
+success_symbol = "[↪](bold green)"
 error_symbol = "[✗](bold red) "
+vicmd_symbol = "[↩](bold green)"
 
 # Indicates when in bash shell.
 [custom.bash]
-command = "echo 🚀"
+command = "echo 🌠"
 when = '[ "$STARSHIP_SHELL" == "bash" ]'
 
 # SYMBOLS 
@@ -174,6 +181,7 @@ format = "[$symbol$version]($style) "
 style = "green"
 detect_extensions = []
 detect_files = [".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]
+python_binary = ["python3","python","python2"]
 
 [ruby]
 symbol = " "
