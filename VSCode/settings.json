@@ -224,6 +224,16 @@
       "before": [
         "<leader>",
         "t",
+        "e"
+      ],
+      "commands": [
+        "extension.advancedNewFile"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "t",
         "o"
       ],
       "commands": [
