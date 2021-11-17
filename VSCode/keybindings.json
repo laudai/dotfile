@@ -44,16 +44,8 @@
     "command": "-workbench.action.nextEditor"
   },
   {
-    "key": "ctrl+k /",
-    "command": "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
-  },
-  {
     "key": "ctrl+tab",
     "command": "-workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
-  },
-  {
-    "key": "ctrl+k ctrl+/",
-    "command": "workbench.action.quickOpenLeastRecentlyUsedEditorInGroup"
   },
   {
     "key": "ctrl+shift+tab",
@@ -71,6 +63,18 @@
   {
     "key": "ctrl+q",
     "command": "-workbench.action.quit"
+  },
+  // 檢視: 快速開啟群組中上一個最近使用的編輯器
+  // View: Quick Open Previous Recently Used Editor in Group
+  {
+    "key": "ctrl+k /",
+    "command": "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
+  },
+  // View: Quick Open Least Recently Used Editor in Group
+  // 檢視: 快速開啟群組中最不常使用的編輯器
+  {
+    "key": "ctrl+k ctrl+/",
+    "command": "workbench.action.quickOpenLeastRecentlyUsedEditorInGroup"
   },
   // Editor and Group
   {
