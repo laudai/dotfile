@@ -89,6 +89,7 @@
   // Extensions setting
   // blockman
   "blockman.n04ColorComboPreset": "Classic Dark 3 (Solid colors)",
+  "blockman.n32BlackListOfFileFormats": "plaintext, markdown, python",
   // Vim Setting
   "vim.hlsearch": true,
   "vim.incsearch": true,
