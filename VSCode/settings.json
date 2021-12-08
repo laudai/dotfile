@@ -376,6 +376,28 @@
         // close other editors in group
       ]
     },
+    {
+      "before": [
+        "<C-w>",
+        "z"
+      ],
+      "commands": [
+        "workbench.action.minimizeOtherEditors"
+        // 縮小其他的 editor
+        // in vim is: close preview window
+      ]
+    },
+    {
+      "before": [
+        "<C-w>",
+        "n"
+      ],
+      "commands": [
+        "workbench.action.evenEditorWidths"
+        // 均分所有的 editor
+        // in vim is: open new window, N lines high
+      ]
+    },
   ],
   "vim.insertModeKeyBindings": [
     {

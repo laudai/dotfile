@@ -93,16 +93,6 @@
     "key": "ctrl+alt+right",
     "command": "-workbench.action.moveEditorToNextGroup"
   },
-  {
-    // 縮小其他的 editor
-    "key": "ctrl+a z",
-    "command": "workbench.action.minimizeOtherEditors"
-  },
-  {
-    // 均分所有的 editor
-    "key": "ctrl+a n",
-    "command": "workbench.action.evenEditorWidths"
-  },
   // Focus on
   {
     "key": "shift+alt+e",
