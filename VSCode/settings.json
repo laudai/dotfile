@@ -71,7 +71,8 @@
     "--line-length",
     "120"
   ],
-  // Settings Cycler
+  // Extensions setting
+  // vscode-settings-cycler
   "settings.cycle": [
     {
       "id": "linenumber", // must be unique
@@ -86,11 +87,91 @@
       ]
     }
   ],
-  // Extensions setting
+  // todo-tree
+  "todo-tree.general.tags": [
+    "TODO",
+    "FIXME",
+    "BUG",
+    "HACK",
+    "NOTE",
+    "TIP",
+    "XXX",
+  ],
+  "todo-tree.highlights.useColourScheme": true,
+  "todo-tree.highlights.defaultHighlight": {
+    "foreground": "black",
+    "background": "orange",
+    "icon": "check",
+    "type": "tag",
+    "opacity": 50,
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "checklist",
+      "foreground": "black",
+      "type": "text-and-comment",
+      "gutterIcon": true
+    },
+    "FIXME": {
+      "icon": "tools",
+      "foreground": "white",
+      "type": "text-and-comment",
+      "gutterIcon": true
+    },
+    "BUG": {
+      "icon": "bug",
+      "foreground": "black",
+      "type": "whole-line",
+      "gutterIcon": true
+    },
+    "HACK": {
+      "icon": "rocket",
+      "foreground": "black",
+      "type": "text-and-comment",
+      "gutterIcon": true
+    },
+    "NOTE": {
+      "icon": "note",
+      "foreground": "black",
+      "type": "tag-and-subTag",
+      "gutterIcon": true
+    },
+    "TIP": {
+      "icon": "squirrel",
+      "foreground": "black",
+      "type": "text",
+      "gutterIcon": true
+    },
+    "XXX": {
+      "icon": "dash",
+      "foreground": "white",
+      "type": "tag",
+      "gutterIcon": true
+    },
+  },
+  "todo-tree.highlights.backgroundColourScheme": [
+    "orange",
+    "green",
+    "red",
+    "yellow",
+    "beige",
+    "violet",
+    "gray",
+    "magenta",
+    "indigo",
+    "gold",
+    "silver",
+    "purple",
+    "brown",
+    "skin",
+    "pink",
+    "blue",
+    "cyan",
+  ],
   // blockman
   "blockman.n04ColorComboPreset": "Classic Dark 3 (Solid colors)",
   "blockman.n32BlackListOfFileFormats": "plaintext, markdown, python",
-  // Vim Setting
+  // vim
   "vim.hlsearch": true,
   "vim.incsearch": true,
   "vim.leader": "<space>",
@@ -98,11 +179,11 @@
   "vim.handleKeys": {
     "<C-k>": false
   },
-  // vim plugin
+  // plugin in vim extensions
   "vim.easymotion": true,
   "vim.sneak": true,
   "vim.surround": true,
-  // vim keybindings
+  // keybindings in vim extensions
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "before": [
