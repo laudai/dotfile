@@ -111,6 +111,7 @@ style = "bold bright-white"
 [status]
 symbol = "🔴"
 format = '[$symbol$status_common_meaning$status_signal_name$status_maybe_int]($style)'
+not_found_symbol="?"
 map_symbol = true
 disabled = false
 
