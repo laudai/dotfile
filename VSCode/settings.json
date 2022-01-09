@@ -92,6 +92,7 @@
     "TODO",
     "FIXME",
     "BUG",
+    "HOT",
     "HACK",
     "NOTE",
     "TIP",
@@ -124,6 +125,12 @@
       "type": "whole-line",
       "gutterIcon": true
     },
+    "HOT": {
+      "icon": "flame",
+      "foreground": "black",
+      "type": "text-and-comment",
+      "gutterIcon": true
+    },
     "HACK": {
       "icon": "rocket",
       "foreground": "black",
@@ -150,9 +157,10 @@
     },
   },
   "todo-tree.highlights.backgroundColourScheme": [
-    "orange",
+    "bisque",
     "green",
     "red",
+    "orange",
     "yellow",
     "beige",
     "violet",
@@ -167,6 +175,8 @@
     "pink",
     "blue",
     "cyan",
+    "navy",
+    "cornsilk",
   ],
   // blockman
   "blockman.n04ColorComboPreset": "Classic Dark 3 (Solid colors)",
