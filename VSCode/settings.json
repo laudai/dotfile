@@ -394,6 +394,19 @@
         "x"
       ]
     },
+    {
+      "before": [
+        "<leader>",
+        "d",
+        "d"
+      ],
+      "after": [
+        "\"",
+        "_",
+        "d",
+        "d"
+      ]
+    },
     // Bind only for VSCode in Vim keymap
     {
       "before": [
