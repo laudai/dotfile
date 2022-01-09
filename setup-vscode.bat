@@ -24,7 +24,6 @@ IF exist %USERPROFILE%\Documents\dotfile (
     code --install-extension formulahendry.code-runner  --force
     code --install-extension mdickin.markdown-shortcuts  --force
     code --install-extension yzhang.markdown-all-in-one  --force
-    code --install-extension coenraads.bracket-pair-colorizer-2  --force
     code --install-extension vscodevim.vim  --force
     code --install-extension DavidAnson.vscode-markdownlint  --force
     code --install-extension shd101wyy.markdown-preview-enhanced  --force

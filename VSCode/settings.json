@@ -16,6 +16,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.stickyTabStops": true, //游標選取時，會依照tab停駐點方式選取
   "editor.minimap.enabled": true,
+  // bracketPairColorization extensions built in August 2021 (version 1.60)
+  "editor.bracketPairColorization.enabled": true,
   // Blockman extensions setting for new VSCode API setting in September 2021 v1.61
   "editor.guides.indentation": true,
   "editor.guides.bracketPairs": true,
