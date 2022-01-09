@@ -31,7 +31,6 @@ code --install-extension pnp.polacode  --force
 code --install-extension techer.open-in-browser  --force
 code --install-extension vscode-icons-team.vscode-icons  --force
 code --install-extension mikestead.dotenv  --force
-code --install-extension wayou.vscode-todo-highlight  --force
 code --install-extension editorconfig.editorconfig  --force
 code --install-extension shan.code-settings-sync  --force
 code --install-extension hoovercj.vscode-settings-cycler --force
