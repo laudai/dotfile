@@ -367,6 +367,7 @@ alias -s sh=bash
 # e.g. cd && ls -l G do
 alias -g G=" | grep -i"
 alias -g xc=" | sed -z 's/\n$//' | xclip -selection clipboard"
+alias -g ca=" | cat"
 
 # edit and source config
 alias ez="$EDITOR $HOME/.zshrc"
