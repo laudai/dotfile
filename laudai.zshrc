@@ -295,6 +295,18 @@ toggle-gnome-interface_animations() {
   fi
 }
 
+# toggle your gnome workspace only with primary monitor
+toggle-workspace-primary-monitor-only() {
+  local workspace_primary_monitor_only=$(gsettings get org.gnome.mutter workspaces-only-on-primary)
+  if [[ $workspace_primary_monitor_only == true ]]; then
+	  gsettings set org.gnome.mutter workspaces-only-on-primary false
+	  echo -e "Change gnome workspace only on primary monitor to ${BOLD_RED}False${RESET}."
+  elif [[ $workspace_primary_monitor_only == false ]]; then
+	  gsettings set org.gnome.mutter workspaces-only-on-primary true
+	  echo -e "Change gnome workspace only on primary monitor to ${BOLD_GREEN}True${RESET}."
+  fi
+}
+
 
 #    ______                      __
 #   / ____/  ______  ____  _____/ /_
