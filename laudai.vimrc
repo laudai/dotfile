@@ -93,6 +93,8 @@ nnoremap <M-n> :tabn<CR> \| :echo 'Change to next tab'<CR>
 nnoremap <M-p> :tabp<CR> \| :echo 'Change to previous tab'<CR>
 nnoremap <C-p> :bp<CR> \| :echo 'Change to previous buffer'<CR>
 nnoremap <C-n> :bn<CR> \| :echo 'Change to next buffer'<CR>
+nnoremap ` '
+nnoremap ' `
 nmap qq :q<CR>
 nmap q; q:
 map <ESC>j <M-j>
