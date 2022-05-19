@@ -171,6 +171,7 @@ noremap <Leader>p "0p
 noremap <Leader>P "+P
 noremap <Leader>x "_x
 noremap <Leader>dd "_dd
+noremap <Leader>dw "_dw
 inoremap <C-v> <ESC>"+pa
 vnoremap <C-c> "+y
 vnoremap <C-d> "+d
