@@ -95,6 +95,11 @@ nnoremap <C-p> :bp<CR> \| :echo 'Change to previous buffer'<CR>
 nnoremap <C-n> :bn<CR> \| :echo 'Change to next buffer'<CR>
 nnoremap ` '
 nnoremap ' `
+" onoremap ' `
+" onoremap ` '
+" you can modified operator pending mode to use y'' d''
+" also can use operatorPendingModeKeyBindings in VSCode vim keymap
+" https://vi.stackexchange.com/questions/12576/how-to-remap-backtick-mark-with-single-quote-mark-globally
 nmap qq :q<CR>
 nmap q; q:
 map <ESC>j <M-j>
