@@ -8,8 +8,7 @@
   "editor.cursorBlinking": "smooth",
   "editor.renderLineHighlight": "all", //將當前行標示全開
   "editor.renderControlCharacters": true, //開啟字元轉換控制
-  "editor.renderWhitespace": "boundary", //空白字元轉換
-  "editor.renderIndentGuides": false, // set renderIndentGuides to false for use Guides extension {default:true}
+  "editor.renderWhitespace": "boundary", // set renderIndentGuides to boundary for use Guides extension {default:true}
   "editor.wordWrap": "on", //畫面變化時，程式碼會跟著變化換行
   "editor.formatOnSave": true, //檔案儲存自動格式化
   "editor.formatOnType": true,
@@ -19,8 +18,8 @@
   // bracketPairColorization extensions built in August 2021 (version 1.60)
   "editor.bracketPairColorization.enabled": true,
   // Blockman extensions setting for new VSCode API setting in September 2021 v1.61
-  "editor.guides.indentation": true,
-  "editor.guides.bracketPairs": true,
+  "editor.guides.indentation": false,
+  "editor.guides.bracketPairs": false,
   // https://github.com/microsoft/vscode/issues/20947
   "editor.minimap.renderCharacters": false, // minimap render block instead of character
   "editor.lineNumbers": "relative",
@@ -181,6 +180,7 @@
     "cornsilk",
   ],
   // blockman
+  "blockman.n01LineHeight": 0,
   "blockman.n04ColorComboPreset": "Classic Dark 3 (Solid colors)",
   "blockman.n32BlackListOfFileFormats": "plaintext, markdown, python",
   // vim
