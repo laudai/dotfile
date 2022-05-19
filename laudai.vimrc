@@ -76,6 +76,7 @@ iab [] []()<left><left><left>
 map! jk <ESC>
 imap <C-]> <ESC>:e<CR> "re-edit this file in insert mode"
 inoremap <C-v><C-v> <C-v>
+inoremap <C-d> <Del>
 " Insert newline without entering insert mode
 " https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
 nnoremap oo o<Esc>k

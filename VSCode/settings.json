@@ -543,6 +543,14 @@
       "after": [
         "<Esc>"
       ]
+    },
+    {
+      "before": [
+        "<C-d>",
+      ],
+      "after": [
+        "<Del>"
+      ]
     }
   ],
   "vim.visualModeKeyBindings": [
