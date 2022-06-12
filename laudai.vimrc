@@ -276,6 +276,11 @@ endif " has("autocmd")
 " This is copy from vim74 example
 
 
+" Bash Script header
+autocmd BufNewFile *.sh 0put =\"#!/usr/bin/env bash\<nl>\"|$
+autocmd BufNewFile *.sh 1put =\"# Author : laudai\<nl>\"|$
+autocmd BufNewFile *.sh 2put =\"\<nl>\"|$
+
 " Python header
 autocmd BufNewFile *.py 0put =\"#!/usr/bin/env python\<nl>\"|$
 autocmd BufNewFile *.py 1put =\"# encoding: utf8\<nl>\"|$
