@@ -316,8 +316,6 @@ toggle-workspace-primary-monitor-only() {
 #          /_/
 
 # export
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
 export EDITOR="vim"
 export VISUAL="$EDITOR"
 export MYVIMRC="$HOME/.vimrc"
@@ -394,13 +392,6 @@ alias sz="source $HOME/.zshrc"
 #   / // __ \/ / __/
 # _/ // / / / / /_
 #/___/_/ /_/_/\__/
-
-# init
-# pyenv , pyenv virtualenv initalize
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi
 
 # nvm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
