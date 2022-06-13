@@ -513,6 +513,17 @@
     },
     {
       "before": [
+        "<leader>",
+        "t",
+        "d"
+      ],
+      "commands": [
+        "workbench.view.extension.todo-tree-container"
+        // Show todo-tree activate bar
+      ]
+    },
+    {
+      "before": [
         "<C-w>",
         "z"
       ],
