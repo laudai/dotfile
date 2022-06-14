@@ -162,6 +162,8 @@ nmap <leader>tt :tabe<CR>
 nmap <leader>te :tabe<space>
 nmap <leader>to :tabo<CR>
 nmap <leader>tc <ESC>:tabc<CR>
+nmap <leader>ma :marks<CR>
+nmap <leader>ju :jumps<CR>
 nn <leader>H H
 nn <leader>M M
 nn <leader>L L

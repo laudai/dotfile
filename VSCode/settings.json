@@ -353,6 +353,26 @@
     {
       "before": [
         "<leader>",
+        "m",
+        "a"
+      ],
+      "commands": [
+        ":marks"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "j",
+        "u"
+      ],
+      "commands": [
+        ":jumps"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
         "H"
       ],
       "after": [
