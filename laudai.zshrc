@@ -241,6 +241,7 @@ function _select-vi() {
 zle -N _select-vi
 
 # toggle your gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
+# 切換自動鎖定螢幕、暫停時鎖定螢幕
 toggle-sll() {
   local lock_enabled=$(gsettings get org.gnome.desktop.screensaver lock-enabled)
   local ubuntu_lock_on_suspend=$(gsettings get org.gnome.desktop.screensaver ubuntu-lock-on-suspend)
@@ -260,6 +261,7 @@ toggle-sll() {
 }
 
 # toggle your gnome app-switcher current-workspace-only
+# 切換是否可以透過'切換相同程式'切換不同 workspace 的視窗
 toggle-app-switcher_workspace-only() {
   local app_switcher_workspace=$(gsettings get org.gnome.shell.app-switcher current-workspace-only)
   if [[ $app_switcher_workspace == true ]]; then
@@ -272,6 +274,7 @@ toggle-app-switcher_workspace-only() {
 }
 
 # toggle your gnome window-switcher current-workspace-only
+# 切換是否可以透過'切換視窗'切換不同 workspace 的視窗
 toggle-window-switcher_workspace-only() {
   local window_switcher_workspace=$(gsettings get org.gnome.shell.window-switcher current-workspace-only)
   if [[ $window_switcher_workspace == true ]]; then
@@ -284,6 +287,7 @@ toggle-window-switcher_workspace-only() {
 }
 
 # toggle your gnome interface animations
+# 切換 gnome 特效動畫
 toggle-gnome-interface_animations() {
   local gnome_interface_animations=$(gsettings get org.gnome.desktop.interface enable-animations)
   if [[ $gnome_interface_animations == true ]]; then
@@ -296,6 +300,7 @@ toggle-gnome-interface_animations() {
 }
 
 # toggle your gnome workspace only with primary monitor
+# 只在主螢幕切換 workspace
 toggle-workspace-primary-monitor-only() {
   local workspace_primary_monitor_only=$(gsettings get org.gnome.mutter workspaces-only-on-primary)
   if [[ $workspace_primary_monitor_only == true ]]; then
