@@ -118,7 +118,7 @@
   */
   // bookmarks
   {
-    "key": "ctrl+alt+j",
+    "key": "ctrl+shift+j",
     "command": "bookmarks.jumpToNext",
     "when": "editorTextFocus"
   },
@@ -128,14 +128,24 @@
     "when": "editorTextFocus"
   },
   {
-    "key": "ctrl+alt+k",
+    "key": "ctrl+shift+j",
+    "command": "-workbench.action.search.toggleQueryDetails",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+k",
     "command": "bookmarks.jumpToPrevious",
-    "when": "editorTextFocus"
+    "when": "editorTextFocus && !editorReadonly"
   },
   {
     "key": "ctrl+alt+j",
     "command": "-bookmarks.jumpToPrevious",
     "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+k",
+    "command": "-editor.action.deleteLines",
+    "when": "textInputFocus && !editorReadonly"
   },
   // Settings Cycler keybindings
   {
