@@ -99,7 +99,7 @@
     "command": "workbench.files.action.focusFilesExplorer"
   },
   {
-    "key": "ctrl+a space",
+    "key": "ctrl+k space",
     "command": "workbench.action.toggleSidebarVisibility"
   },
   {
