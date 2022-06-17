@@ -227,6 +227,16 @@ function mkcdf() {
   cd $1
 }
 
+# display setting for monitor
+function screen_to_monitor(){
+	xrandr --output eDP-1 --mode 1920x1080
+}
+
+# display setting for panel
+function screen_to_panel(){
+	xrandr --output eDP-1 --mode 1600x900
+}
+
 # change to vim insert mode and use emacs keymap
 function _select-emacs() {
   zle vi-insert
