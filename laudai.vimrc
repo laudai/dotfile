@@ -50,7 +50,7 @@ set autoread " ar, 當文件僅在vim外部進行修改，可進行自動讀檔(
 " misc-setting
 " 將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
 " number<C-a> or number<C-x>
-set nrformats=
+" set nrformats= " 預設可以識別 bin, oct, dec, hex 加入此設定反而無法識別
 
 " Highlight setting
 highlight CursorLine cterm=bold,underline ctermbg=black ctermfg=None
