@@ -361,6 +361,7 @@ alias gquit--no-prompt="gnome-session-quit --no-prompt"
 alias dotfile="cd ~/.dotfile"
 alias li="set -o | grep 'emacs\|^vi'"
 alias kagt="killall gnome-terminal-server"
+alias kagc="killall gnome-calculator"
 
 # line alias
 alias line="chromium-browser chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html#popout > /dev/null 2>&1 &"
