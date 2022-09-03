@@ -362,6 +362,7 @@ alias dotfile="cd ~/.dotfile"
 alias li="set -o | grep 'emacs\|^vi'"
 alias kagt="killall gnome-terminal-server"
 alias kagc="killall gnome-calculator"
+alias less="less -r" # in raw-control-chars for default
 
 # line alias
 alias line="chromium-browser chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html#popout > /dev/null 2>&1 &"
@@ -415,3 +416,6 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 # starship
 eval "$(starship init zsh)"
+
+# https://superuser.com/questions/117841/when-reading-a-file-with-less-or-more-how-can-i-get-the-content-in-colors
+#export LESS="-r" #useful for raw-control-chars, but can't like alias to escape via backslash \
