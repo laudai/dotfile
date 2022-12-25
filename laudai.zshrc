@@ -143,6 +143,7 @@ source $ZSH/oh-my-zsh.sh
 #          /____/                            /____/
 
 # keybindings
+# You can use C-v in your shell to check what key combinaiton you press
 bindkey '^[\' autosuggest-toggle # alt-\
 bindkey -s '^[d' '^Uexit^M'
 bindkey '^P' history-substring-search-up
@@ -161,6 +162,8 @@ bindkey -M viins 'jk' vi-cmd-mode
 bindkey -M viins '^[e' _select-emacs
 bindkey -M vicmd '^[e' _select-emacs
 bindkey -M emacs '^[v' _select-vi
+bindkey -M viins '\ec' _select-emacs
+bindkey -M emacs '\ec' _select-vi
 bindkey -M vicmd " e" end-of-line
 bindkey -M vicmd " a" beginning-of-line
 # zsh-navigation-tools  keybindings
