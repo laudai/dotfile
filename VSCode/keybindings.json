@@ -64,6 +64,10 @@
     "key": "ctrl+q",
     "command": "-workbench.action.quit"
   },
+  {
+    "key": "Shift+Alt+n",
+    "command": "notifications.clearAll"
+  },
   // 檢視: 快速開啟群組中上一個最近使用的編輯器
   // View: Quick Open Previous Recently Used Editor in Group
   {
