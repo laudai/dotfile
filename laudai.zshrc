@@ -372,6 +372,7 @@ alias line="chromium-browser chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
 alias grf="git reflog"
+alias gdst="git diff --stat"
 
 # oh-my-zsh plugin git alias
 alias gmd="less ~/.oh-my-zsh/plugins/git/README.md 2> /dev/null || echo 'File not founded.'"
