@@ -27,7 +27,7 @@ ZSH_THEME="cloud"
 #powerlevel10k/powerlevel10k # need install
 
 #CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$HOME/.dotfile/color.txt"
+test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
 
 #if [ "$HOST"="raspberrypi" ]
 #then
