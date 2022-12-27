@@ -384,6 +384,8 @@ alias gmd="less ~/.oh-my-zsh/plugins/git/README.md 2> /dev/null || echo 'File no
 # curl alias
 alias wttrk="curl wttr.in/kaohsiung"
 alias wttrt="curl wttr.in/taipei"
+alias wttri="curl wttr.in/Ireland"
+alias wttrd="curl wttr.in/dublin"
 
 # zsh-navigation-tools plugin alias
 alias naliases=n-aliases ncd=n-cd nenv=n-env nfunctions=n-functions nhistory=n-history
