@@ -125,6 +125,13 @@ nn <C-v><C-v> <C-v>
 set <S-F4>=[1;2S
 nn <S-F4> :mksession! ~/.vim_manual_session.vim<CR> \| :echo 'stores session to ~/.vim_manual_session.vim'<CR>
 nn <F4> :source ~/.vim_manual_session.vim<CR> \| :echo 'restores session from ~/.vim_manual_session.vim'<CR>
+" break undo sequence, start new change for the Ctrl-w, Ctrl-u, Ctrl-h, Ctrl-d
+" https://vim.fandom.com/wiki/Recover_from_accidental_Ctrl-U
+inoremap <C-u> <C-g>u<C-u>
+inoremap <C-w> <C-g>u<C-w>
+inoremap <C-h> <C-g>u<C-h>
+inoremap <C-d> <C-g>u<Del>
+
 
 " Toggle Cursorline on/off with one key press
 " https://stackoverflow.com/questions/1497404/toggle-cursorline-on-off-with-one-key-press
