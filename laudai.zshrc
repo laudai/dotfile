@@ -387,6 +387,7 @@ alias wttrt="curl wttr.in/taipei"
 alias wttri="curl wttr.in/Ireland"
 alias wttrd="curl wttr.in/dublin"
 alias wttrhelp="curl wttr.in/:help | less"
+alias wttrd_png="curl wttr.in/dublin.png --output /tmp/weather.png &> /dev/null && (which display &> /dev/null && display -resize $(xrandr | fgrep '*' | awk '{print $1}') /tmp/weather.png || echo 'You could use ImageMagick to show this image.')"
 
 # zsh-navigation-tools plugin alias
 alias naliases=n-aliases ncd=n-cd nenv=n-env nfunctions=n-functions nhistory=n-history
