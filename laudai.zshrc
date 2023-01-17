@@ -386,6 +386,7 @@ alias wttrk="curl wttr.in/kaohsiung"
 alias wttrt="curl wttr.in/taipei"
 alias wttri="curl wttr.in/Ireland"
 alias wttrd="curl wttr.in/dublin"
+alias wttrhelp="curl wttr.in/:help | less"
 
 # zsh-navigation-tools plugin alias
 alias naliases=n-aliases ncd=n-cd nenv=n-env nfunctions=n-functions nhistory=n-history
