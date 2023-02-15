@@ -5,6 +5,7 @@
 test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
 
 
+#curl checkip.amazonaws.com
 
 # check vpn enabled or not
 ip a | grep -E "surfshark" >/dev/null
