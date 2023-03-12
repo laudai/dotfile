@@ -154,13 +154,13 @@
   // Settings Cycler keybindings
   {
     "key": "ctrl+shift+F3",
-    "command": "settings.cycle.linenumber",
+    "command": "settings.cycle.linenumber"
   },
   // blockman
   {
     // 開啟/關閉 blockman
     "key": "ctrl+alt+b",
-    "command": "blockman.toggleEnableDisable",
+    "command": "blockman.toggleEnableDisable"
   },
   /*
  _    ___              __ __           __    _           ___
@@ -189,5 +189,5 @@
     "key": "alt+k",
     "command": "editor.action.moveLinesUpAction",
     "when": "editorTextFocus && !editorReadonly && vim.active"
-  },
+  }
 ]
