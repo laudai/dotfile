@@ -1,41 +1,124 @@
 # Visual Studio Code
-ln -s ~/.dotfile/VSCode/keybindings.json ~/.config/Code/User/keybindings.json
-ln -s ~/.dotfile/VSCode/settings.json ~/.config/Code/User/settings.json
-if [ ! -d ~/.config/Code/User/snippets ]; then
-	mkdir -p ~/.config/Code/User/snippets;
-fi
-ln -s ~/.dotfile/VSCode/python.json ~/.config/Code/User/snippets/python.json
 
-code --install-extension ms-python.python  --force
-code --install-extension tht13.python  --force
-code --install-extension ms-ceintl.vscode-language-pack-zh-hant  --force
-code --install-extension visualstudioexptteam.vscodeintellicode  --force
-code --install-extension formulahendry.code-runner  --force
-code --install-extension mdickin.markdown-shortcuts  --force
-code --install-extension yzhang.markdown-all-in-one  --force
-code --install-extension vscodevim.vim  --force
-code --install-extension DavidAnson.vscode-markdownlint  --force
-code --install-extension shd101wyy.markdown-preview-enhanced  --force
-code --install-extension formulahendry.auto-rename-tag  --force
-code --install-extension aaron-bond.better-comments  --force
-code --install-extension alefragnani.bookmarks  --force
-code --install-extension github.vscode-pull-request-github  --force
-code --install-extension eamodio.gitlens  --force
-code --install-extension ritwickdey.liveserver  --force
-code --install-extension patbenatar.advanced-new-file  --force
-code --install-extension equinusocio.vsc-material-theme  --force
-code --install-extension pkief.material-icon-theme  --force
-code --install-extension ms-vscode-remote.remote-ssh  --force
-code --install-extension esbenp.prettier-vscode  --force
-code --install-extension pnp.polacode  --force
-code --install-extension techer.open-in-browser  --force
-code --install-extension vscode-icons-team.vscode-icons  --force
-code --install-extension mikestead.dotenv  --force
-code --install-extension editorconfig.editorconfig  --force
-code --install-extension shan.code-settings-sync  --force
-code --install-extension hoovercj.vscode-settings-cycler --force
-code --install-extension gruntfuggly.todo-tree --force
-code --install-extension spywhere.guides --force
-code --install-extension mhutchie.git-graph --force
-code --install-extension donjayamanne.githistory --force
-code --install-extension leodevbro.blockman --force
+# default path by different os
+VSCODE_PATH="$HOME/.dotfile/VSCode"
+VSCODE_LINUX_PATH="$HOME/.config/Code/User"
+VSCODE_MAC_PATH="$HOME/Library/Application Support/Code/User"
+INSTALL_EXTENSIONS_MOTD="
+Now start to install the VSCode extensions.
+Will insall all VSCode extensions forcibly in the array in this script.
+"
+
+declare -a vscode_extensions=(
+    "ms-python.python"
+    "tht13.python"
+    "ms-ceintl.vscode-language-pack-zh-hant"
+    "visualstudioexptteam.vscodeintellicode"
+    "formulahendry.code-runner"
+    "mdickin.markdown-shortcuts"
+    "yzhang.markdown-all-in-one"
+    "vscodevim.vim"
+    "DavidAnson.vscode-markdownlint"
+    "shd101wyy.markdown-preview-enhanced"
+    "formulahendry.auto-rename-tag"
+    "aaron-bond.better-comments"
+    "alefragnani.bookmarks"
+    "github.vscode-pull-request-github"
+    "eamodio.gitlens"
+    "ritwickdey.liveserver"
+    "patbenatar.advanced-new-file"
+    "equinusocio.vsc-material-theme"
+    "pkief.material-icon-theme"
+    "ms-vscode-remote.remote-ssh"
+    "esbenp.prettier-vscode"
+    "pnp.polacode"
+    "techer.open-in-browser"
+    "vscode-icons-team.vscode-icons"
+    "mikestead.dotenv"
+    "editorconfig.editorconfig"
+    "shan.code-settings-sync"
+    "hoovercj.vscode-settings-cycler"
+    "gruntfuggly.todo-tree"
+    "spywhere.guides"
+    "mhutchie.git-graph"
+    "donjayamanne.githistory"
+    "leodevbro.blockman"
+)
+
+
+function end_of_setting() {
+    local os_setting_path="$1"
+    echo "Set keybindings.json, settings.json, and python snippets on '$os_setting_path' successfully."
+}
+
+
+# check vscode path
+if [[ -d "$VSCODE_PATH" ]]; then
+    :
+else
+   echo "Cannot find the "$VSCODE_PATH", will exit this script."
+   exit 1
+fi
+
+
+# check the vscode was installed and set to the environment variable
+which code &> /dev/null
+if [[ $? -eq 0 ]]; then
+    echo "Can find code command in the environment variable."
+elif [[ $? -eq 1 ]]; then
+    echo "
+    Cannot find the code command in the environment variable.
+    You need to install the VSCode and add the command into the environment varible.
+    " >&2 && exit 1
+else
+    echo "Undefined error number." >&2 && exit 1
+fi
+echo
+
+
+# set the configuration files by different os
+case "$OSTYPE" in
+    "linux-gnu"*)
+        # keybindings and settings
+        BASE_PATH="$VSCODE_LINUX_PATH"
+        ln -sf "$VSCODE_PATH/keybindings.json" "$BASE_PATH/keybindings.json"
+        ln -sf "$VSCODE_PATH/settings.json" "$BASE_PATH/settings.json"
+
+        # snippets
+        [[ ! -d "$BASE_PATH/snippets" ]] && mkdir -p "$BASE_PATH/snippets"
+        ln -sf "$VSCODE_PATH/python.json" "$BASE_PATH/snippets/phthon.json"
+
+        end_of_setting "$BASE_PATH"
+        ;;
+    "darwin"*)
+        BASE_PATH="$VSCODE_MAC_PATH"
+        ln -sf "$VSCODE_PATH/keybindings.json" "$BASE_PATH/keybindings.json"
+        ln -sf "$VSCODE_PATH/settings.json" "$BASE_PATH/settings.json"
+
+        # snippets
+        [[ ! -d "$BASE_PATH/snippets" ]] && mkdir -p "$BASE_PATH/snippets"
+        ln -sf "$VSCODE_PATH/python.json" "$BASE_PATH/snippets/phthon.json"
+
+        # extension settings
+        # vim
+        # To enable key-repeating, execute the following in your Terminal, log out and back in, and then restart VS Code:
+        defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false              # For VS Code
+        defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false      # For VS Code Insider
+        defaults write com.visualstudio.code.oss ApplePressAndHoldEnabled -bool false         # For VS Codium
+        defaults write com.microsoft.VSCodeExploration ApplePressAndHoldEnabled -bool false   # For VS Codium Exploration users
+        defaults delete -g ApplePressAndHoldEnabled
+        echo
+
+        end_of_setting "$BASE_PATH"
+        ;;
+    *)
+        echo "Can not match any OSTYPE variable name." >&2
+        exit 1
+        ;;
+esac
+
+echo "$INSTALL_EXTENSIONS_MOTD"
+for extension in "${vscode_extensions[@]}"
+do
+    code --install-extension "$extension" --force
+done

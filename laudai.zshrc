@@ -338,6 +338,8 @@ export EDITOR="vim"
 export VISUAL="$EDITOR"
 export MYVIMRC="$HOME/.vimrc"
 export DOTFILE="$HOME/.dotfile"
+[[ "$OSTYPE" == "darwin"* ]] && export PATH=/opt/homebrew/bin:$PATH # for m1 homebrew
+
 
 # let urlview to use firefox browser to show
 if [ -e '/usr/bin/firefox' ] ; then
