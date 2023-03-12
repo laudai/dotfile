@@ -189,5 +189,152 @@
     "key": "alt+k",
     "command": "editor.action.moveLinesUpAction",
     "when": "editorTextFocus && !editorReadonly && vim.active"
+  },
+  /*
+    __  ___           ____  _____    __ __           __    _           ___
+   /  |/  /___ ______/ __ \/ ___/   / //_/__  __  __/ /_  (_)___  ____/ (_)___  ____ ______
+  / /|_/ / __ `/ ___/ / / /\__ \   / ,< / _ \/ / / / __ \/ / __ \/ __  / / __ \/ __ `/ ___/
+ / /  / / /_/ / /__/ /_/ /___/ /  / /| /  __/ /_/ / /_/ / / / / / /_/ / / / / / /_/ (__  )
+/_/  /_/\__,_/\___/\____//____/  /_/ |_\___/\__, /_.___/_/_/ /_/\__,_/_/_/ /_/\__, /____/
+                                           /____/                            /____/
+  MacOS Keybindings
+  */
+  {
+    "key": "cmd+1",
+    "command": "workbench.action.openEditorAtIndex1",
+    "when": "isMac"
+  },
+  {
+    "key": "cmd+1",
+    "command": "-workbench.action.focusFirstEditorGroup"
+  },
+  {
+    "key": "cmd+2",
+    "command": "workbench.action.openEditorAtIndex2",
+    "when": "isMac"
+  },
+  {
+    "key": "cmd+2",
+    "command": "-workbench.action.focusSecondEditorGroup"
+  },
+  {
+    "key": "cmd+3",
+    "command": "workbench.action.openEditorAtIndex3",
+    "when": "isMac"
+  },
+  {
+    "key": "cmd+3",
+    "command": "-workbench.action.focusThirdEditorGroup"
+  },
+  {
+    "key": "cmd+4",
+    "command": "workbench.action.openEditorAtIndex4",
+    "when": "isMac"
+  },
+  {
+    "key": "cmd+4",
+    "command": "-workbench.action.focusFourthEditorGroup"
+  },
+  {
+    "key": "cmd+5",
+    "command": "-workbench.action.focusFifthEditorGroup"
+  },
+  {
+    "key": "cmd+5",
+    "command": "workbench.action.openEditorAtIndex5"
+  },
+  {
+    "key": "cmd+6",
+    "command": "workbench.action.openEditorAtIndex6"
+  },
+  {
+    "key": "cmd+6",
+    "command": "-workbench.action.focusSixthEditorGroup"
+  },
+  {
+    "key": "cmd+7",
+    "command": "workbench.action.openEditorAtIndex7"
+  },
+  {
+    "key": "cmd+7",
+    "command": "-workbench.action.focusSeventhEditorGroup"
+  },
+  {
+    "key": "cmd+8",
+    "command": "workbench.action.openEditorAtIndex8"
+  },
+  {
+    "key": "cmd+8",
+    "command": "-workbench.action.focusEighthEditorGroup"
+  },
+  {
+    "key": "cmd+9",
+    "command": "workbench.action.openEditorAtIndex9"
+  },
+  {
+    "key": "cmd+9",
+    "command": "-workbench.action.lastEditorInGroup"
+  },
+  {
+    "key": "cmd+0",
+    "command": "workbench.action.lastEditorInGroup"
+  },
+  {
+    "key": "ctrl+0",
+    "command": "workbench.action.focusSideBar",
+    "when": "isMac"
+  },
+  {
+    "key": "cmd+0",
+    "command": "-workbench.action.focusSideBar"
+  },
+  /*
+    ____  _                          __   ____       ____            ____     _____      __  __  _
+   / __ \(_)_____________ __________/ /  / __ \___  / __/___ ___  __/ / /_   / ___/___  / /_/ /_(_)___  ____ ______
+  / / / / / ___/ ___/ __ `/ ___/ __  /  / / / / _ \/ /_/ __ `/ / / / / __/   \__ \/ _ \/ __/ __/ / __ \/ __ `/ ___/
+ / /_/ / (__  ) /__/ /_/ / /  / /_/ /  / /_/ /  __/ __/ /_/ / /_/ / / /_    ___/ /  __/ /_/ /_/ / / / / /_/ (__  )
+/_____/_/____/\___/\__,_/_/   \__,_/  /_____/\___/_/  \__,_/\__,_/_/\__/   /____/\___/\__/\__/_/_/ /_/\__, /____/
+                                                                                                     /____/
+  Discard Default Settings
+  */
+  {
+    "key": "ctrl+1",
+    "command": "-workbench.action.openEditorAtIndex1"
+  },
+  {
+    "key": "ctrl+2",
+    "command": "-workbench.action.openEditorAtIndex2"
+  },
+  {
+    "key": "ctrl+3",
+    "command": "-workbench.action.openEditorAtIndex3"
+  },
+  {
+    "key": "ctrl+4",
+    "command": "-workbench.action.openEditorAtIndex4"
+  },
+  {
+    "key": "ctrl+5",
+    "command": "-workbench.action.openEditorAtIndex5"
+  },
+  {
+    "key": "ctrl+6",
+    "command": "-workbench.action.openEditorAtIndex6"
+  },
+  {
+    "key": "ctrl+7",
+    "command": "-workbench.action.openEditorAtIndex7"
+  },
+  {
+    "key": "ctrl+8",
+    "command": "-workbench.action.openEditorAtIndex8"
+  },
+  {
+    "key": "ctrl+9",
+    "command": "-workbench.action.openEditorAtIndex9"
+  },
+  {
+    "key": "ctrl+0",
+    "command": "-workbench.action.lastEditorInGroup"
   }
 ]
