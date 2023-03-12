@@ -201,8 +201,10 @@
   */
   {
     "key": "cmd+1",
-    "command": "workbench.action.openEditorAtIndex1",
-    "when": "isMac"
+    "command": "workbench.action.openEditorAtIndex1"
+    //"when": "isMac"
+    // Add context keys for platforms #54894
+    // https://github.com/microsoft/vscode/pull/54894
   },
   {
     "key": "cmd+1",
@@ -210,8 +212,7 @@
   },
   {
     "key": "cmd+2",
-    "command": "workbench.action.openEditorAtIndex2",
-    "when": "isMac"
+    "command": "workbench.action.openEditorAtIndex2"
   },
   {
     "key": "cmd+2",
@@ -219,8 +220,7 @@
   },
   {
     "key": "cmd+3",
-    "command": "workbench.action.openEditorAtIndex3",
-    "when": "isMac"
+    "command": "workbench.action.openEditorAtIndex3"
   },
   {
     "key": "cmd+3",
@@ -228,8 +228,7 @@
   },
   {
     "key": "cmd+4",
-    "command": "workbench.action.openEditorAtIndex4",
-    "when": "isMac"
+    "command": "workbench.action.openEditorAtIndex4"
   },
   {
     "key": "cmd+4",
