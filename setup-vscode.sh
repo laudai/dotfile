@@ -99,6 +99,16 @@ case "$OSTYPE" in
         [[ ! -d "$BASE_PATH/snippets" ]] && mkdir -p "$BASE_PATH/snippets"
         ln -sf "$VSCODE_PATH/python.json" "$BASE_PATH/snippets/phthon.json"
 
+        # extension settings
+        # vim
+        # To enable key-repeating, execute the following in your Terminal, log out and back in, and then restart VS Code:
+        defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false              # For VS Code
+        defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false      # For VS Code Insider
+        defaults write com.visualstudio.code.oss ApplePressAndHoldEnabled -bool false         # For VS Codium
+        defaults write com.microsoft.VSCodeExploration ApplePressAndHoldEnabled -bool false   # For VS Codium Exploration users
+        defaults delete -g ApplePressAndHoldEnabled
+        echo
+
         end_of_setting "$BASE_PATH"
         ;;
     *)
