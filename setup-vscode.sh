@@ -1,10 +1,44 @@
 # Visual Studio Code
-ln -s ~/.dotfile/VSCode/keybindings.json ~/.config/Code/User/keybindings.json
-ln -s ~/.dotfile/VSCode/settings.json ~/.config/Code/User/settings.json
-if [ ! -d ~/.config/Code/User/snippets ]; then
-	mkdir -p ~/.config/Code/User/snippets;
+
+# default path by different os
+linux_path="$HOME/.config/Code/User"
+mac_path="$HOME/Library/Application Support/Code/User"
+
+
+# check the vscode was installed and set to the environment variable
+which code &> /dev/null
+if [[ $? -eq 0 ]]; then
+    echo "Can find code command in the environment variable."
+elif [[ $? -eq 1 ]]; then
+    echo "Cannot find the code command in the environment variable." >&2 && exit 1
+else
+    echo "Undefined error number." >&2 && exit 1
 fi
-ln -s ~/.dotfile/VSCode/python.json ~/.config/Code/User/snippets/python.json
+echo
+
+# set the configuration files by different os
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # keybindings and settings
+    base_path="$linux_path"
+    ln -sf ~/.dotfile/VSCode/keybindings.json "$base_path/keybindings.json"
+    ln -sf ~/.dotfile/VSCode/settings.json "$base_path/settings.json"
+
+    # snippets
+    [[ ! -d "$base_path/snippets" ]] && mkdir -p "$base_path/snippets"
+    ln -sf ~/.dotfile/VSCode/python.json "$base_path/snippets/phthon.json"
+
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    base_path="$mac_path"
+    ln -sf ~/.dotfile/VSCode/keybindings.json "$base_path/keybindings.json"
+    ln -sf ~/.dotfile/VSCode/settings.json "$base_path/settings.json"
+
+    # snippets
+    [[ ! -d "$base_path/snippets" ]] && mkdir -p "$base_path/snippets"
+    ln -sf ~/.dotfile/VSCode/python.json "$base_path/snippets/phthon.json"
+
+else
+    echo "Can not match any OSTYPE variable name." >&2 && exit 1
+fi
 
 code --install-extension ms-python.python  --force
 code --install-extension tht13.python  --force
