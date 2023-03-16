@@ -253,6 +253,25 @@ function _select-vi() {
 }
 zle -N _select-vi
 
+# jump to folder by autojump command, and use the VSCode to open this folder
+function gfv() {
+  if which autojump &> /dev/null; then
+    :
+  else
+    echo "autojump command not found" >&2
+    return
+  fi
+  if which code &> /dev/null; then
+    :
+  else
+    echo "code command not found" >&2
+    return
+  fi
+  # the first argument should fill in your folder name
+  j "$1" && : || return
+  code -n .
+}
+
 # toggle your gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
 # 切換自動鎖定螢幕、暫停時鎖定螢幕
 toggle-sll() {
