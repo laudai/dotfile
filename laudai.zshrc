@@ -272,6 +272,18 @@ function gfv() {
   code -n .
 }
 
+# 切換 MacOS 的“依據應用程式將視窗分組” "Group windows by application"
+function toggle-expose-apps() {
+  local expose_group_apps=$(defaults read com.apple.dock expose-group-apps)
+  if [[ $expose_group_apps -eq 1 ]]; then
+    defaults write com.apple.dock expose-group-apps -boolean false; killall Dock
+    echo "turn off 'Group windows by application'"
+  else
+    defaults write com.apple.dock expose-group-apps -boolean true; killall Dock
+    echo "turn on 'Group windows by application'"
+  fi
+}
+
 # toggle your gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
 # 切換自動鎖定螢幕、暫停時鎖定螢幕
 toggle-sll() {
