@@ -259,13 +259,13 @@ function gfv() {
     :
   else
     echo "autojump command not found" >&2
-    return
+    return 1
   fi
   if which code &> /dev/null; then
     :
   else
     echo "code command not found" >&2
-    return
+    return 1
   fi
   # the first argument should fill in your folder name
   j "$1" && : || return
