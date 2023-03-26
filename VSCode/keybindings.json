@@ -290,13 +290,13 @@
     "command": "workbench.action.lastEditorInGroup"
   },
   {
+    "key": "cmd+0",
+    "command": "workbench.action.zoomReset"
+  },
+  {
     "key": "ctrl+0",
     "command": "workbench.action.focusSideBar",
     "when": "isMac"
-  },
-  {
-    "key": "cmd+0",
-    "command": "-workbench.action.focusSideBar"
   },
   /*
     ____  _                          __   ____       ____            ____     _____      __  __  _
@@ -353,11 +353,11 @@
     "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
   },
   {
-    "key": "cmd+0",
-    "command": "workbench.action.zoomReset"
-  },
-  {
     "key": "cmd+numpad0",
     "command": "-workbench.action.zoomReset"
+  },
+  {
+    "key": "cmd+0",
+    "command": "-workbench.action.focusSideBar"
   }
 ]
