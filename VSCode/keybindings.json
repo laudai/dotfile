@@ -283,14 +283,10 @@
   },
   {
     "key": "cmd+9",
-    "command": "workbench.action.openEditorAtIndex9"
-  },
-  {
-    "key": "cmd+9",
     "command": "-workbench.action.lastEditorInGroup"
   },
   {
-    "key": "cmd+0",
+    "key": "cmd+9",
     "command": "workbench.action.lastEditorInGroup"
   },
   {
@@ -355,5 +351,13 @@
     "key": "enter",
     "command": "-renameFile",
     "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+  },
+  {
+    "key": "cmd+0",
+    "command": "workbench.action.zoomReset"
+  },
+  {
+    "key": "cmd+numpad0",
+    "command": "-workbench.action.zoomReset"
   }
 ]
