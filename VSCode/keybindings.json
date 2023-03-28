@@ -203,21 +203,32 @@
                                            /____/                            /____/
   MacOS Keybindings
   */
+  // Focus at editor group
   {
-    "key": "cmd+k cmd+o",
-    "command": "workbench.action.files.openFileFolder",
-    "when": "openFolderWorkspaceSupport"
+    "key": "ctrl+shift+1",
+    "command": "workbench.action.focusFirstEditorGroup"
   },
   {
-    "key": "f2",
-    "command": "renameFile",
-    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    "key": "ctrl+shift+2",
+    "command": "workbench.action.focusSecondEditorGroup"
   },
   {
-    "key": "enter",
-    "command": "explorer.openAndPassFocus",
-    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsFolder && !inputFocus"
+    "key": "ctrl+shift+3",
+    "command": "workbench.action.focusThirdEditorGroup"
   },
+  {
+    "key": "ctrl+shift+4",
+    "command": "workbench.action.focusFourthEditorGroup"
+  },
+  {
+    "key": "ctrl+shift+5",
+    "command": "workbench.action.focusFifthEditorGroup"
+  },
+  {
+    "key": "ctrl+shift+0",
+    "command": "workbench.action.focusLastEditorGroup"
+  },
+  // Focus at editor index
   {
     "key": "cmd+1",
     "command": "workbench.action.openEditorAtIndex1"
@@ -301,6 +312,22 @@
     "key": "ctrl+0",
     "command": "workbench.action.focusSideBar",
     "when": "isMac"
+  },
+  // Misc
+  {
+    "key": "cmd+k cmd+o",
+    "command": "workbench.action.files.openFileFolder",
+    "when": "openFolderWorkspaceSupport"
+  },
+  {
+    "key": "f2",
+    "command": "renameFile",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+  },
+  {
+    "key": "enter",
+    "command": "explorer.openAndPassFocus",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsFolder && !inputFocus"
   },
   /*
     ____  _                          __   ____       ____            ____     _____      __  __  _
