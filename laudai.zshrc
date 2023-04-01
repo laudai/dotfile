@@ -29,6 +29,24 @@ ZSH_THEME="cloud"
 #CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
 
+# source all files in specify folder
+declare -a source_folder_arr
+declare -a source_filename_arr
+source_folder_arr=(
+  $HOME/.dotfile/private
+)
+for foldername in ${source_folder_arr[@]};
+do
+  source_filename_arr+=$(find "$foldername" -type f ! -name '*.*~' 2>/dev/null)
+done
+if [[ ${#source_filename_arr[@]} -gt 0 ]]; then
+  for source_filename in ${source_filename_arr[@]}
+  do
+    source "$source_filename"
+  done
+fi
+
+
 #if [ "$HOST"="raspberrypi" ]
 #then
 #	ZSH_THEME="robbyrussell"
