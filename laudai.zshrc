@@ -403,11 +403,6 @@ fi
 # /_/  |_/_/_/\__,_/____/
 
 # alias
-# docker alias
-alias dcp="docker-compose"
-alias dcls="docker container ls"
-alias dclsa="docker container ls -a"
-
 # operating alias
 alias cls="printf '\033c'"
 alias gquit="gnome-session-quit"
@@ -418,8 +413,6 @@ alias kagt="killall gnome-terminal-server"
 alias kagc="killall gnome-calculator"
 alias less="less -r" # in raw-control-chars for default
 
-# line alias
-alias line="chromium-browser chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html#popout > /dev/null 2>&1 &"
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
 alias grf="git reflog"
@@ -429,13 +422,6 @@ alias gsa="git show --all --shortstat --stat"
 # ssh alias
 alias sshr="ssh-keygen -R " # to remove specify ssh key by name
 
-# oh-my-zsh plugin git alias
-alias gmd="less ~/.oh-my-zsh/plugins/git/README.md 2> /dev/null || echo 'File not founded.'"
-
-# python alias
-#alias python="/usr/bin/python3"
-#alias pip="/usr/bin/pip3"
-
 # curl alias
 alias wttrk="curl wttr.in/kaohsiung"
 alias wttrt="curl wttr.in/taipei"
@@ -444,20 +430,24 @@ alias wttrd="curl wttr.in/dublin"
 alias wttrhelp="curl wttr.in/:help | less"
 alias wttrd_png="curl wttr.in/dublin.png --output /tmp/weather.png &> /dev/null && (which display &> /dev/null && display -resize $(xrandr | fgrep '*' | awk '{print $1}') /tmp/weather.png || echo 'You could use ImageMagick to show this image.')"
 
+# python alias
+#alias python="/usr/bin/python3"
+#alias pip="/usr/bin/pip3"
+
+# oh-my-zsh plugin git alias
+alias gmd="less ~/.oh-my-zsh/plugins/git/README.md 2> /dev/null || echo 'File not founded.'"
+
 # zsh-navigation-tools plugin alias
 alias naliases=n-aliases ncd=n-cd nenv=n-env nfunctions=n-functions nhistory=n-history
 alias nkill=n-kill noptions=n-options npanelize=n-panelize nhelp=n-help
 
-# suffix alias
-alias -s {md,py,txt,vimrc,zshrc,conf,toml}=vim
-alias -s sh=bash
+# line alias
+alias line="chromium-browser chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html#popout > /dev/null 2>&1 &"
 
-# global alais
-# https://thorsten-hans.com/5-types-of-zsh-aliases
-# e.g. cd && ls -l G do
-alias -g G=" | grep -i"
-alias -g xc=" | sed -z 's/\n$//' | xclip -selection clipboard"
-alias -g ca=" | cat"
+# docker alias
+alias dcp="docker-compose"
+alias dcls="docker container ls"
+alias dclsa="docker container ls -a"
 
 # edit and source config
 alias ez="$EDITOR $HOME/.zshrc"
@@ -466,6 +456,16 @@ alias ev="$EDITOR $HOME/.vimrc"
 alias es="$EDITOR $HOME/.config/starship.toml"
 alias sz="source $HOME/.zshrc"
 
+# suffix alias
+alias -s {md,py,txt,vimrc,zshrc,conf,toml}=vim
+alias -s sh=bash
+
+# global alias
+# https://thorsten-hans.com/5-types-of-zsh-aliases
+# e.g. cd && ls -l G do
+alias -g G=" | grep -i"
+alias -g xc=" | sed -z 's/\n$//' | xclip -selection clipboard"
+alias -g ca=" | cat"
 
 #    ____      _ __
 #   /  _/___  (_) /_
