@@ -35,6 +35,7 @@
   "terminal.integrated.fontFamily": "'Fira Code', 'DejaVu Sans Mono','Monospace'", //字型
   "terminal.integrated.fontSize": 16, //字體大小
   "terminal.external.windowsExec": "C:\\Program Files\\Git\\git-bash.exe", //Windows Ctrl+Shift+C 開啟外部terminal
+  "terminal.external.osxExec": "iTerm.app",
   // Panel - Output
   "[Log]": {
     // Source : https://igorbrejc.net/vscode-output-font-size
