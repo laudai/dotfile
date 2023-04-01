@@ -426,6 +426,9 @@ alias grf="git reflog"
 alias gdst="git diff --stat"
 alias gsa="git show --all --shortstat --stat"
 
+# ssh alias
+alias sshr="ssh-keygen -R " # to remove specify ssh key by name
+
 # oh-my-zsh plugin git alias
 alias gmd="less ~/.oh-my-zsh/plugins/git/README.md 2> /dev/null || echo 'File not founded.'"
 
