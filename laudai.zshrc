@@ -118,6 +118,7 @@ plugins=(
     zsh-navigation-tools
     git-open
     nvm
+    aws
 )
 # plugin history-substring-search should load before zsh-syntax-highlighting to avoid syantax error
 
