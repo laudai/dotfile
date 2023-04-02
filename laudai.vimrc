@@ -42,7 +42,8 @@ set history=200 "set history number, default is 50
 set pastetoggle=<F7> "pt, toggle vim paste mode"
 " edit-setting
 " enable X11-based-system clipboard, In Ubuntu & Debian, u need install vim-gtk3
-set clipboard=unnamedplus
+" https://stackoverflow.com/questions/3961859/how-to-copy-to-clipboard-in-vim
+set clipboard^=unnamedplus,unnamed " this setting run on both Linux, and MacOS M1
 filetype plugin indent on " enable filetype plugins and indent
 set undofile
 set autochdir " acd, 當開啟多個不同資料夾檔案時，會自動切換到目前編輯檔案路徑
