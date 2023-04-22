@@ -390,5 +390,9 @@
   {
     "key": "cmd+0",
     "command": "-workbench.action.focusSideBar"
-  }
+  },
+  {
+    "key": "cmd+q",
+    "command": "-workbench.action.quit"
+  } // Remove the MacOS default quit application keybindings
 ]
