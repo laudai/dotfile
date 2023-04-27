@@ -375,6 +375,25 @@ toggle-workspace-primary-monitor-only() {
   fi
 }
 
+# Show weather by city supported by wttr via ImageMagick
+# TODO: fix the senario when the city not in the supported list
+funciton wttr_to_png() {
+  city=$1
+  curl wttr.in/"$city".png --output /tmp/weather.png &> /dev/null
+  if which display &> /dev/null; then
+    display -resize $(xrandr | fgrep '*' | awk '{print $1}') /tmp/weather.png
+  else
+	echo 'You could use ImageMagick to show this image.'
+  fi
+}
+
+# Show weather by city supported by wttr via cli command
+funciton wttr_city() {
+  # printf '\033c'
+  clear
+  curl wttr.in/$1
+}
+
 
 #    ______                      __
 #   / ____/  ______  ____  _____/ /_
@@ -424,12 +443,7 @@ alias gsa="git show --all --shortstat --stat"
 alias sshr="ssh-keygen -R " # to remove specify ssh key by name
 
 # curl alias
-alias wttrk="curl wttr.in/kaohsiung"
-alias wttrt="curl wttr.in/taipei"
-alias wttri="curl wttr.in/Ireland"
-alias wttrd="curl wttr.in/dublin"
 alias wttrhelp="curl wttr.in/:help | less"
-alias wttrd_png="curl wttr.in/dublin.png --output /tmp/weather.png &> /dev/null && (which display &> /dev/null && display -resize $(xrandr | fgrep '*' | awk '{print $1}') /tmp/weather.png || echo 'You could use ImageMagick to show this image.')"
 
 # python alias
 #alias python="/usr/bin/python3"
