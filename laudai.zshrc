@@ -26,10 +26,12 @@ ZSH_THEME="cloud"
 #steeef.zsh-theme
 #powerlevel10k/powerlevel10k # need install
 
+SYMBOL_FILE="$HOME/.dotfile/symbol.txt"
+
 #CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
 
-# source all files in specify folder
+# source all specific file type in specific folder
 declare -a source_folder_arr
 declare -a source_filename_arr
 source_folder_arr=(
@@ -37,7 +39,7 @@ source_folder_arr=(
 )
 for foldername in ${source_folder_arr[@]};
 do
-  source_filename_arr+=$(find "$foldername" -type f ! -name '*.*~' 2>/dev/null)
+	source_filename_arr+=($(find "$foldername" -type f -name '*.sh' -or -name '*.function' -or -name '*.alias'  2>/dev/null))
 done
 if [[ ${#source_filename_arr[@]} -gt 0 ]]; then
   for source_filename in ${source_filename_arr[@]}
@@ -272,6 +274,43 @@ function _select-vi() {
 }
 zle -N _select-vi
 
+# TODO funciton timestamp to the humaun readable
+# TODO function or alias to count the total word in specific file
+
+# generate the timestamp in fromat ISO 8601 and copy to the clipboard
+function dateISO8601ToClip() {
+  if [[ "$OSTYPE" =~ "[D|d]arwin"* ]]; then
+    date -Iseconds | tr -d "\n" | pbcopy
+  elif [[ "$OSTYPE" =~ "[L|l]inux"* ]]; then
+    date -Isec | xclip -selection clipboard
+  else
+    echo "can't match the os type." 1>&2
+  fi
+}
+
+
+# open symbol.txt file with less
+function lsymbol() {
+  if [[ -e "$SYMBOL_FILE" ]]; then
+    less "$SYMBOL_FILE"
+  else
+	echo "can't find $SYMBOL_FILE" 1>&2
+  fi
+}
+
+# edit symbol.txt file with vim editor
+function esymbol() {
+  if [[ -e "$SYMBOL_FILE"  ]]; then
+    if which vim &> /dev/null; then
+		vim "$SYMBOL_FILE"
+	else
+		echo "skip to open, please install vim first." 1>&2
+	fi
+  else
+	echo "can't find $SYMBOL_FILE" 1>&2
+  fi
+}
+
 # jump to folder by autojump command, and use the VSCode to open this folder
 function gfv() {
   if which autojump &> /dev/null; then
@@ -479,7 +518,8 @@ alias -s sh=bash
 # https://thorsten-hans.com/5-types-of-zsh-aliases
 # e.g. cd && ls -l G do
 alias -g G=" | grep -i"
-alias -g xc=" | sed -z 's/\n$//' | xclip -selection clipboard"
+alias -g lxc=" | sed -z 's/\n$//' | xclip -selection clipboard"
+alias -g mxc=" | gsed -z 's/\n$//' | pbcopy"
 alias -g ca=" | cat"
 
 #    ____      _ __
