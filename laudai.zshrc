@@ -10,6 +10,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+[[ "$OSTYPE" == "darwin"* ]] && export PATH=/opt/homebrew/bin:$PATH # for m1 homebrew
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -277,6 +278,7 @@ zle -N _select-vi
 # TODO funciton timestamp to the humaun readable
 # TODO function or alias to count the total word in specific file
 
+# TODO modify the Timezone to the UTC +0
 # generate the timestamp in fromat ISO 8601 and copy to the clipboard
 function dateISO8601ToClip() {
   if [[ "$OSTYPE" =~ "[D|d]arwin"* ]]; then
@@ -446,7 +448,6 @@ export EDITOR="vim"
 export VISUAL="$EDITOR"
 export MYVIMRC="$HOME/.vimrc"
 export DOTFILE="$HOME/.dotfile"
-[[ "$OSTYPE" == "darwin"* ]] && export PATH=/opt/homebrew/bin:$PATH # for m1 homebrew
 
 
 # let urlview to use firefox browser to show
