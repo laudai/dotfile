@@ -43,6 +43,7 @@ declare -a vscode_extensions=(
     "mhutchie.git-graph"
     "donjayamanne.githistory"
     "leodevbro.blockman"
+	"j4ng5y.charactercount"
 )
 
 

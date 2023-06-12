@@ -1,3 +1,5 @@
+:: TODO
+:: 有天要從某個清單去與Linux的檔案進行同步安裝，卸載
 @echo off
 echo This script can set hardlink to your VSCode settings.json, keybindings.json etc on your Windows OS.
 echo.
