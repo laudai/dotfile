@@ -275,19 +275,156 @@ function _select-vi() {
 }
 zle -N _select-vi
 
-# TODO funciton timestamp to the humaun readable
-# TODO function or alias to count the total word in specific file
+# reset the Alfred 4/5 to factory mode
+# How can I reset Alfred to defaults?
+# https://www.alfredapp.com/help/troubleshooting/reset-alfred/
+function resetAlfred() {
+  declare -a Alfred_file_array=(
+  "~/Library/Application Support/Alfred"
+  "~/Library/Preferences/com.runningwithcrayons.Alfred-Preferences.plist"
+  "~/Library/Preferences/com.alfredapp.Alfred.plist"
+  "~/Library/Caches/com.runningwithcrayons.Alfred"
+  )
 
-# TODO modify the Timezone to the UTC +0
-# generate the timestamp in fromat ISO 8601 and copy to the clipboard
-function dateISO8601ToClip() {
   if [[ "$OSTYPE" =~ "[D|d]arwin"* ]]; then
-    date -Iseconds | tr -d "\n" | pbcopy
-  elif [[ "$OSTYPE" =~ "[L|l]inux"* ]]; then
-    date -Isec | xclip -selection clipboard
+    # test grep in version: MacOS 13.3
+    if ls -l /Applications | grep "Alfred [4-5]" &> /dev/null; then
+      echo -n "Will delete below files to reset the Alfred
+Please quit Alfred and agree this request, re-launch Alfred after delete those files.\n
+"
+      for item in ${Alfred_file_array[@]}; do echo $item; done
+      echo
+      echo -n "[Yes/No]: "
+        read AGREEMENT # can't use local, will not wait for input
+        AGREEMENT=$(echo $AGREEMENT | tr "[:upper:]" "[:lower:]")
+        echo
+
+        if [[ "$AGREEMENT" == "yes" || "$AGREEMENT" == "y" ]]; then
+          for item in ${Alfred_file_array[@]};
+          do
+            rm "$item"
+          done
+          echo "Remove the file list finished. Please re-launch the Alfred."
+    else
+      echo -n "\nPlease run it again and selete 'yes' to reset the Alfred configure."
+    fi
+
+  unset AGREEMENT
+  else
+  echo "Didn't find and Alfred 4/5 in the /Applications folder."
+    fi
+
+  else
+    echo "Not in MacOS." 1>&2 && return
+  fi
+}
+
+
+# TODO function or alias to count the total word in specific file
+# TODO function to filter the csv or json via jq or other
+
+# generate the timestamp in format ISO 8601 and copy to the clipboard
+function dateISO8601ToClip() {
+  if [[ "$OSTYPE" =~ [Dd]arwin* ]]; then
+    date -Iseconds -u | tr -d "\n" | pbcopy
+  elif [[ "$OSTYPE" =~ [Ll]inux* ]]; then
+    date -Isec -u | xclip -selection clipboard
   else
     echo "can't match the os type." 1>&2
   fi
+}
+
+# generate the timestamp in format offset with day/Hour granularity from now
+function offsetDayHourinISO8601(){
+  if [[ "$OSTYPE" =~ [Dd]arwin* ]]; then
+    read "?offset in Day (-/+)(default is -): " Dayoffset
+    [[ ! ( $Dayoffset == "-" || $Dayoffset == "+") ]] && Dayoffset="-"
+    read "?offset Num in Day (:digit:)(default is 0): " DayoffsetNum
+    [[ ! $DayoffsetNum =~ ^[[:digit:]].*$ ]] && DayoffsetNum="0"
+    read "?offset in Hour (-/+)(default is -): " Houroffset
+    [[ ! ( $Houroffset == "-" || $Houroffset == "+") ]] && Houroffset="-"
+    read "?offset Num in Hour (:digit:)(default is 0): " HouroffsetNum
+    [[ ! $HouroffsetNum =~ ^[[:digit:]].*$ ]] && HouroffsetNum="0"
+    echo "Result:"
+    date -v "${Dayoffset}${DayoffsetNum}d" -v "${Houroffset}${HouroffsetNum}H" -Iseconds -u | tr -d "\n" | tee >(pbcopy)
+
+  elif [[ "$OSTYPE" =~ [Ll]inux* ]]; then
+    read -p "offset in Day (-/+)(default is -): " Dayoffset
+    [[ ! ( $Dayoffset == "-" || $Dayoffset == "+") ]] && Dayoffset="-"
+    read -p "offset Num in Day (:digit:)(default is 0): " DayoffsetNum
+    [[ ! $DayoffsetNum =~ ^[[:digit:]].*$ ]] && DayoffsetNum="0"
+    read -p "offset in Hour (-/+)(default is -): " Houroffset
+    [[ ! ( $Houroffset == "-" || $Houroffset == "+") ]] && Houroffset="-"
+    read -p "offset Num in Hour (:digit:)(default is 0): " HouroffsetNum
+    [[ ! $HouroffsetNum =~ ^[[:digit:]].*$ ]] && HouroffsetNum="0"
+    echo "Result:"
+    date -d "$(date) ${Dayoffset} ${DayoffsetNum} day ${Houroffset} ${HouroffsetNum} hour" -Isec -u
+
+  else
+    echo "can't match the os type." 1>&2
+  fi
+}
+
+# generate the Epoch Time (Linux and MacOS)
+function epochTimeDate_get(){
+  date +%s
+}
+
+# generate the timestamp by ISO8601 by two epoch UNIX time
+function epochTimetoDate_transfer (){
+  case "$OSTYPE" in
+    "linux-gnu"*)
+        date -d @${1} -Isec -u
+        ;;
+    "darwin"*)
+        date -r ${1} -Iseconds -u
+        ;;
+    *)
+      echo "Not support OSTYPE." 1>&2
+      ;;
+  esac
+}
+
+# generate the timestamp by ISO8601 by two epoch UNIX time
+function epochTimetoDate_calcuate (){
+  case "$OSTYPE" in
+    "linux-gnu"*)
+        date -d @$((${1}+${2})) -Isec -u
+        ;;
+    "darwin"*)
+        date -Iseconds -r $((${1}+${2})) -u
+        ;;
+    *)
+      echo "Not support OSTYPE." 1>&2
+      ;;
+  esac
+}
+
+# AWS Documents transfer to english ver
+function trimdoc() {
+  local origion_url=$1
+  case "$OSTYPE" in
+    "linux-gnu"*)
+       if which sed &> /dev/null; then
+	    :
+	   else
+	     echo "can't find the gsed command"  >&2
+	   return
+	   fi
+      new_url=$(sed 's/\/[a-z_]\+_[a-z]\+//g' <<< $origion_url)
+      echo $new_url | xclip -selection clipboard
+      ;;
+    "darwin"*)
+       if which gsed &> /dev/null; then
+	    :
+	   else
+	     echo "can't find the gsed command"  >&2
+	   return
+	   fi
+      new_url=$(gsed 's/\/[a-z_]\+_[a-z]\+//g' <<< $origion_url)
+      echo $new_url | pbcopy
+  esac
+  echo $new_url
 }
 
 
@@ -342,6 +479,29 @@ function toggle-expose-apps() {
     defaults write com.apple.dock expose-group-apps -boolean true; killall Dock
     echo "turn on 'Group windows by application'"
   fi
+}
+
+# 切換 MacOS 的"在使用電池且閒置時關閉顯示器"(Turn display off when inactive)
+# leverage the pmset need root privilege
+# only can get the last pmset value when not plugin the power cord
+function toggle-or-setting-displaysleep() {
+  [[ ! "$OSTYPE" == "darwin"* ]] && echo "This function only run on MacOS" && return
+  ! which gawk >/dev/null && echo "Please install awk(gawk) first" && return
+
+  local default_time=5
+  local displaysleep=$(sudo pmset -g | gawk '/displaysleep/ { print $2 }')
+  local setting_time=$1
+  if [[ $displaysleep -ne 0 ]] && [[ -z $setting_time ]] ; then
+	  echo "Modify the DisplaySleep time from ${displaysleep} mins to Never"
+	  sudo pmset -b displaysleep 0
+  elif [[ $displaysleep -eq 0 ]] && [[ -z $setting_time ]] ; then
+	  echo "Modify the DisplaySleep time from Never to ${default_time} mins"
+	  sudo pmset -b displaysleep $default_time
+  else
+	  echo "Modify the DisplaySleep time to parameter $setting_time mins"
+	  sudo pmset -b displaysleep $setting_time
+  fi
+
 }
 
 # toggle your gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
@@ -462,6 +622,8 @@ fi
 #  / ___ |/ / / /_/ (__  )
 # /_/  |_/_/_/\__,_/____/
 
+# TODO
+# add new alias for case folder in internal alias .alias file
 # alias
 # operating alias
 alias cls="printf '\033c'"
