@@ -1,3 +1,5 @@
+# TODO, remember install the apt package if need
+
 # install cross-shell prompt starship
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 mkdir -p ~/.config
@@ -12,12 +14,13 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # install oh-my-zsh framework
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
+# TODO, need to find out some way to exit the install omz framwork to execute next command
 # install homebrew for MacOS
-[[ "$OSTYPE" == "darwin"* ]] && ! which brew && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+[[ "$OSTYPE" == "darwin"* ]] && ! which brew >/dev/null && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # for mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
-	if which brew; then
+	if which brew >/dev/null ; then
 		# setup font
 		brew tap homebrew/cask-fonts && brew install --cask font-caskaydia-cove-nerd-font font-fira-code font-cascadia-code
 		brew install glances htop autojump mos gawk cloc tmux
