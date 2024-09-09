@@ -12,9 +12,10 @@ echo
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 # install oh-my-zsh framework
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+# modify the original install script to non-interactive way
+#sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | bash
 
-# TODO, need to find out some way to exit the install omz framwork to execute next command
 # install homebrew for MacOS
 [[ "$OSTYPE" == "darwin"* ]] && ! which brew >/dev/null && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
