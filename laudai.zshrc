@@ -10,7 +10,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-[[ "$OSTYPE" == "darwin"* ]] && export PATH=/opt/homebrew/bin:$PATH # for m1 homebrew
+[[ "$OSTYPE" == "darwin"* ]] && export PATH=/opt/homebrew/sbin:/opt/homebrew/bin:$PATH # for m1 homebrew
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
