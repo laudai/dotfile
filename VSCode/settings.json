@@ -184,6 +184,8 @@
   "blockman.n01LineHeight": 0,
   "blockman.n04ColorComboPreset": "Classic Dark 3 (Solid colors)",
   "blockman.n32BlackListOfFileFormats": "plaintext, markdown, python",
+  // opencclint
+  "opencclint.converterOptions": "tw=>cn",
   // vim
   "vim.hlsearch": true,
   "vim.incsearch": true,
@@ -598,6 +600,4 @@
       ]
     }
   ],
-  "opencclint.converterOptions": "tw=>cn",
-  "editor.accessibilitySupport": "off",
 }
