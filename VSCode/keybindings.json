@@ -166,6 +166,23 @@
     "key": "ctrl+alt+b",
     "command": "blockman.toggleEnableDisable"
   },
+  // opencclint
+  {
+    "key": "ctrl+cmd+c",
+    "command": "opencclint.translateFile"
+  },
+  {
+    "key": "ctrl+cmd+o",
+    "command": "-opencclint.translateFile"
+  },
+  {
+    "key": "ctrl+shift+cmd+c",
+    "command": "opencclint.translateFileRevert"
+  },
+  {
+    "key": "ctrl+shift+cmd+o",
+    "command": "-opencclint.translateFileRevert"
+  },
   /*
  _    ___              __ __           __    _           ___
 | |  / (_)___ ___     / //_/__  __  __/ /_  (_)___  ____/ (_)___  ____ ______

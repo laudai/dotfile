@@ -9,6 +9,9 @@ Now start to install the VSCode extensions.
 Will insall all VSCode extensions forcibly in the array in this script.
 "
 
+# MacOS high CPU cluprit
+# https://github.com/shanalikhan/code-settings-sync
+# https://code.visualstudio.com/docs/editor/settings-sync
 declare -a vscode_extensions=(
     "ms-python.python"
     "tht13.python"
@@ -36,7 +39,6 @@ declare -a vscode_extensions=(
     "vscode-icons-team.vscode-icons"
     "mikestead.dotenv"
     "editorconfig.editorconfig"
-    "shan.code-settings-sync"
     "hoovercj.vscode-settings-cycler"
     "gruntfuggly.todo-tree"
     "spywhere.guides"
@@ -44,6 +46,8 @@ declare -a vscode_extensions=(
     "donjayamanne.githistory"
     "leodevbro.blockman"
 	"j4ng5y.charactercount"
+	"brokenbonesdd.opencclint"
+	"hediet.debug-visualizer"
 )
 
 
