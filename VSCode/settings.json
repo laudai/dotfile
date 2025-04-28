@@ -600,4 +600,15 @@
       ]
     }
   ],
+  "accessibility.signals.voiceRecordingStarted": {
+    "sound": "auto"
+  },
+  "accessibility.signals.lineHasWarning": {
+    "sound": "off",
+    "announcement": "auto"
+  },
+  "accessibility.signals.positionHasWarning": {
+    "sound": "off",
+    "announcement": "auto"
+  },
 }
