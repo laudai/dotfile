@@ -402,7 +402,7 @@ function epochTimetoDate_calcuate (){
 
 # AWS Documents transfer to english ver
 function trimdoc() {
-  local origion_url=$1
+  local original_url=$1
   case "$OSTYPE" in
     "linux-gnu"*)
        if which sed &> /dev/null; then
@@ -411,7 +411,7 @@ function trimdoc() {
 	     echo "can't find the gsed command"  >&2
 	   return
 	   fi
-      new_url=$(sed 's/\/[a-z_]\+_[a-z]\+//g' <<< $origion_url)
+      new_url=$(sed "s/\/[a-z_]\+_[a-z]\+//g" <<< $original_url)
       echo $new_url | xclip -selection clipboard
       ;;
     "darwin"*)
@@ -421,7 +421,7 @@ function trimdoc() {
 	     echo "can't find the gsed command"  >&2
 	   return
 	   fi
-      new_url=$(gsed 's/\/[a-z_]\+_[a-z]\+//g' <<< $origion_url)
+      new_url=$(gsed "s/\/[a-z_]\+_[a-z]\+//g" <<< $original_url)
       echo $new_url | pbcopy
   esac
   echo $new_url
@@ -595,6 +595,10 @@ funciton wttr_city() {
   curl wttr.in/$1
 }
 
+
+funciton count_characters() {
+  printf $1 | wc -m
+}
 
 #    ______                      __
 #   / ____/  ______  ____  _____/ /_
