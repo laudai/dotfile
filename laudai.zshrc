@@ -637,7 +637,7 @@ alias dotfile="cd ~/.dotfile"
 alias li="set -o | grep 'emacs\|^vi'"
 alias kagt="killall gnome-terminal-server"
 alias kagc="killall gnome-calculator"
-alias less="less -r" # in raw-control-chars for default
+alias less="less -N --RAW-CONTROL-CHARS --quit-if-one-screen" # in RAW-CONTROL-CHARS for default, recommend in the manual.
 
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
@@ -688,6 +688,8 @@ alias -g G=" | grep -i"
 alias -g lxc=" | sed -z 's/\n$//' | xclip -selection clipboard"
 alias -g mxc=" | gsed -z 's/\n$//' | pbcopy"
 alias -g ca=" | cat"
+alias -g pa=" | less"
+alias -g ppa=" | \less" # purge pager
 
 #    ____      _ __
 #   /  _/___  (_) /_
