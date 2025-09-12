@@ -1,3 +1,7 @@
+# create the config folder both for the nix* and MacOS
+mkdir -p $HOME/.config
+mkdir -p $HOME/.config/ghostty
+
 # Dotfiles symlinks
 ln -sf ~/.dotfile/laudai.zshrc ~/.zshrc
 ln -sf ~/.dotfile/laudai.vimrc ~/.vimrc
@@ -5,6 +9,7 @@ ln -sf ~/.dotfile/laudai.tmux.conf ~/.tmux.conf
 ln -sf ~/.dotfile/laudai.gitconfig ~/.gitconfig
 ln -sf ~/.dotfile/laudai.gitignore_global ~/.gitignore_global
 ln -sf ~/.dotfile/laudai.starship.toml ~/.config/starship.toml
+ln -sf ~/.dotfile/laudai.ghostty ~/.config/ghostty/config
 sudo ln -sf ~/.dotfile/linux_script/workspace.sh /usr/local/bin/workspace
 sudo ln -sf ~/.dotfile/linux_script/whatismyip.sh /usr/local/bin/whatismyip
 
