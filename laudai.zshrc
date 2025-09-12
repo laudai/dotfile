@@ -40,7 +40,7 @@ source_folder_arr=(
 )
 for foldername in ${source_folder_arr[@]};
 do
-	source_filename_arr+=($(find "$foldername" -type f -name '*.sh' -or -name '*.function' -or -name '*.alias'  2>/dev/null))
+	source_filename_arr+=($(find "$foldername" -not -path "$HOME/.dotfile/private/internal_script/*" -type f -name '*.sh' -or -name '*.function' -or -name '*.alias'  2>/dev/null))
 done
 if [[ ${#source_filename_arr[@]} -gt 0 ]]; then
   for source_filename in ${source_filename_arr[@]}
