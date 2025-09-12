@@ -47,6 +47,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 		brew install --cask amethyst # Tiling window manager for macOS along the lines of xmonad.
 		brew install --cask monitorcontrol # Control your external monitor brightness, contrast or volume directly from a menulet or with keyboard native keys
 		brew install --cask karabiner-elements
+		brew install --cask ghostty
 		# if OS is MacOS
 		ln -sf ~/.dotfile/laudai.karabiner_bash_emacs.json ~/.config/karabiner/assets/complex_modifications/bash_emacs.json
 	else
