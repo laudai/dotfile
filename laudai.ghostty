@@ -48,14 +48,43 @@ font-size = 16
 font-family = CaskaydiaCove Nerd Font Mono
 #font-family = Fira Code Regular
 window-inherit-font-size = false
-window-theme = ghostty
+window-theme = dark
 window-width = 80
 window-height = 30
-theme = Chester
+#theme = Chester
 #theme = Builtin Solarized Dark
-#theme = MaterialDesignColors
+theme = Material Design Colors
 #theme = iTerm2 Solarized Dark
 
-# bind the super/cmd+h/l to send like the alt+h/l in the Linux for MacOS
+# disable inherit the window
+window-inherit-working-directory = false
+# First path if no other Ghostty window
+#working-directory = home
+
+# This feature is only supported on GTK.
+window-subtitle = working-directory
+
+# disable the popon window
+confirm-close-surface = false
+
+
+# keybindings
+#  global
+keybind = cmd+s>r=reload_config
+#  bind the super/cmd+h/l to send like the alt+h/l in the Linux for MacOS
 keybind = cmd+h=esc:h
 keybind = cmd+l=esc:l
+#  window
+keybind = cmd+s>x=close_surface
+
+keybind = cmd+s>e=equalize_splits
+#  split and move
+# grave_accent means backtick `
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
+keybind = cmd+s>s=new_split:auto
+keybind = cmd+s>j=goto_split:bottom
+keybind = cmd+s>k=goto_split:top
+keybind = cmd+s>h=goto_split:left
+keybind = cmd+s>l=goto_split:right
+keybind = cmd+s>z=toggle_split_zoom
+keybind = global:control+command+t=new_window
