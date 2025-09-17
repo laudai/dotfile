@@ -1,7 +1,3 @@
-# create the config folder both for the nix* and MacOS
-mkdir -p $HOME/.config
-mkdir -p $HOME/.config/ghostty
-
 # Dotfiles symlinks
 ln -sf ~/.dotfile/laudai.zshrc ~/.zshrc
 ln -sf ~/.dotfile/laudai.vimrc ~/.vimrc

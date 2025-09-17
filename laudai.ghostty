@@ -55,3 +55,7 @@ theme = Chester
 #theme = Builtin Solarized Dark
 #theme = MaterialDesignColors
 #theme = iTerm2 Solarized Dark
+
+# bind the super/cmd+h/l to send like the alt+h/l in the Linux for MacOS
+keybind = cmd+h=esc:h
+keybind = cmd+l=esc:l

@@ -2,6 +2,8 @@
 # TODO, install the gnome extension package
 # e.g. gnome-extensions install --force workspace-switcher-manager@G-dH.github.com.zip
 
+# create the config folder both for the nix* and MacOS
+mkdir -p $HOME/.config
 # install cross-shell prompt starship
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 mkdir -p ~/.config/{i3,conky,polybar}
@@ -14,6 +16,8 @@ ln -sf ~/.dotfile/laudai.i3.config ~/.config/i3/config
 ln -sf ~/.dotfile/laudai.conky.conf ~/.config/conky/conky.conf
 cp ~/.dotfile/linux_script/start-conky.sh ~/.config/conky
 ln -sf ~/.dotfile/laudai.polybar.config.ini ~/.config/polybar/config.ini
+mkdir -p $HOME/.config/ghostty
+
 
 # install TPM (Tmux Plugin Manager)
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
