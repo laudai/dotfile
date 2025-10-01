@@ -74,6 +74,9 @@ keybind = cmd+s>r=reload_config
 #  bind the super/cmd+h/l to send like the alt+h/l in the Linux for MacOS
 keybind = cmd+h=esc:h
 keybind = cmd+l=esc:l
+keybind = cmd+b=esc:b
+keybind = cmd+f=esc:f
+keybind = cmd+.=esc:.
 #  window
 keybind = cmd+s>x=close_surface
 
