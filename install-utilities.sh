@@ -43,7 +43,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 	if which brew >/dev/null ; then
 		# setup font
 		brew tap homebrew/cask-fonts && brew install --cask font-caskaydia-cove-nerd-font font-fira-code font-cascadia-code
-		brew install glances htop autojump mos gawk cloc tmux figlet background-music coreutils
+		brew install glances htop autojump mos gawk cloc tmux figlet background-music coreutils tokei
 		brew install --cask easy-move-plus-resize # similar or alternative to move window in the Gnome way
 		brew install --cask background-music # not work in M1 MacOS
 		brew install --cask rectangle # open source window manager in MacOS
