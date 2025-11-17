@@ -1,5 +1,6 @@
 # TODO, remember install the apt package if need
 # TODO, install the gnome extension package
+# e.g. gnome-extensions install --force workspace-switcher-manager@G-dH.github.com.zip
 
 # install cross-shell prompt starship
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
