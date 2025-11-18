@@ -5,10 +5,13 @@
 # install cross-shell prompt starship
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 mkdir -p ~/.config
+mkdir -p ~/.config/{i3,}
+
 echo
 echo "Download Nerd Fonts from web for starship:"
 echo "https://www.nerdfonts.com/font-downloads"
 echo
+ln -sf ~/.dotfile/laudai.i3.config ~/.config/i3/config
 
 # install TPM (Tmux Plugin Manager)
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm

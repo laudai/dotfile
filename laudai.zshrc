@@ -676,6 +676,7 @@ alias ez="$EDITOR $HOME/.zshrc"
 alias et="$EDITOR $HOME/.tmux.conf"
 alias ev="$EDITOR $HOME/.vimrc"
 alias es="$EDITOR $HOME/.config/starship.toml"
+alias ei="$EDITOR $HOME/.config/i3/config"
 alias sz="source $HOME/.zshrc"
 
 # suffix alias
