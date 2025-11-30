@@ -693,6 +693,11 @@ alias -g ca=" | cat"
 alias -g pa=" | less"
 alias -g ppa=" | \less" # purge pager
 
+# managent related alias
+# make usb port 1-3 wakeup from s3 situation
+# please make sure the XHC in /proc/acpi/wakeup is enabled
+alias usb_s3_wakeup="echo 'enabled' | sudo tee /sys/bus/usb/devices/1-3/power/wakeup"
+
 #    ____      _ __
 #   /  _/___  (_) /_
 #   / // __ \/ / __/
