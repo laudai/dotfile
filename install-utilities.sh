@@ -4,7 +4,7 @@
 
 # install cross-shell prompt starship
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
-mkdir -p ~/.config/{i3,conky}
+mkdir -p ~/.config/{i3,conky,polybar}
 
 echo
 echo "Download Nerd Fonts from web for starship:"
@@ -12,7 +12,8 @@ echo "https://www.nerdfonts.com/font-downloads"
 echo
 ln -sf ~/.dotfile/laudai.i3.config ~/.config/i3/config
 ln -sf ~/.dotfile/laudai.conky.conf ~/.config/conky/conky.conf
-cp ~/.dotfile/linux_script/start-conky.sh ~/config/conky
+cp ~/.dotfile/linux_script/start-conky.sh ~/.config/conky
+ln -sf ~/.dotfile/laudai.polybar.config.ini ~/.config/polybar/config.ini
 
 # install TPM (Tmux Plugin Manager)
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
