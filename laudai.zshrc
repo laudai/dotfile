@@ -616,7 +616,8 @@ export DOTFILE="$HOME/.dotfile"
 
 # let urlview to use firefox browser to show
 if [ -e '/usr/bin/firefox' ] ; then
-  export BROWSER='/usr/bin/firefox'
+  #export BROWSER='/usr/bin/firefox'
+  # comment this block to use xdg-settings set default-web-browser firefox_firefox.desktop
 fi
 
 
