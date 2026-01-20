@@ -243,6 +243,8 @@ Plug 'justinmk/vim-sneak'
 Plug 'yggdroot/indentline'
 " coc, vim auto complete. Use release branch (recommended)
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 " Pending
 " 'jiangmiao/auto-pairs'
 " 'preservim/nerdtree'

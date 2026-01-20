@@ -193,6 +193,10 @@ zle -N znt-cd-widget
 bindkey "^B" znt-cd-widget
 zle -N znt-kill-widget
 bindkey "^Y" znt-kill-widget
+# Set up fzf key bindings and fuzzy completion
+#source <(fzf --zsh) 0.48.0 later
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
 # keybindings reference
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
 # https://github.com/ThiefMaster/zsh-config/blob/master/zshrc.d/keybinds.zsh
