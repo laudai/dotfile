@@ -32,23 +32,29 @@ SYMBOL_FILE="$HOME/.dotfile/symbol.txt"
 #CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
 
-# source all specific file type in specific folder
-declare -a source_folder_arr
-declare -a source_filename_arr
-source_folder_arr=(
-  $HOME/.dotfile/private
-)
-for foldername in ${source_folder_arr[@]};
-do
-	source_filename_arr+=($(find "$foldername" -not -path "$HOME/.dotfile/private/internal_script/*" -type f -name '*.sh' -or -name '*.function' -or -name '*.alias'  2>/dev/null))
-done
-if [[ ${#source_filename_arr[@]} -gt 0 ]]; then
-  for source_filename in ${source_filename_arr[@]}
+function _sz_function() {
+  # source all specific file type in specific folder
+  declare -a source_folder_arr
+  declare -a source_filename_arr
+  source_folder_arr=(
+    $HOME/.dotfile/private
+  )
+  for foldername in ${source_folder_arr[@]};
   do
-    source "$source_filename"
+      source_filename_arr+=($(find "$foldername" -not -path "$HOME/.dotfile/private/internal_script/*" -type f -name '*.sh' -or -name '*.function' -or -name '*.alias'  2>/dev/null))
   done
-fi
+  if [[ ${#source_filename_arr[@]} -gt 0 ]]; then
+    for source_filename in ${source_filename_arr[@]}
+    do
+      source "$source_filename"
+    done
+  fi
+}
+_sz_function
 
+# export NVM_NO_USE in zsh-nvm before load plugin to avoid the autoload node
+export NVM_LAZY_LOAD=true
+export NVM_LAZY_LOAD_EXTRA_COMMANDS=("vim" "view")
 
 #if [ "$HOST"="raspberrypi" ]
 #then
@@ -120,7 +126,7 @@ plugins=(
     vi-mode
     zsh-navigation-tools
     git-open
-    nvm
+    zsh-nvm
     aws
 )
 # plugin history-substring-search should load before zsh-syntax-highlighting to avoid syantax error
@@ -711,10 +717,27 @@ alias usb_s3_wakeup="echo 'enabled' | sudo tee /sys/bus/usb/devices/1-3/power/wa
 #/___/_/ /_/_/\__/
 
 # nvm
-export NVM_DIR="$HOME/.nvm"
+# export NVM_DIR="$HOME/.nvm"
+# export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# https://medium.com/@ankitbabber/how-i-improved-my-shell-load-time-with-a-lazy-load-3acd89f8c4a3
+# manually lazy load the nvm if needed
+# _nvm_lazy_load() {
+#   unset -f nvm node npm npx yarn pnpm node_modules vim &> /dev/null
+#   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+#   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# }
+# nvm()  { _nvm_lazy_load; nvm  "$@"; }
+# node() { _nvm_lazy_load; node "$@"; }
+# npm()  { _nvm_lazy_load; npm  "$@"; }
+# npx()  { _nvm_lazy_load; npx  "$@"; }
+# vim()  { _nvm_lazy_load; vim  "$@"; }
+# other way to node lazy load
+# https://sumercip.com/posts/lazyload-zsh/
+# https://github.com/qoomon/zsh-lazyload
 
 # starship
 eval "$(starship init zsh)"
