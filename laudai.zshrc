@@ -1,3 +1,4 @@
+date "+%s.%N"
 #     _                    ____
 #  \_|_)                  (|   \       o
 #    |     __,             |    | __,
@@ -32,25 +33,37 @@ SYMBOL_FILE="$HOME/.dotfile/symbol.txt"
 #CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
 
-function _sz_function() {
-  # source all specific file type in specific folder
-  declare -a source_folder_arr
-  declare -a source_filename_arr
-  source_folder_arr=(
+# Version A: zsh glob (no fork, faster ~10-20ms)
+_sz_function() {
+  local -a folders=(
     $HOME/.dotfile/private
   )
-  for foldername in ${source_folder_arr[@]};
-  do
-      source_filename_arr+=($(find "$foldername" -not -path "$HOME/.dotfile/private/internal_script/*" -type f -name '*.sh' -or -name '*.function' -or -name '*.alias'  2>/dev/null))
-  done
-  if [[ ${#source_filename_arr[@]} -gt 0 ]]; then
-    for source_filename in ${source_filename_arr[@]}
-    do
-      source "$source_filename"
+  local -a exts=(sh function alias)
+  local f
+  for d in $folders; do
+    # ${(j:|:)~exts} joins exts array with | → "sh|function|alias"
+    # ~ enables glob expansion so the joined string is treated as a glob pattern
+    # *.(pattern) matches files by extension, (N) suppresses error if no match
+    for f in $d/*.(${(j:|:)~exts})(N); do
+      source "$f"
     done
-  fi
+  done
 }
 _sz_function
+
+# Version B: find (fork subprocess, more familiar syntax)
+# _sz_function() {
+#   local -a folders=(
+#     $HOME/.dotfile/private
+#   )
+#   local f
+#   for d in $folders; do
+#     for f in $(find "$d" -maxdepth 1 -type f \( -name '*.sh' -o -name '*.function' -o -name '*.alias' \) 2>/dev/null); do
+#       source "$f"
+#     done
+#   done
+# }
+# _sz_function
 
 # export NVM_NO_USE in zsh-nvm before load plugin to avoid the autoload node
 export NVM_LAZY_LOAD=true
@@ -744,3 +757,4 @@ eval "$(starship init zsh)"
 
 # https://superuser.com/questions/117841/when-reading-a-file-with-less-or-more-how-can-i-get-the-content-in-colors
 #export LESS="-r" #useful for raw-control-chars, but can't like alias to escape via backslash \
+date "+%s.%N"
