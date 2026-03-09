@@ -1,4 +1,6 @@
 date "+%s.%N"
+zmodload zsh/zprof
+
 #     _                    ____
 #  \_|_)                  (|   \       o
 #    |     __,             |    | __,
@@ -130,7 +132,7 @@ plugins=(
     docker
     docker-compose
     encode64
-    autojump
+    #autojump
     history-substring-search
     zsh-autosuggestions
     zsh-syntax-highlighting
@@ -141,6 +143,7 @@ plugins=(
     git-open
     zsh-nvm
     aws
+    zoxide
 )
 # plugin history-substring-search should load before zsh-syntax-highlighting to avoid syantax error
 
@@ -757,4 +760,5 @@ eval "$(starship init zsh)"
 
 # https://superuser.com/questions/117841/when-reading-a-file-with-less-or-more-how-can-i-get-the-content-in-colors
 #export LESS="-r" #useful for raw-control-chars, but can't like alias to escape via backslash \
+zprof
 date "+%s.%N"
