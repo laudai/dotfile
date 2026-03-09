@@ -664,6 +664,7 @@ alias less="less -N --RAW-CONTROL-CHARS --quit-if-one-screen" # in RAW-CONTROL-C
 
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
+alias glolar="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar, %aI) %C(bold blue)<%an>%Creset'" # show the git log without --all flag to run commit to commit
 alias glolara="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar, %aI) %C(bold blue)<%an>%Creset' --all" # show the git log in relative/absolute timestamp
 alias grf="git reflog"
 alias gdst="git diff --stat"
