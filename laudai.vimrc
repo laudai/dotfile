@@ -245,6 +245,7 @@ Plug 'yggdroot/indentline'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'berdandy/ansiesc.vim'
 " Pending
 " 'jiangmiao/auto-pairs'
 " 'preservim/nerdtree'
