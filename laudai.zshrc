@@ -503,27 +503,19 @@ function toggle-expose-apps() {
   fi
 }
 
-# 切換 MacOS 的"在使用電池且閒置時關閉顯示器"(Turn display off when inactive)
 # leverage the pmset need root privilege
-# only can get the last pmset value when not plugin the power cord
+# modify the displaysleep & sleep settings in battery/charging
 function toggle-or-setting-displaysleep() {
   [[ ! "$OSTYPE" == "darwin"* ]] && echo "This function only run on MacOS" && return
   ! which gawk >/dev/null && echo "Please install awk(gawk) first" && return
 
-  local default_time=5
   local displaysleep=$(sudo pmset -g | gawk '/displaysleep/ { print $2 }')
-  local setting_time=$1
-  if [[ $displaysleep -ne 0 ]] && [[ -z $setting_time ]] ; then
-	  echo "Modify the DisplaySleep time from ${displaysleep} mins to Never"
-	  sudo pmset -b displaysleep 0
-  elif [[ $displaysleep -eq 0 ]] && [[ -z $setting_time ]] ; then
-	  echo "Modify the DisplaySleep time from Never to ${default_time} mins"
-	  sudo pmset -b displaysleep $default_time
-  else
-	  echo "Modify the DisplaySleep time to parameter $setting_time mins"
-	  sudo pmset -b displaysleep $setting_time
-  fi
+  local dst=${1:-$(( displaysleep != 0 ? 0 : 5 ))}
+  local st=$((dst == 0 ? 0 : dst + 10))
 
+  echo "Modify the DisplaySleep time to $( ((dst)) && echo "$dst mins" || echo "Never" )"
+  sudo pmset -b sleep $st displaysleep $dst
+  sudo pmset -c sleep $st displaysleep $dst
 }
 
 # toggle your gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
