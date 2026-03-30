@@ -518,6 +518,23 @@ function toggle-or-setting-displaysleep() {
   sudo pmset -c sleep $st displaysleep $dst
 }
 
+# Toggle between headphones and MacBook Pro Speakers
+# If External Headphones available, use it instead of Plantronics
+function toggle-AudioSource() {
+  ! command -v SwitchAudioSource >/dev/null && echo "Install: brew install switchaudio-osx" && return 1
+
+  local headphone_ext="External Headphones"
+  local headphone_plt="Plantronics Blackwire 5220 Series"
+  local speaker_mbp="MacBook Pro Speakers"
+  local current=$(SwitchAudioSource -c)
+  local available=$(SwitchAudioSource -a -t output)
+  local headphone=$(echo "$available" | grep -q "^$headphone_ext$" && echo "$headphone_ext" || echo "$headphone_plt")
+  local target=$([[ "$current" == "$speaker_mbp" ]] && echo "$headphone" || echo "$speaker_mbp")
+  echo "$available" | grep -q "^$target$" || { echo "Device not found: $target"; return 1; }
+
+  SwitchAudioSource -s "$target" && echo "✓ $current → $target" || { echo "✗ Failed"; return 1; }
+}
+
 # toggle your gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
 # 切換自動鎖定螢幕、暫停時鎖定螢幕
 toggle-sll() {
