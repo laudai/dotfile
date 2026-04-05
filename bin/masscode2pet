@@ -5,6 +5,14 @@ One-way sync from massCode to pet. Uses the massCode ``createdAt`` epoch
 timestamp (stored as a ``masscode:<epoch>`` tag in pet) to track identity
 across syncs.
 
+.. warning::
+
+   The identity key is ``createdAt``.  When bulk-importing snippets via
+   GenAI or scripts, each snippet **must** have a unique ``createdAt``
+   value.  If multiple snippets share the same ``createdAt``, they will
+   map to the same ``masscode:<epoch>`` tag and overwrite each other on
+   every sync, causing duplicates and data corruption in pet.
+
 Behaviour:
     - New massCode snippets are appended to pet.
     - Changed name or command in massCode updates the pet entry.
