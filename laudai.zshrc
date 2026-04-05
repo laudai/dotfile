@@ -650,7 +650,7 @@ funciton count_characters() {
 
 # fzf interactive git diff preview
 # usage: fgd (unstaged) | fgd --cached (staged) | fgd HEAD~3 | fgd main
-fgd() {
+function fgd() {
   git diff --name-only "$@" |
     fzf --height=100% \
         --preview "git diff --color=always $* -- {}" \
@@ -659,7 +659,7 @@ fgd() {
 
 # fzf interactive git log preview
 # usage: fgl (all) | fgl -20 (recent 20) | fgl --all | fgl -- path/to/file
-fgl() {
+function fgl() {
   git log --oneline --color=always "$@" |
     fzf --ansi --height=100% \
         --preview 'git show --color=always {1}' \
@@ -671,7 +671,7 @@ fgl() {
 #        fgls --print (output commit hash and file path)
 # 1st layer: select commit (preview: modified files)
 # 2nd layer: select file (preview: diff of that file), ESC to go back
-fgls() {
+function fgls() {
   local print=false commit file
   [[ "$1" == "--print" ]] && print=true && shift
   while true; do
@@ -694,7 +694,7 @@ fgls() {
 # usage: fjl [pattern]
 #   pattern  optional, filter unit names (default: all units)
 # preview: systemctl status, enter: open full journal
-fjl() {
+function fjl() {
   [[ "$OSTYPE" != linux* ]] && echo "fjl: Linux only (systemd)" >&2 && return 1
   systemctl list-units --output json |
     jq '.[].unit | select(test($pattern))' --arg pattern "${1:-.}" --raw-output |
@@ -710,7 +710,7 @@ fjl() {
 #   query    optional, pre-fill fzf search (default: empty, use - to skip)
 #   lines    optional, number of recent log lines (default: 500)
 # raw mode: all lines visible, matches highlighted, ctrl-p/n to jump between matches
-fjlr() {
+function fjlr() {
   [[ "$OSTYPE" != linux* ]] && echo "fjlr: Linux only (systemd)" >&2 && return 1
   local unit=${1:-$(systemctl list-units --output json | jq -r '.[].unit' | fzf)} || return
   local query="${2:-}"
