@@ -16,6 +16,8 @@ Behaviour:
     - Snippets containing ``<...>`` patterns that pet would misinterpret
       as parameters are tagged with ``pet-param-conflict`` so they can be
       easily filtered out when using ``pet exec``.
+    - Snippets with intentional pet ``<param>`` placeholders that work
+      correctly are tagged with ``pet-param-pass``.
 
 Usage::
 
@@ -34,10 +36,18 @@ from pathlib import Path
 MC_TAG_PREFIX = "masscode:"
 MC_LABEL_PREFIX = "mc-tag:"
 CONFLICT_TAG = "pet-param-conflict"
+PARAM_PASS_TAG = "pet-param-pass"
 
-# Matches any <...> where content does not end with a space — the same
-# heuristic pet uses to detect parameter placeholders.
-_PET_PARAM_RE = re.compile(r"<([^>]+[^ ])>", re.DOTALL)
+# Loose regex — same heuristic pet uses to detect parameter placeholders.
+# Matches any <...> where content does not end with a space (DOTALL for
+# multi-line spans).
+_PET_LOOSE_RE = re.compile(r"<([^>]+[^ ])>", re.DOTALL)
+
+# Strict regex — only matches intentional pet parameters: <simple-word>.
+_PET_PARAM_RE = re.compile(r"<([\w-]+)>")
+
+# Detects heredoc (<<WORD, <<-WORD, <<'WORD', <<"WORD") or here string (<<<).
+_HEREDOC_RE = re.compile(r"<<-?\s*['\"]?\w+|<<<")
 
 
 # ---------------------------------------------------------------------------
@@ -115,11 +125,28 @@ def parse_masscode_md(
     }
 
 
-def has_pet_param_conflict(command: str) -> bool:
-    """Return ``True`` if *command* contains ``<...>`` patterns that pet
-    would misinterpret as parameter placeholders.
+def classify_pet_params(command: str) -> str | None:
+    """Classify how *command* interacts with pet's ``<param>`` detection.
+
+    Returns ``"pet-param-conflict"`` when pet would misinterpret non-param
+    ``<...>`` patterns, ``"pet-param-pass"`` when the command contains
+    intentional ``<param>`` placeholders that pet handles correctly, or
+    ``None`` when no ``<...>`` patterns are present.
     """
-    return bool(_PET_PARAM_RE.search(command))
+    loose = _PET_LOOSE_RE.findall(command)
+    strict = _PET_PARAM_RE.findall(command)
+    if not loose and not strict:
+        return None
+    # loose catches things strict doesn't → pet will misparse
+    if len(loose) > len(strict):
+        return CONFLICT_TAG
+    # strict params exist inside a multi-line heredoc/here-string context
+    # → pet substitution would corrupt the heredoc content
+    if strict and "\n" in command and _HEREDOC_RE.search(command):
+        return CONFLICT_TAG
+    if strict:
+        return PARAM_PASS_TAG
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -217,8 +244,9 @@ def _build_snippet(info: dict, mc_tag: str) -> dict:
     tags.extend(f"{MC_LABEL_PREFIX}{t}" for t in info.get("mc_tags", []))
     if info.get("is_favorite"):
         tags.append("mc-favorite")
-    if has_pet_param_conflict(info["command"]):
-        tags.append(CONFLICT_TAG)
+    param_tag = classify_pet_params(info["command"])
+    if param_tag:
+        tags.append(param_tag)
     return {
         "Description": info["name"],
         "command": info["command"],
@@ -257,7 +285,7 @@ def sync(
             mc_index[tag] = i
 
     # Scan massCode vault
-    added, updated, conflicts = 0, 0, 0
+    added, updated, conflicts, param_pass = 0, 0, 0, 0
     seen_mc_tags: set[str] = set()
 
     for md_file in vault.rglob("*.md"):
@@ -273,6 +301,8 @@ def sync(
             conflicts += 1
             if show_conflicts:
                 print(f"  ⚠ param conflict: {info['name']}")
+        if PARAM_PASS_TAG in new_snippet["Tag"]:
+            param_pass += 1
 
         if mc_tag in mc_index:
             old = pet_snippets[mc_index[mc_tag]]
@@ -305,6 +335,7 @@ def sync(
     print(
         f"\nTotal: {added} added, {updated} updated, "
         f"{removed} removed, {conflicts} param-conflict, "
+        f"{param_pass} param-pass, "
         f"{len(pet_snippets)} snippets"
     )
 
