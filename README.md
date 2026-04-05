@@ -144,7 +144,7 @@ You can open a highlighted text in copy-mode via press `o` or `Ctrl-o` to open f
 
 ## My zsh plugins
 
-`git pip python systemd tmux docker docker-compose encode64 autojump history-substring-search zsh-autosuggestions zsh-syntax-highlighting sudo vscode vi-mode zsh-navigation-tools git-open`
+`git pip python systemd tmux docker docker-compose encode64 history-substring-search zsh-autosuggestions zsh-syntax-highlighting sudo vscode vi-mode zsh-navigation-tools git-open`
 
 ##### tmux_note.txt is a file that remind some tmux setting
 

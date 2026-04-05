@@ -489,22 +489,11 @@ function esymbol() {
   fi
 }
 
-# jump to folder by autojump command, and use the VSCode to open this folder
+# go to folder path by zoxide command, and use the VSCode to open this folder
 function gfv() {
-  if which autojump &> /dev/null; then
-    :
-  else
-    echo "autojump command not found" >&2
-    return 1
-  fi
-  if which code &> /dev/null; then
-    :
-  else
-    echo "code command not found" >&2
-    return 1
-  fi
-  # the first argument should fill in your folder name
-  j "$1" && : || return
+  command -v zoxide &>/dev/null || { echo "zoxide not found" >&2; return 1; }
+  command -v code &>/dev/null || { echo "code not found" >&2; return 1; }
+  z "$1" || return
   code -n .
 }
 
