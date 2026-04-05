@@ -1,0 +1,376 @@
+#!/usr/bin/env python3
+"""Sync massCode markdown vault snippets into pet's snippet.toml.
+
+One-way sync from massCode to pet. Uses the massCode ``createdAt`` epoch
+timestamp (stored as a ``masscode:<epoch>`` tag in pet) to track identity
+across syncs.
+
+Behaviour:
+    - New massCode snippets are appended to pet.
+    - Changed name or command in massCode updates the pet entry.
+    - Deleted or trashed massCode snippets are removed from pet.
+    - Pet-native snippets (without a ``masscode:`` tag) are never touched.
+    - massCode favorites are synced as ``mc-favorite`` tags in pet.
+    - massCode folder names are synced as pet tags directly.
+    - massCode tags are synced as ``mc-tag:<name>`` tags in pet.
+    - Snippets containing ``<...>`` patterns that pet would misinterpret
+      as parameters are tagged with ``pet-param-conflict`` so they can be
+      easily filtered out when using ``pet exec``.
+
+Usage::
+
+    masscode2pet [--vault PATH] [--pet-file PATH] [--max-lines N] [--dry-run]
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import subprocess
+import sys
+import tomllib
+from pathlib import Path
+
+MC_TAG_PREFIX = "masscode:"
+MC_LABEL_PREFIX = "mc-tag:"
+CONFLICT_TAG = "pet-param-conflict"
+
+# Matches any <...> where content does not end with a space — the same
+# heuristic pet uses to detect parameter placeholders.
+_PET_PARAM_RE = re.compile(r"<([^>]+[^ ])>", re.DOTALL)
+
+
+# ---------------------------------------------------------------------------
+# massCode parsing
+# ---------------------------------------------------------------------------
+
+def load_tag_map(vault: Path) -> dict[int, str]:
+    """Load tag ID → name mapping from the vault's ``.masscode/state.json``."""
+    state_file = vault / ".masscode" / "state.json"
+    if not state_file.exists():
+        return {}
+    import json
+    data = json.loads(state_file.read_text(encoding="utf-8"))
+    return {t["id"]: t["name"] for t in data.get("tags", [])}
+
+
+def parse_masscode_md(
+    filepath: Path, *, max_lines: int = 0, tag_map: dict[int, str] | None = None,
+) -> dict | None:
+    """Parse a massCode markdown file and return snippet metadata.
+
+    Returns a dict with keys ``id``, ``name``, ``command``, ``folder``,
+    ``mc_tags``, ``is_favorite``, or ``None`` if the file should be
+    skipped (deleted, empty, or unparseable).  When *max_lines* is
+    greater than zero, snippets exceeding that line count are skipped.
+    """
+    text = filepath.read_text(encoding="utf-8")
+    m = re.match(r"^---\n(.+?)\n---\n(.+)", text, re.DOTALL)
+    if not m:
+        return None
+
+    frontmatter, body = m.group(1), m.group(2)
+
+    def yaml_val(key: str) -> str | None:
+        """Return the scalar value for *key* in the YAML frontmatter."""
+        match = re.search(rf"^{key}:\s*(.+)$", frontmatter, re.MULTILINE)
+        return match.group(1).strip() if match else None
+
+    sid = yaml_val("createdAt")
+    name = yaml_val("name")
+    if not sid or not name:
+        return None
+
+    if yaml_val("isDeleted") == "1":
+        return None
+
+    code_match = re.search(r"```\w*\n(.+?)```", body, re.DOTALL)
+    if not code_match:
+        return None
+
+    cmd = code_match.group(1).rstrip("\n")
+    if not cmd.strip():
+        return None
+
+    if max_lines > 0 and cmd.count("\n") >= max_lines:
+        return None
+
+    # Parse tags — inline ``tags: [1, 2]`` or multi-line ``tags:\n  - 1``
+    mc_tags: list[str] = []
+    if tag_map:
+        inline = re.search(r"^tags:\s*\[([^\]]*)\]", frontmatter, re.MULTILINE)
+        if inline and inline.group(1).strip():
+            tag_ids = [int(x.strip()) for x in inline.group(1).split(",") if x.strip()]
+        else:
+            tag_ids = [int(x) for x in re.findall(r"^  - (\d+)", frontmatter, re.MULTILINE)]
+        mc_tags = [tag_map[tid] for tid in tag_ids if tid in tag_map]
+
+    return {
+        "id": sid,
+        "name": name,
+        "command": cmd,
+        "folder": filepath.parent.name,
+        "mc_tags": mc_tags,
+        "is_favorite": yaml_val("isFavorites") == "1",
+    }
+
+
+def has_pet_param_conflict(command: str) -> bool:
+    """Return ``True`` if *command* contains ``<...>`` patterns that pet
+    would misinterpret as parameter placeholders.
+    """
+    return bool(_PET_PARAM_RE.search(command))
+
+
+# ---------------------------------------------------------------------------
+# pet TOML helpers
+# ---------------------------------------------------------------------------
+
+def _get(snippet: dict, key: str) -> object:
+    """Get a value from *snippet* with pet's mixed-case key convention.
+
+    Pet writes capitalised keys (``Description``, ``Tag``, ``Output``) but
+    lowercase ``command``.  This helper tries capitalised first, then
+    lowercase, so the rest of the code doesn't need to care.
+    """
+    cap = key[0].upper() + key[1:] if key else key
+    return snippet.get(cap, snippet.get(key))
+
+
+def load_pet_snippets(pet_file: Path) -> list[dict]:
+    """Load existing snippets from a pet TOML file.
+
+    Returns an empty list when the file does not exist.
+    """
+    if not pet_file.exists():
+        return []
+    with open(pet_file, "rb") as f:
+        data = tomllib.load(f)
+    return data.get("Snippets", data.get("snippets", []))
+
+
+def get_mc_tag(snippet: dict) -> str | None:
+    """Return the ``masscode:<id>`` tag if present, else ``None``."""
+    for t in _get(snippet, "tag") or []:
+        if t.startswith(MC_TAG_PREFIX):
+            return t
+    return None
+
+
+def _escape_toml_basic_str(value: str) -> str:
+    """Escape a string for use inside a TOML basic string (double-quoted)."""
+    return (
+        value
+        .replace("\\", "\\\\")
+        .replace('"', '\\"')
+        .replace("\n", "\\n")
+        .replace("\t", "\\t")
+    )
+
+
+def snippet_to_toml(snippet: dict) -> str:
+    """Serialise a single snippet dict to a TOML ``[[Snippets]]`` block.
+
+    Output uses pet's native key casing so that ``pet`` can read the file
+    without issues.
+    """
+    tags = _get(snippet, "tag") or []
+    tags_str = ", ".join(f'"{_escape_toml_basic_str(t)}"' for t in tags)
+    desc = _escape_toml_basic_str(str(_get(snippet, "description") or ""))
+    output = _escape_toml_basic_str(str(_get(snippet, "output") or ""))
+    cmd = (_get(snippet, "command") or "").strip("\n")
+
+    if "\n" in cmd or '"' in cmd:
+        cmd_str = f"'''\n{cmd}\n'''"
+    else:
+        cmd_str = f'"{_escape_toml_basic_str(cmd)}"'
+
+    return (
+        f"[[Snippets]]\n"
+        f'  Description = "{desc}"\n'
+        f"  command = {cmd_str}\n"
+        f"  Tag = [{tags_str}]\n"
+        f'  Output = "{output}"\n'
+    )
+
+
+def write_pet_file(pet_file: Path, snippets: list[dict]) -> None:
+    """Write *snippets* to *pet_file* in pet-compatible TOML format."""
+    pet_file.write_text(
+        "\n".join(snippet_to_toml(s) for s in snippets) + "\n",
+        encoding="utf-8",
+    )
+
+
+# ---------------------------------------------------------------------------
+# Sync logic
+# ---------------------------------------------------------------------------
+
+def _build_snippet(info: dict, mc_tag: str) -> dict:
+    """Build a pet snippet dict from parsed massCode info.
+
+    Appends a ``pet-param-conflict`` tag when the command contains
+    ``<...>`` patterns that would trigger pet's parameter detection.
+    massCode tags are included as ``mc-tag:<TagName>``.
+    """
+    tags = [info["folder"], mc_tag]
+    tags.extend(f"{MC_LABEL_PREFIX}{t}" for t in info.get("mc_tags", []))
+    if info.get("is_favorite"):
+        tags.append("mc-favorite")
+    if has_pet_param_conflict(info["command"]):
+        tags.append(CONFLICT_TAG)
+    return {
+        "Description": info["name"],
+        "command": info["command"],
+        "Tag": tags,
+        "Output": "",
+    }
+
+
+def sync(
+    vault: Path,
+    pet_file: Path,
+    *,
+    max_lines: int = 0,
+    dry_run: bool = False,
+    show_conflicts: bool = False,
+    auto_sync: bool = False,
+) -> None:
+    """Run a one-way sync from *vault* to *pet_file*.
+
+    Prints a summary of added, updated, and removed snippets.  When
+    *dry_run* is ``True`` the file is not written; instead the would-be
+    content is printed to stdout.
+    """
+    if not vault.is_dir():
+        print(f"Error: vault path not found: {vault}", file=sys.stderr)
+        sys.exit(1)
+
+    tag_map = load_tag_map(vault)
+    pet_snippets = load_pet_snippets(pet_file)
+
+    # Index existing masscode-tagged snippets by their mc_tag
+    mc_index: dict[str, int] = {}
+    for i, s in enumerate(pet_snippets):
+        tag = get_mc_tag(s)
+        if tag:
+            mc_index[tag] = i
+
+    # Scan massCode vault
+    added, updated, conflicts = 0, 0, 0
+    seen_mc_tags: set[str] = set()
+
+    for md_file in vault.rglob("*.md"):
+        info = parse_masscode_md(md_file, max_lines=max_lines, tag_map=tag_map)
+        if not info:
+            continue
+
+        mc_tag = f"{MC_TAG_PREFIX}{info['id']}"
+        seen_mc_tags.add(mc_tag)
+        new_snippet = _build_snippet(info, mc_tag)
+
+        if CONFLICT_TAG in new_snippet["Tag"]:
+            conflicts += 1
+            if show_conflicts:
+                print(f"  ⚠ param conflict: {info['name']}")
+
+        if mc_tag in mc_index:
+            old = pet_snippets[mc_index[mc_tag]]
+            old_cmd = (_get(old, "command") or "").strip("\n")
+            new_cmd = new_snippet["command"].strip("\n")
+            if (_get(old, "description") != new_snippet["Description"]
+                    or old_cmd != new_cmd
+                    or sorted(_get(old, "tag") or []) != sorted(new_snippet["Tag"])):
+                new_snippet["Output"] = _get(old, "output") or ""
+                pet_snippets[mc_index[mc_tag]] = new_snippet
+                updated += 1
+                print(f"  updated: {info['name']}")
+        else:
+            pet_snippets.append(new_snippet)
+            added += 1
+            print(f"  added: {info['name']}")
+
+    # Remove pet snippets whose massCode source was deleted or trashed
+    removed = 0
+    clean: list[dict] = []
+    for s in pet_snippets:
+        mc_tag = get_mc_tag(s)
+        if mc_tag and mc_tag not in seen_mc_tags:
+            removed += 1
+            print(f"  removed: {_get(s, 'description')}")
+        else:
+            clean.append(s)
+    pet_snippets = clean
+
+    print(
+        f"\nTotal: {added} added, {updated} updated, "
+        f"{removed} removed, {conflicts} param-conflict, "
+        f"{len(pet_snippets)} snippets"
+    )
+
+    if not (added or updated or removed):
+        print("No changes.")
+    elif dry_run:
+        print("\n[dry-run] Would write:")
+        print("\n".join(snippet_to_toml(s) for s in pet_snippets))
+    else:
+        write_pet_file(pet_file, pet_snippets)
+        print(f"Written to {pet_file}")
+        if auto_sync:
+            print()
+            subprocess.run(["pet", "sync"])
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+def main() -> None:
+    """Parse arguments and run the sync."""
+    parser = argparse.ArgumentParser(
+        description="One-way sync from massCode markdown vault to pet.",
+    )
+    parser.add_argument(
+        "--vault",
+        default=str(Path.home() / ".massCode-vault/code"),
+        help="massCode vault path (default: ~/.massCode-vault/code)",
+    )
+    parser.add_argument(
+        "--pet-file",
+        default=str(Path.home() / ".config/pet/snippet.toml"),
+        help="pet snippet.toml path (default: ~/.config/pet/snippet.toml)",
+    )
+    parser.add_argument(
+        "--max-lines",
+        type=int,
+        default=0,
+        help="skip snippets exceeding this line count (default: 0 = no limit)",
+    )
+    parser.add_argument(
+        "--show-conflicts",
+        action="store_true",
+        help="show snippets with pet <param> conflicts",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="preview changes without writing to disk",
+    )
+    parser.add_argument(
+        "--sync",
+        action="store_true",
+        help="run 'pet sync' after writing changes",
+    )
+    args = parser.parse_args()
+    sync(
+        Path(args.vault),
+        Path(args.pet_file),
+        max_lines=args.max_lines,
+        show_conflicts=args.show_conflicts,
+        dry_run=args.dry_run,
+        auto_sync=args.sync,
+    )
+
+
+if __name__ == "__main__":
+    main()

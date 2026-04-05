@@ -1,0 +1,17 @@
+#compdef masscode2pet
+
+# Zsh completion for masscode2pet
+# Source: ~/.dotfile/completions/_masscode2pet
+
+_masscode2pet() {
+  _arguments \
+    '--vault[massCode vault path]:path:_directories' \
+    '--pet-file[pet snippet.toml path]:file:_files' \
+    '--max-lines[skip snippets exceeding this line count (0 = no limit)]:number' \
+    '--show-conflicts[show snippets with pet param conflicts]' \
+    '--dry-run[preview changes without writing to disk]' \
+    '--sync[run pet sync after writing changes]' \
+    '(-h --help)'{-h,--help}'[show help message]'
+}
+
+_masscode2pet "$@"

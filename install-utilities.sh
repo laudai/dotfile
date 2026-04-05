@@ -6,7 +6,7 @@
 mkdir -p $HOME/.config
 # install cross-shell prompt starship
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
-mkdir -p ~/.config/{i3,conky,polybar}
+mkdir -p ~/.config/{i3,conky,polybar,pet}
 
 echo
 echo "Download Nerd Fonts from web for starship:"
@@ -17,6 +17,7 @@ ln -sf ~/.dotfile/laudai.conky.conf ~/.config/conky/conky.conf
 cp ~/.dotfile/linux_script/start-conky.sh ~/.config/conky
 ln -sf ~/.dotfile/laudai.polybar.config.ini ~/.config/polybar/config.ini
 mkdir -p $HOME/.config/ghostty
+ln -sf ~/.dotfile/laudai.pet.config.toml ~/.config/pet/config.toml
 
 
 # install TPM (Tmux Plugin Manager)
@@ -43,7 +44,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 	if which brew >/dev/null ; then
 		# setup font
 		brew tap homebrew/cask-fonts && brew install --cask font-caskaydia-cove-nerd-font font-fira-code font-cascadia-code
-		brew install glances htop autojump mos gawk cloc tmux figlet background-music coreutils tokei zoxide fzf
+		brew install glances htop autojump mos gawk cloc tmux figlet background-music coreutils tokei zoxide fzf pet bat fd
 		brew install --cask easy-move-plus-resize # similar or alternative to move window in the Gnome way
 		brew install --cask background-music # not work in M1 MacOS
 		brew install --cask rectangle # open source window manager in MacOS

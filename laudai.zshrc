@@ -144,6 +144,11 @@ plugins=(
 # plugin history-substring-search should load before zsh-syntax-highlighting to avoid syantax error
 
 
+# Deduplicate fpath and path to keep them clean across multiple source calls
+typeset -U fpath path
+# Custom completions (must be before oh-my-zsh source, which calls compinit)
+fpath=(~/.dotfile/completions $fpath)
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -212,9 +217,21 @@ bindkey "^B" znt-cd-widget
 zle -N znt-kill-widget
 bindkey "^Y" znt-kill-widget
 # Set up fzf key bindings and fuzzy completion
-#source <(fzf --zsh) 0.48.0 later
+source <(fzf --zsh) # 0.48.0 later
 [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
 [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+# Rebind fzf cd widget from alt-c to alt-p (avoid conflict with vi/emacs toggle)
+bindkey -M emacs '\ep' fzf-cd-widget
+bindkey -M viins '\ep' fzf-cd-widget
+bindkey -M vicmd '\ep' fzf-cd-widget
+# pet query keybindings
+bindkey '^s' pet-snippet-search # ctrl-s
+# Bind Ctrl+U to .kill-whole-line instead of vi-kill-line:
+# 1. Deletes entire line regardless of insert-mode entry point (vi-kill-line
+#    does nothing after A, unlike vim's <C-g>u<C-u> remap in .vimrc)
+# 2. Dot prefix bypasses vi-mode plugin's clipcopy wrapper that clears
+#    system clipboard with empty CUTBUFFER
+bindkey '^U' .kill-whole-line
 # keybindings reference
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
 # https://github.com/ThiefMaster/zsh-config/blob/master/zshrc.d/keybinds.zsh
@@ -631,6 +648,104 @@ funciton count_characters() {
   printf $1 | wc -m
 }
 
+# fzf interactive git diff preview
+# usage: fgd (unstaged) | fgd --cached (staged) | fgd HEAD~3 | fgd main
+fgd() {
+  git diff --name-only "$@" |
+    fzf --height=100% \
+        --preview "git diff --color=always $* -- {}" \
+        --preview-window down:80%
+}
+
+# fzf interactive git log preview
+# usage: fgl (all) | fgl -20 (recent 20) | fgl --all | fgl -- path/to/file
+fgl() {
+  git log --oneline --color=always "$@" |
+    fzf --ansi --height=100% \
+        --preview 'git show --color=always {1}' \
+        --preview-window down:80%
+}
+
+# fzf interactive git log with stat → file drill-down
+# usage: fgls (all) | fgls -20 | fgls --all | fgls -- path/to/file
+#        fgls --print (output commit hash and file path)
+# 1st layer: select commit (preview: modified files)
+# 2nd layer: select file (preview: diff of that file), ESC to go back
+fgls() {
+  local print=false commit file
+  [[ "$1" == "--print" ]] && print=true && shift
+  while true; do
+    commit=$(git log --oneline --color=always "$@" |
+      fzf --ansi --height=100% \
+          --preview 'git show --stat --color=always {1}' \
+          --preview-window down:80%) || return
+    commit=${commit%% *}
+    file=$(git diff-tree --no-commit-id --name-only -r "$commit" |
+      fzf --height=100% \
+          --preview "git show --color=always $commit -- {}" \
+          --preview-window down:80%)
+    [[ -z "$file" ]] && continue
+    $print && echo "$commit" && echo "$file"
+    break
+  done
+}
+
+# fzf interactive systemd journal viewer (Linux only, requires jq)
+# usage: fjl [pattern]
+#   pattern  optional, filter unit names (default: all units)
+# preview: systemctl status, enter: open full journal
+fjl() {
+  [[ "$OSTYPE" != linux* ]] && echo "fjl: Linux only (systemd)" >&2 && return 1
+  systemctl list-units --output json |
+    jq '.[].unit | select(test($pattern))' --arg pattern "${1:-.}" --raw-output |
+    fzf --height=100% \
+        --preview "systemctl status {}" \
+        --preview-window down:80% \
+        --bind "enter:execute(journalctl -u {})"
+}
+
+# fzf interactive systemd journal raw log viewer (Linux only)
+# usage: fjlr [service] [query] [lines]
+#   service  optional, systemd unit name; if omitted, fzf select from active units
+#   query    optional, pre-fill fzf search (default: empty, use - to skip)
+#   lines    optional, number of recent log lines (default: 500)
+# raw mode: all lines visible, matches highlighted, ctrl-p/n to jump between matches
+fjlr() {
+  [[ "$OSTYPE" != linux* ]] && echo "fjlr: Linux only (systemd)" >&2 && return 1
+  local unit=${1:-$(systemctl list-units --output json | jq -r '.[].unit' | fzf)} || return
+  local query="${2:-}"
+  [[ "$query" == "-" ]] && query=""
+  journalctl --no-pager -u "$unit" -n "${3:-500}" |
+    fzf --raw --query "$query"
+}
+
+# pet related function
+function pet() {
+  case "$1" in
+    edit|configure)
+      # Load nvm only if node is not yet in PATH, so coc.nvim can find node.
+      # _zsh_nvm_load (from zsh-nvm plugin) loads nvm and unsets all lazy
+      # functions at once, avoiding double nvm loading when pet spawns vim.
+      (( ! $+commands[node] )) && _zsh_nvm_load
+      ;;
+  esac
+  command pet "$@"
+}
+
+function prev_pet_add() {
+  PREV=$(fc -lrn | head -n 1)
+  sh -c "pet new `printf %q "$PREV"`"
+}
+
+function pet-snippet-search() {
+  BUFFER=$(pet search --query "$LBUFFER")
+  CURSOR=$#BUFFER
+  zle redisplay
+}
+zle -N pet-snippet-search
+stty -ixon
+
+
 #    ______                      __
 #   / ____/  ______  ____  _____/ /_
 #  / __/ | |/_/ __ \/ __ \/ ___/ __/
@@ -643,6 +758,9 @@ export EDITOR="vim"
 export VISUAL="$EDITOR"
 export MYVIMRC="$HOME/.vimrc"
 export DOTFILE="$HOME/.dotfile"
+# Custom dotfile scripts
+export PATH="$HOME/.dotfile/bin:$PATH"
+
 
 
 # let urlview to use firefox browser to show
@@ -650,6 +768,51 @@ if [ -e '/usr/bin/firefox' ] ; then
   #export BROWSER='/usr/bin/firefox'
   # comment this block to use xdg-settings set default-web-browser firefox_firefox.desktop
 fi
+
+# fzf global defaults
+# note: ctrl-y is fzf built-in yank (emacs style: paste back killed text),
+#       overridden in FZF_CTRL_R_OPTS to copy selection to system clipboard
+export FZF_DEFAULT_OPTS="
+  --reverse
+  --cycle
+  --height=60%
+  --highlight-line
+  --border
+  --preview-window down
+  --bind 'ctrl-b:half-page-up,ctrl-f:half-page-down'
+  --bind 'shift-page-up:preview-page-up,shift-page-down:preview-page-down'
+  --bind '?:toggle-preview'
+  --bind 'ctrl-\:change-preview-window(right:50%|hidden|)'
+  --header 'ctrl+y (emacs yank/recover) | ? (preview) | ctrl+\\ (preview pos) | ctrl+/ (line wrap) | shift+pgup/dn (preview page)'"
+
+# Ctrl+T: search files and paste path to command line
+# Based on fzf official config, added: --walker-root (search from home)
+export FZF_CTRL_T_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview '[ -d {} ] && tree -C {} || bat -n --color=always {}'"
+
+# Print tree structure in the preview window
+# Alt+P (rebound from Alt+C): cd into selected directory
+# Env var names must stay as FZF_ALT_C_* — fzf hardcodes these names
+# regardless of which key triggers fzf-cd-widget (see bindkey above)
+export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --exclude .git --exclude node_modules --exclude target"
+
+# bind alt-o to save to pet, ctrl-y to copy to clipboard in fzf history search
+# fzf action: +accept = close fzf and output selection to terminal
+#             +abort  = close fzf without output (silent operation)
+export FZF_CTRL_R_OPTS="
+  --info=right
+  --height=80%
+  --no-multi-line
+  --color header:italic:bold
+  --color 'fg:#bbccdd,fg+:#ddeeff,bg:#334455,preview-bg:#223344,border:#778899'
+  --header 'alt+o (pet new) | ctrl+y (copy to clipboard) | ctrl+s (sort: +S relevance, -S recency)'
+  --preview 'echo {}' --preview-window hidden:50%:wrap
+  --bind 'ctrl-\:change-preview-window(down:50%|right:50%|)'
+  --bind 'ctrl-s:toggle-sort'
+  --bind 'ctrl-y:execute-silent(echo -n {} | sed \"s/^[[:space:]]*[0-9]*\\t//\" | if command -v pbcopy >/dev/null; then pbcopy; else xclip -selection clipboard; fi)+accept'
+  --bind 'alt-o:execute(pet new --tag {2..})+abort'"
 
 
 #     ___    ___
