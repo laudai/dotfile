@@ -444,24 +444,15 @@ function trimdoc() {
   local original_url=$1
   case "$OSTYPE" in
     "linux-gnu"*)
-       if which sed &> /dev/null; then
-	    :
-	   else
-	     echo "can't find the gsed command"  >&2
-	   return
-	   fi
+      command -v sed &>/dev/null || { echo "can't find sed" >&2; return 1; }
       new_url=$(sed "s/\/[a-z_]\+_[a-z]\+//g" <<< $original_url)
       echo $new_url | xclip -selection clipboard
       ;;
     "darwin"*)
-       if which gsed &> /dev/null; then
-	    :
-	   else
-	     echo "can't find the gsed command"  >&2
-	   return
-	   fi
+      command -v gsed &>/dev/null || { echo "can't find gsed" >&2; return 1; }
       new_url=$(gsed "s/\/[a-z_]\+_[a-z]\+//g" <<< $original_url)
       echo $new_url | pbcopy
+      ;;
   esac
   echo $new_url
 }
@@ -478,15 +469,9 @@ function lsymbol() {
 
 # edit symbol.txt file with vim editor
 function esymbol() {
-  if [[ -e "$SYMBOL_FILE"  ]]; then
-    if which vim &> /dev/null; then
-		vim "$SYMBOL_FILE"
-	else
-		echo "skip to open, please install vim first." 1>&2
-	fi
-  else
-	echo "can't find $SYMBOL_FILE" 1>&2
-  fi
+  [[ ! -e "$SYMBOL_FILE" ]] && echo "can't find $SYMBOL_FILE" >&2 && return 1
+  command -v vim &>/dev/null || { echo "vim not found" >&2; return 1; }
+  vim "$SYMBOL_FILE"
 }
 
 # go to folder path by zoxide command, and use the VSCode to open this folder
