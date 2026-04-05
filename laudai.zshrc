@@ -404,7 +404,33 @@ function offsetDayHourinISO8601(){
   fi
 }
 
-# generate the Epoch Time (Linux and MacOS)
+# generate the epoch UNIX time from the ISO8601 time (%Y-%m-%d %H:%M:%S)(cloud-init)
+function dateISO8601_to_epoch(){
+  local timestamp="${*%,*}"  # merge all args and remove milliseconds
+  case "$OSTYPE" in
+    "linux-gnu"*)
+        date -d "$timestamp" +%s
+        ;;
+    "darwin"*)
+        date -j -f "%Y-%m-%d %H:%M:%S" "$timestamp" +%s
+        ;;
+    *)
+      echo "Not support OSTYPE." 1>&2
+      ;;
+  esac
+}
+
+# generate timestamp in journalctl format and copy to clipboard
+function dateJournalctl() {
+  local ts=$(date -u +"%Y-%m-%d %H:%M:%S")
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo -n "$ts" | pbcopy
+  else
+    echo -n "$ts" | xclip -selection clipboard
+  fi
+  echo "Copied: $ts"
+}
+
 function epochTimeDate_get(){
   date +%s
 }
