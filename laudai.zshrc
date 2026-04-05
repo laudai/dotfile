@@ -431,6 +431,7 @@ function dateJournalctl() {
   echo "Copied: $ts"
 }
 
+# generate the Epoch Time (Linux and MacOS)
 function epochTimeDate_get(){
   date +%s
 }
