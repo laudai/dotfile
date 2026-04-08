@@ -787,9 +787,9 @@ export FZF_DEFAULT_OPTS="
   --header 'ctrl+y (emacs yank/recover) | ? (preview) | ctrl+\\ (preview pos) | ctrl+/ (line wrap) | shift+pgup/dn (preview page)'"
 
 # Ctrl+T: search files and paste path to command line
-# Based on fzf official config, added: --walker-root (search from home)
+# Use fd for speed (parallel, respects .gitignore) and --hidden for dotfiles
+export FZF_CTRL_T_COMMAND="fd --type f --type d --hidden --follow --exclude .git --exclude node_modules --exclude target"
 export FZF_CTRL_T_OPTS="
-  --walker-skip .git,node_modules,target
   --preview '[ -d {} ] && tree -C {} || bat -n --color=always {}'"
 
 # Print tree structure in the preview window
