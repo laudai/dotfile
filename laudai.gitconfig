@@ -6,3 +6,5 @@
 	excludesfile = ~/.gitignore_global
 [alias]
 	adog = log --all --decorate --oneline --graph
+[include]
+    path = ~/.config/git/config-override
