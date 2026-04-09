@@ -627,7 +627,7 @@ toggle-workspace-primary-monitor-only() {
 
 # Show weather by city supported by wttr via ImageMagick
 # TODO: fix the senario when the city not in the supported list
-funciton wttr_to_png() {
+function wttr_to_png() {
   city=$1
   curl wttr.in/"$city".png --output /tmp/weather.png &> /dev/null
   if which display &> /dev/null; then
@@ -638,14 +638,14 @@ funciton wttr_to_png() {
 }
 
 # Show weather by city supported by wttr via cli command
-funciton wttr_city() {
+function wttr_city() {
   # printf '\033c'
   clear
   curl wttr.in/$1
 }
 
 
-funciton count_characters() {
+function count_characters() {
   printf $1 | wc -m
 }
 
