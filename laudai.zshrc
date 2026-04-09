@@ -693,6 +693,15 @@ function fgls() {
   done
 }
 
+# Fuzzy search file contents with ripgrep and open selection in vim at matching line
+# usage: rgvim
+# requires: rg, fzf (>=0.38 for become()), vim
+function rgvim() {
+  (( ! $+commands[node] )) && _zsh_nvm_load
+  rg --line-number . |
+       fzf --delimiter : --nth 3.. --bind 'enter:become(vim {1} +{2})'
+}
+
 # fzf interactive systemd journal viewer (Linux only, requires jq)
 # usage: fjl [pattern]
 #   pattern  optional, filter unit names (default: all units)
