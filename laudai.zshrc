@@ -787,7 +787,7 @@ function OpenDirtyRepository() {
     for repo in "${dirty[@]}"; do
         osascript -e 'tell application "System Events" to keystroke "t" using command down'
         sleep 0.5
-        osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear\n\""
+        osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear && gd\n\""
     done
 }
 
