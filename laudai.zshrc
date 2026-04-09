@@ -746,6 +746,51 @@ function pet-snippet-search() {
 zle -N pet-snippet-search
 stty -ixon
 
+# Check dirty git repos and open them in Ghostty tabs
+function OpenDirtyRepository() {
+    local repos=(
+        ~/Documents/projects/*/*
+        ~/.dotfile
+        ~/.ai-prompts
+        ~/.massCode-vault
+    )
+    local dirty=() clean=() skipped=()
+
+    for repo in "${repos[@]}"; do
+        if [[ ! -d "$repo/.git" ]]; then
+            skipped+=("$repo")
+        elif git -C "$repo" status --porcelain | grep -q .; then
+            dirty+=("$repo")
+        else
+            clean+=("$repo")
+        fi
+    done
+
+    echo "=== Summary ==="
+    echo "Dirty:   ${#dirty[@]}"
+    echo "Clean:   ${#clean[@]}"
+    echo "Skipped: ${#skipped[@]} (not a git repo)"
+    echo ""
+    (( ${#clean[@]} )) && printf "  [clean]   %s\n" "${clean[@]}"
+    (( ${#skipped[@]} )) && printf "  [skip]    %s\n" "${skipped[@]}"
+    (( ${#dirty[@]} )) && printf "  [dirty]   %s\n" "${dirty[@]}"
+
+    if [[ ${#dirty[@]} -eq 0 ]]; then
+        echo ""
+        echo "Nothing to open."
+        return 0
+    fi
+
+    echo ""
+    echo "Opening ${#dirty[@]} tab(s) in Ghostty..."
+
+    for repo in "${dirty[@]}"; do
+        osascript -e 'tell application "System Events" to keystroke "t" using command down'
+        sleep 0.5
+        osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear\n\""
+    done
+}
+
 
 #    ______                      __
 #   / ____/  ______  ____  _____/ /_
@@ -930,3 +975,4 @@ eval "$(starship init zsh)"
 
 # https://superuser.com/questions/117841/when-reading-a-file-with-less-or-more-how-can-i-get-the-content-in-colors
 #export LESS="-r" #useful for raw-control-chars, but can't like alias to escape via backslash \
+
