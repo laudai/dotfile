@@ -829,7 +829,8 @@ export FZF_DEFAULT_OPTS="
   --bind 'shift-page-up:preview-page-up,shift-page-down:preview-page-down'
   --bind '?:toggle-preview'
   --bind 'ctrl-\:change-preview-window(right:50%|hidden|)'
-  --header 'ctrl+y (emacs yank/recover) | ? (preview) | ctrl+\\ (preview pos) | ctrl+/ (line wrap) | shift+pgup/dn (preview page)'"
+  --bind 'alt-y:execute-silent(echo -n {} | sed \"s/^[[:space:]]*[0-9]*\\t//\" | if command -v pbcopy >/dev/null; then pbcopy; else xclip -selection clipboard; fi)+accept'
+  --header 'ctrl+y (emacs yank/recover) | alt+y (copy) | ? (preview) | ctrl+\\ (preview pos) | ctrl+/ (line wrap) | shift+pgup/dn (preview page)'"
 
 # Ctrl+T: search files and paste path to command line
 # Use fd for speed (parallel, respects .gitignore) and --hidden for dotfiles
@@ -853,11 +854,10 @@ export FZF_CTRL_R_OPTS="
   --no-multi-line
   --color header:italic:bold
   --color 'fg:#bbccdd,fg+:#ddeeff,bg:#334455,preview-bg:#223344,border:#778899'
-  --header 'alt+o (pet new) | ctrl+y (copy to clipboard) | ctrl+s (sort: +S relevance, -S recency)'
+  --header 'alt+o (pet new) | alt+y (copy) | ctrl+s (sort: +S relevance, -S recency)'
   --preview 'echo {}' --preview-window hidden:50%:wrap
   --bind 'ctrl-\:change-preview-window(down:50%|right:50%|)'
   --bind 'ctrl-s:toggle-sort'
-  --bind 'ctrl-y:execute-silent(echo -n {} | sed \"s/^[[:space:]]*[0-9]*\\t//\" | if command -v pbcopy >/dev/null; then pbcopy; else xclip -selection clipboard; fi)+accept'
   --bind 'alt-o:execute(pet new --tag {2..})+abort'"
 
 

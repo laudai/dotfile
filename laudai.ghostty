@@ -80,6 +80,7 @@ keybind = cmd+f=esc:f
 keybind = cmd+.=esc:.
 keybind = cmd+o=esc:o
 keybind = cmd+p=esc:p
+keybind = cmd+y=esc:y
 #  window
 keybind = cmd+s>x=close_surface
 
