@@ -226,6 +226,8 @@ bindkey -M viins '\ep' fzf-cd-widget
 bindkey -M vicmd '\ep' fzf-cd-widget
 # pet query keybindings
 bindkey '^s' pet-snippet-search # ctrl-s
+# kiro prompt selector
+bindkey '^k' kiro-prompt-select # ctrl-k
 # Bind Ctrl+U to .kill-whole-line instead of vi-kill-line:
 # 1. Deletes entire line regardless of insert-mode entry point (vi-kill-line
 #    does nothing after A, unlike vim's <C-g>u<C-u> remap in .vimrc)
@@ -745,6 +747,20 @@ function pet-snippet-search() {
 }
 zle -N pet-snippet-search
 stty -ixon
+
+function kiro-prompt-select() {
+  local prompt_dir="$HOME/.kiro/prompts"
+  local selected=$(find -L "$prompt_dir" -name '*.md' -not -name '.*' | sed "s|$prompt_dir/||;s|\.md$||" | fzf --prompt='kiro prompt> ' --header='enter: chat | ctrl-t: chat --tui' --expect=ctrl-t)
+  [[ -n "$selected" ]] || return
+  local key="${selected%%$'\n'*}"
+  local name="${selected#*$'\n'}"
+  [[ -n "$name" ]] || return
+  BUFFER="kiro-cli chat \"@${name}\""
+  [[ "$key" == "ctrl-t" ]] && BUFFER+=" --tui"
+  CURSOR=$#BUFFER
+  zle redisplay
+}
+zle -N kiro-prompt-select
 
 # Check dirty git repos and open them in Ghostty tabs
 function OpenDirtyRepository() {
