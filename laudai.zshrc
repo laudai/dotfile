@@ -66,7 +66,7 @@ _sz_function
 
 # export NVM_NO_USE in zsh-nvm before load plugin to avoid the autoload node
 export NVM_LAZY_LOAD=true
-export NVM_LAZY_LOAD_EXTRA_COMMANDS=("vim" "view")
+export NVM_LAZY_LOAD_EXTRA_COMMANDS=("vim" "view" "kiro-cli")
 
 #if [ "$HOST"="raspberrypi" ]
 #then
