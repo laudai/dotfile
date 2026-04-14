@@ -274,6 +274,7 @@ let g:jedi#auto_initialization = 1
 let g:jedi#popup_on_dot = 0
 autocmd FileType python setlocal completeopt-=preview
 " indentLine plugin
+let g:vim_json_conceal=0 "disable JSON conceal to show double quotes
 let g:indentLine_enabled = 1
 let g:indentLine_setColors = 1
 let g:indentLine_color_term = 214
