@@ -226,8 +226,8 @@ bindkey -M viins '\ep' fzf-cd-widget
 bindkey -M vicmd '\ep' fzf-cd-widget
 # pet query keybindings
 bindkey '^s' pet-snippet-search # ctrl-s
-# kiro prompt selector
-bindkey '^k' kiro-prompt-select # ctrl-k
+# kiro agent selector
+bindkey '^k' kiro-agent-select # ctrl-k
 # Bind Ctrl+U to .kill-whole-line instead of vi-kill-line:
 # 1. Deletes entire line regardless of insert-mode entry point (vi-kill-line
 #    does nothing after A, unlike vim's <C-g>u<C-u> remap in .vimrc)
@@ -757,62 +757,90 @@ function pet-snippet-search() {
 zle -N pet-snippet-search
 stty -ixon
 
-function kiro-prompt-select() {
-  local prompt_dir="$HOME/.kiro/prompts"
-  local selected=$(find -L "$prompt_dir" -name '*.md' -not -name '.*' | sed "s|$prompt_dir/||;s|\.md$||" | fzf --prompt='kiro prompt> ' --header='enter: chat | ctrl-t: chat --tui' --expect=ctrl-t)
+function kiro-agent-select() {
+  local agent_dir="$HOME/.kiro/agents"
+  local selected=$(find -L "$agent_dir" -name '*.json' -not -name '.*' | sed "s|$agent_dir/||;s|\.json$||" | fzf --prompt='kiro agent> ' --header='enter: chat | ctrl-t: chat --tui' --expect=ctrl-t)
   [[ -n "$selected" ]] || return
   local key="${selected%%$'\n'*}"
   local name="${selected#*$'\n'}"
   [[ -n "$name" ]] || return
-  BUFFER="kiro-cli chat \"@${name}\""
+  BUFFER="kiro-cli chat --agent \"${name}\""
   [[ "$key" == "ctrl-t" ]] && BUFFER+=" --tui"
   CURSOR=$#BUFFER
   zle redisplay
 }
-zle -N kiro-prompt-select
+zle -N kiro-agent-select
 
 # Check dirty git repos and open them in Ghostty tabs
+# TODO: osascript is macOS only, replace with cross-platform solution (ghostty CLI or tmux) for Linux
 function OpenDirtyRepository() {
+    local check_unpushed=false no_cmd=false
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --unpushed|-u) check_unpushed=true ;;
+            --no-cmd|--silent|-s) no_cmd=true ;;
+        esac
+        shift
+    done
+
     local repos=(
         ~/Documents/projects/*/*
         ~/.dotfile
-        ~/.ai-prompts
+        ~/.dotai
         ~/.massCode-vault
     )
-    local dirty=() clean=() skipped=()
+    local dirty=() unpushed=() clean=() skipped=()
 
     for repo in "${repos[@]}"; do
         if [[ ! -d "$repo/.git" ]]; then
             skipped+=("$repo")
         elif git -C "$repo" status --porcelain | grep -q .; then
             dirty+=("$repo")
+        elif $check_unpushed && git -C "$repo" log --oneline @{u}..HEAD 2>/dev/null | grep -q .; then
+            unpushed+=("$repo")
         else
             clean+=("$repo")
         fi
     done
 
     echo "=== Summary ==="
-    echo "Dirty:   ${#dirty[@]}"
-    echo "Clean:   ${#clean[@]}"
-    echo "Skipped: ${#skipped[@]} (not a git repo)"
+    echo "Dirty:    ${#dirty[@]}"
+    $check_unpushed && echo "Unpushed: ${#unpushed[@]}"
+    echo "Clean:    ${#clean[@]}"
+    echo "Skipped:  ${#skipped[@]} (not a git repo)"
     echo ""
-    (( ${#clean[@]} )) && printf "  [clean]   %s\n" "${clean[@]}"
-    (( ${#skipped[@]} )) && printf "  [skip]    %s\n" "${skipped[@]}"
-    (( ${#dirty[@]} )) && printf "  [dirty]   %s\n" "${dirty[@]}"
+    (( ${#clean[@]} )) && printf "  [clean]     %s\n" "${clean[@]}"
+    (( ${#skipped[@]} )) && printf "  [skip]      %s\n" "${skipped[@]}"
+    (( ${#unpushed[@]} )) && printf "  [unpushed]  %s\n" "${unpushed[@]}"
+    (( ${#dirty[@]} )) && printf "  [dirty]     %s\n" "${dirty[@]}"
 
-    if [[ ${#dirty[@]} -eq 0 ]]; then
+    local targets=("${dirty[@]}" "${unpushed[@]}")
+    if [[ ${#targets[@]} -eq 0 ]]; then
         echo ""
         echo "Nothing to open."
         return 0
     fi
 
     echo ""
-    echo "Opening ${#dirty[@]} tab(s) in Ghostty..."
+    echo "Opening ${#targets[@]} tab(s) in Ghostty..."
 
     for repo in "${dirty[@]}"; do
         osascript -e 'tell application "System Events" to keystroke "t" using command down'
         sleep 0.5
-        osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear && gd\n\""
+        if $no_cmd; then
+            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear\n\""
+        else
+            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear && gd\n\""
+        fi
+    done
+    for repo in "${unpushed[@]}"; do
+        osascript -e 'tell application "System Events" to keystroke "t" using command down'
+        sleep 0.5
+        if $no_cmd; then
+            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear\n\""
+        else
+            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear && git log --oneline @{u}..HEAD\n\""
+        fi
     done
 }
 
