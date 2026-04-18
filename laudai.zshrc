@@ -758,12 +758,30 @@ zle -N pet-snippet-search
 stty -ixon
 
 function kiro-agent-select() {
-  local agent_dir="$HOME/.kiro/agents"
-  local selected=$(find -L "$agent_dir" -name '*.json' -not -name '.*' | sed "s|$agent_dir/||;s|\.json$||" | fzf --prompt='kiro agent> ' --header='enter: chat | ctrl-t: chat --tui' --expect=ctrl-t)
+  local dotai_agents="$HOME/.dotai/kiro/agents"
+  local built_agents="$HOME/.kiro/agents"
+  local list=""
+  for f in "$dotai_agents"/*.json(N); do
+    local name="${${f:t}%.json}"
+    if [[ -f "$built_agents/$name.json" ]]; then
+      list+="$name"$'\n'
+    else
+      list+="$name  [BUILD FAILED]"$'\n'
+    fi
+  done
+  [[ -n "$list" ]] || return
+  local selected=$(echo "$list" | fzf --prompt='kiro agent> ' --header='enter: chat | ctrl-t: chat --tui' --expect=ctrl-t)
   [[ -n "$selected" ]] || return
   local key="${selected%%$'\n'*}"
-  local name="${selected#*$'\n'}"
+  local entry="${selected#*$'\n'}"
+  local name="${entry%%  \[*}"
   [[ -n "$name" ]] || return
+  if [[ "$entry" == *"[BUILD FAILED]"* ]]; then
+    BUFFER=" # agent '$name' failed to build — run: cd ~/.dotai && ./build.sh"
+    CURSOR=$#BUFFER
+    zle redisplay
+    return
+  fi
   BUFFER="kiro-cli chat --agent \"${name}\""
   [[ "$key" == "ctrl-t" ]] && BUFFER+=" --tui"
   CURSOR=$#BUFFER
@@ -842,6 +860,16 @@ function OpenDirtyRepository() {
             osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear && git log --oneline @{u}..HEAD\n\""
         fi
     done
+}
+
+  # Cross-platform clipboard copy (macOS pbcopy / Wayland wl-copy / X11 xclip, xsel)
+function clipcopy() {
+    if command -v pbcopy >/dev/null; then pbcopy
+    elif command -v wl-copy >/dev/null; then wl-copy
+    elif command -v xclip >/dev/null; then xclip -selection clipboard
+    elif command -v xsel >/dev/null; then xsel --clipboard --input
+    else echo "No clipboard tool found" >&2; return 1
+    fi
 }
 
 
