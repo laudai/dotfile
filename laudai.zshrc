@@ -968,6 +968,7 @@ alias glolara="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %C
 alias grf="git reflog"
 alias gdst="git diff --stat"
 alias gsa="git show --all --shortstat --stat"
+alias glup='git log @{upstream}..HEAD --oneline'
 
 # ssh alias
 alias sshr="ssh-keygen -R " # to remove specify ssh key by name
