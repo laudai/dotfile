@@ -33,13 +33,16 @@ SYMBOL_FILE="$HOME/.dotfile/symbol.txt"
 test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
 
 # Version A: zsh glob (no fork, faster ~10-20ms)
-_sz_function() {
+function _sz_function() {
   local -a folders=(
     $HOME/.dotfile/private
   )
   local -a exts=(sh function alias)
   local f
   for d in $folders; do
+    # Non-recursive: * matches single directory level only (no /),
+    # so subdirectories like internal_script/ are excluded.
+    # Only .sh/.function/.alias are sourced; .zsh scripts are standalone executables.
     # ${(j:|:)~exts} joins exts array with | → "sh|function|alias"
     # ~ enables glob expansion so the joined string is treated as a glob pattern
     # *.(pattern) matches files by extension, (N) suppresses error if no match
