@@ -1006,7 +1006,6 @@ alias sz="source $HOME/.zshrc"
 
 # suffix alias
 alias -s {md,py,txt,vimrc,zshrc,conf,toml}=vim
-alias -s sh=bash
 
 # global alias
 # https://thorsten-hans.com/5-types-of-zsh-aliases
