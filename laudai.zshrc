@@ -792,14 +792,16 @@ function kiro-agent-select() {
 }
 zle -N kiro-agent-select
 
-# Check dirty git repos and open them in Ghostty tabs
-# TODO: osascript is macOS only, replace with cross-platform solution (ghostty CLI or tmux) for Linux
+# Check dirty git repos and open them in tmux windows or Ghostty tabs
+# --newtab: use Ghostty AppleScript to open tabs (macOS only, requires Ghostty 1.3.0+)
+# default: use tmux to open windows (cross-platform, requires active tmux session)
 function OpenDirtyRepository() {
-    local check_unpushed=false no_cmd=false
+    local check_unpushed=false no_cmd=false use_newtab=false
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --unpushed|-u) check_unpushed=true ;;
             --no-cmd|--silent|-s) no_cmd=true ;;
+            --newtab|-t) use_newtab=true ;;
         esac
         shift
     done
@@ -842,27 +844,49 @@ function OpenDirtyRepository() {
         return 0
     fi
 
+    # Validate backend
+    if $use_newtab; then
+        [[ "$OSTYPE" != darwin* ]] && echo "--newtab is macOS only." >&2 && return 1
+    elif [[ -z "$TMUX" ]]; then
+        echo "Not in a tmux session. Starting one and re-running..."
+        local _args=()
+        $check_unpushed && _args+=(--unpushed)
+        $no_cmd && _args+=(--silent)
+        tmux new-session -s "dirty-repos-$$" "zsh -ic 'OpenDirtyRepository ${_args[*]}; exec zsh'"
+        return
+    fi
+
     echo ""
-    echo "Opening ${#targets[@]} tab(s) in Ghostty..."
+    local _open_repo
+    if $use_newtab; then
+        echo "Opening ${#targets[@]} tab(s) in Ghostty..."
+        _open_repo() {
+            local repo=$1 cmd=$2
+            osascript -e "tell application \"Ghostty\"
+                set t to new tab in front window
+                set term to focused terminal of t
+                input text \"cd '${repo}' && clear${cmd:+ && $cmd}\n\" to term
+            end tell"
+        }
+    else
+        echo "Opening ${#targets[@]} window(s) in tmux..."
+        _open_repo() {
+            local repo=$1 cmd=$2
+            if [[ -n "$cmd" ]]; then
+                tmux new-window -c "$repo" "zsh -ic '$cmd; exec zsh'"
+            else
+                tmux new-window -c "$repo"
+            fi
+        }
+    fi
 
     for repo in "${dirty[@]}"; do
-        osascript -e 'tell application "System Events" to keystroke "t" using command down'
-        sleep 0.5
-        if $no_cmd; then
-            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear\n\""
-        else
-            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear && gd\n\""
-        fi
+        $no_cmd && _open_repo "$repo" "" || _open_repo "$repo" "gd"
     done
     for repo in "${unpushed[@]}"; do
-        osascript -e 'tell application "System Events" to keystroke "t" using command down'
-        sleep 0.5
-        if $no_cmd; then
-            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear\n\""
-        else
-            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear && glup\n\""
-        fi
+        $no_cmd && _open_repo "$repo" "" || _open_repo "$repo" "glup"
     done
+    unfunction _open_repo 2>/dev/null
 }
 
   # Cross-platform clipboard copy (macOS pbcopy / Wayland wl-copy / X11 xclip, xsel)
