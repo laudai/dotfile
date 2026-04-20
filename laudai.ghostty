@@ -83,11 +83,13 @@ keybind = cmd+p=esc:p
 keybind = cmd+y=esc:y
 #  window
 keybind = cmd+s>x=close_surface
+keybind = super+q=unbind
+keybind = ctrl+shift+q=quit
 
-keybind = cmd+s>e=equalize_splits
 #  split and move
 # grave_accent means backtick `
 keybind = global:ctrl+grave_accent=toggle_quick_terminal
+keybind = cmd+s>e=equalize_splits
 keybind = cmd+s>s=new_split:auto
 keybind = cmd+s>j=goto_split:bottom
 keybind = cmd+s>k=goto_split:top
