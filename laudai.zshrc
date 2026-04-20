@@ -857,7 +857,7 @@ function OpenDirtyRepository() {
         if $no_cmd; then
             osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear\n\""
         else
-            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear && git log --oneline @{u}..HEAD\n\""
+            osascript -e "tell application \"System Events\" to keystroke \"cd '${repo}' && clear && glup\n\""
         fi
     done
 }
@@ -968,7 +968,7 @@ alias glolara="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %C
 alias grf="git reflog"
 alias gdst="git diff --stat"
 alias gsa="git show --all --shortstat --stat"
-alias glup='git log @{upstream}..HEAD --oneline'
+alias glup='git log @{u}..HEAD --oneline'
 
 # ssh alias
 alias sshr="ssh-keygen -R " # to remove specify ssh key by name
