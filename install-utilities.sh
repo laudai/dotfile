@@ -473,6 +473,16 @@ echo -e "\n${TC_CYAN}>>> Symlink setup${TC_RESET}"
 # Delegate to setup-symlinks.sh (single source of truth for all symlinks)
 zsh "$HOME/.dotfile/setup-symlinks.sh"
 
+echo -e "\n${TC_CYAN}>>> ZSH plugins${TC_RESET}"
+# Delegate to install-ZSH-Plugins.sh
+zsh "$HOME/.dotfile/install-ZSH-Plugins.sh"
+
+# Set zsh as default shell (Linux only, macOS already defaults to zsh)
+if [[ "$OS" == "Linux" ]] && [[ "$(basename "$SHELL")" != "zsh" ]]; then
+	echo -e "\n${TC_CYAN}>>> Setting zsh as default shell${TC_RESET}"
+	chsh -s "$(command -v zsh)"
+fi
+
 # --- Summary ---
 echo ""
 if [[ ${#pkg_manual[@]} -gt 0 ]]; then
