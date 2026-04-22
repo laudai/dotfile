@@ -440,7 +440,6 @@ fi
 echo -e "\n${TC_CYAN}>>> Common setup${TC_RESET}"
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/"{i3,conky,polybar,pet,ghostty}
-ln -sf "$HOME/.dotfile/laudai.pet.config.toml" "$HOME/.config/pet/config.toml"
 
 # install cross-shell prompt starship (install to ~/.local/bin to avoid sudo)
 mkdir -p "$HOME/.local/bin"
@@ -471,15 +470,8 @@ nvm install --lts
 # --- OS-specific config (symlinks) ---
 
 echo -e "\n${TC_CYAN}>>> Symlink setup${TC_RESET}"
-if [[ "$OS" == "macOS" ]]; then
-	mkdir -p "$HOME/.config/karabiner/assets/complex_modifications"
-	ln -sf "$HOME/.dotfile/laudai.karabiner_bash_emacs.json" "$HOME/.config/karabiner/assets/complex_modifications/bash_emacs.json"
-elif [[ "$OS" == "Linux" ]]; then
-	ln -sf "$HOME/.dotfile/laudai.i3.config" "$HOME/.config/i3/config"
-	ln -sf "$HOME/.dotfile/laudai.conky.conf" "$HOME/.config/conky/conky.conf"
-	ln -sf "$HOME/.dotfile/laudai.polybar.config.ini" "$HOME/.config/polybar/config.ini"
-	cp "$HOME/.dotfile/linux_script/start-conky.sh" "$HOME/.config/conky"
-fi
+# Delegate to setup-symlinks.sh (single source of truth for all symlinks)
+zsh "$HOME/.dotfile/setup-symlinks.sh"
 
 # --- Summary ---
 echo ""
