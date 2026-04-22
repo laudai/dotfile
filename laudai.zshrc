@@ -914,6 +914,7 @@ export MYVIMRC="$HOME/.vimrc"
 export DOTFILE="$HOME/.dotfile"
 # Custom dotfile scripts
 export PATH="$HOME/.dotfile/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 
 
