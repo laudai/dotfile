@@ -140,7 +140,6 @@ macos_only_cask=(
 
 	# Keyboard / Peripherals
 	karabiner-elements
-	logi-options+
 
 	# Other
 	qr-journal
@@ -179,6 +178,11 @@ declare -A apt_name_map=(
 # --- Runtime state ---
 # Collects packages that failed during batch_install fallback
 install_failed=()
+
+# --- Colors ---
+TC_CYAN="\033[1;36m"
+TC_YELLOW="\033[1;33m"
+TC_RESET="\033[0m"
 
 # =============================================================================
 # Utility functions
@@ -222,9 +226,11 @@ function brew_classify() {
 # batch install with fallback to one-by-one on failure
 function batch_install() {
 	local cmd="$1"; shift
-	$cmd "$@" 2>/dev/null || {
+	echo -e "\n${TC_CYAN}>>> Running: $cmd $*${TC_RESET}"
+	eval "$cmd $*" || {
+		echo -e "${TC_YELLOW}>>> Batch failed, retrying one-by-one...${TC_RESET}"
 		for pkg in "$@"; do
-			$cmd "$pkg" 2>/dev/null || install_failed+=("$pkg")
+			eval "$cmd $pkg" || install_failed+=("$pkg")
 		done
 	}
 }
@@ -319,7 +325,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 		# Cannot merge CLI + GUI: CLI → brew install, GUI → brew install --cask
 		brew_classify pkg_install_cask  $(filter_skip "${cross_platform_cask[@]}" "${macos_only_cask[@]}")
 	else
-		echo "brew not found. Install Homebrew first or run with --install."
+		echo "brew not found. Install Homebrew first:"
+		echo '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+		exit 1
 	fi
 
 elif [[ "$OSTYPE" == "linux"* ]]; then
@@ -404,6 +412,9 @@ echo ""
 # --- OS-specific package install (run first to ensure git/curl are available) ---
 
 if [[ "$OS" == "macOS" ]]; then
+	# Apple Silicon needs Rosetta 2 for x86 packages (e.g., background-music)
+	[[ "$(uname -m)" == "arm64" ]] && softwareupdate --install-rosetta --agree-to-license 2>/dev/null || true
+
 	command -v brew >/dev/null || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 	if command -v brew >/dev/null; then
@@ -412,6 +423,7 @@ if [[ "$OS" == "macOS" ]]; then
 		batch_install "brew install --cask" "${pkg_install_cask[@]}"
 	else
 		echo "Didn't find brew. Please reinstall and run again."
+		exit 1
 	fi
 
 elif [[ "$OS" == "Linux" ]]; then
@@ -425,6 +437,7 @@ fi
 # --- Common setup (both macOS and Linux) ---
 # Runs after package install to ensure git/curl are available
 
+echo -e "\n${TC_CYAN}>>> Common setup${TC_RESET}"
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/"{i3,conky,polybar,pet,ghostty}
 ln -sf "$HOME/.dotfile/laudai.pet.config.toml" "$HOME/.config/pet/config.toml"
@@ -457,7 +470,9 @@ nvm install --lts
 
 # --- OS-specific config (symlinks) ---
 
+echo -e "\n${TC_CYAN}>>> Symlink setup${TC_RESET}"
 if [[ "$OS" == "macOS" ]]; then
+	mkdir -p "$HOME/.config/karabiner/assets/complex_modifications"
 	ln -sf "$HOME/.dotfile/laudai.karabiner_bash_emacs.json" "$HOME/.config/karabiner/assets/complex_modifications/bash_emacs.json"
 elif [[ "$OS" == "Linux" ]]; then
 	ln -sf "$HOME/.dotfile/laudai.i3.config" "$HOME/.config/i3/config"
