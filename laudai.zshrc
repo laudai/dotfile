@@ -220,9 +220,13 @@ bindkey "^B" znt-cd-widget
 zle -N znt-kill-widget
 bindkey "^Y" znt-kill-widget
 # Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh) # 0.48.0 later
-[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
-[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+# fzf 0.48.0+ supports --zsh; older versions use separate source files
+if fzf --zsh &>/dev/null; then
+	source <(fzf --zsh)
+else
+	[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+	[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+fi
 # Rebind fzf cd widget from alt-c to alt-p (avoid conflict with vi/emacs toggle)
 bindkey -M emacs '\ep' fzf-cd-widget
 bindkey -M viins '\ep' fzf-cd-widget
