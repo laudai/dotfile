@@ -77,6 +77,9 @@ common_formula=(
 	# Linter
 	ruff
 
+	# Security
+	bitwarden-cli
+
 	# Other
 	figlet
 )

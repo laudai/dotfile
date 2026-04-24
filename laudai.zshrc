@@ -32,6 +32,9 @@ SYMBOL_FILE="$HOME/.dotfile/symbol.txt"
 #CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
 
+# Host-level config and secrets
+[[ -f "$HOME/.env" ]] && set -a && source "$HOME/.env" && set +a
+
 # Version A: zsh glob (no fork, faster ~10-20ms)
 function _sz_function() {
   local -a folders=(
