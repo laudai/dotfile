@@ -60,9 +60,10 @@ common_formula=(
 	fd                # find alternative
 	ripgrep           # grep alternative
 
-	# Code stats
+	# Code stats / Editor
 	cloc
 	tokei
+	vim
 
 	# Shell utilities
 	zsh
