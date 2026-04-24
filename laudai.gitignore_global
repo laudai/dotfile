@@ -24,3 +24,15 @@ Sessionx.vim
 tags
 # Persistent undo
 [._]*.un~
+
+#    __  ___           ____  _____
+#   /  |/  /___ ______/ __ \/ ___/
+#  / /|_/ / __ `/ ___/ / / /\__ \
+# / /  / / /_/ / /__/ /_/ /___/ /
+#/_/  /_/\__,_/\___/\____//____/
+
+# source : https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
