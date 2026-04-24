@@ -1083,6 +1083,18 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # https://sumercip.com/posts/lazyload-zsh/
 # https://github.com/qoomon/zsh-lazyload
 
+#    ___         __        __                __
+#   /   | __  __/ /_____  / /___  ____ _____/ /
+#  / /| |/ / / / __/ __ \/ / __ \/ __ `/ __  /
+# / ___ / /_/ / /_/ /_/ / / /_/ / /_/ / /_/ /
+#/_/  |_\__,_/\__/\____/_/\____/\__,_/\__,_/
+
+# autoload
+# run-help: enable zsh built-in help for builtins (whence, bindkey, etc.)
+unalias run-help 2>/dev/null
+autoload -Uz run-help
+autoload -Uz run-help-git run-help-sudo run-help-openssl
+
 # starship
 eval "$(starship init zsh)"
 
