@@ -894,16 +894,6 @@ function OpenDirtyRepository() {
     unfunction _open_repo 2>/dev/null
 }
 
-# Cross-platform clipboard copy (macOS pbcopy / Wayland wl-copy / X11 xclip, xsel)
-function clipcopy() {
-    if command -v pbcopy >/dev/null; then pbcopy
-    elif command -v wl-copy >/dev/null; then wl-copy
-    elif command -v xclip >/dev/null; then xclip -selection clipboard
-    elif command -v xsel >/dev/null; then xsel --clipboard --input
-    else echo "No clipboard tool found" >&2; return 1
-    fi
-}
-
 # run-help wrapper: clear autosuggestion before invoking run-help,
 # otherwise the grey suggestion text gets included in the command buffer
 function _run-help-clean() {
