@@ -204,6 +204,7 @@ bindkey '^Y^Y' undo # bind ^Y^Y undo like emacs ^Y keymaps
 bindkey '^[l' forward-word # alt-l
 bindkey '^[h' backward-word # alt-h
 bindkey '^[.' insert-last-word # alt-.
+bindkey '^[/' _run-help-clean # alt-/
 # How to switch comfortably to vi command mode on the zsh command line?
 # https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
 bindkey -M viins 'jk' vi-cmd-mode
@@ -893,7 +894,7 @@ function OpenDirtyRepository() {
     unfunction _open_repo 2>/dev/null
 }
 
-  # Cross-platform clipboard copy (macOS pbcopy / Wayland wl-copy / X11 xclip, xsel)
+# Cross-platform clipboard copy (macOS pbcopy / Wayland wl-copy / X11 xclip, xsel)
 function clipcopy() {
     if command -v pbcopy >/dev/null; then pbcopy
     elif command -v wl-copy >/dev/null; then wl-copy
@@ -902,6 +903,14 @@ function clipcopy() {
     else echo "No clipboard tool found" >&2; return 1
     fi
 }
+
+# run-help wrapper: clear autosuggestion before invoking run-help,
+# otherwise the grey suggestion text gets included in the command buffer
+function _run-help-clean() {
+	zle autosuggest-clear
+	zle run-help
+}
+zle -N _run-help-clean
 
 
 #    ______                      __
