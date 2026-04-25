@@ -818,7 +818,6 @@ function OpenDirtyRepository() {
         ~/Documents/projects/*/*
         ~/.dotfile
         ~/.dotai
-        ~/.massCode-vault
     )
     local dirty=() unpushed=() clean=() skipped=()
 
