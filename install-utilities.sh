@@ -77,6 +77,9 @@ common_formula=(
 	# Linter
 	ruff
 
+	# Python
+	uv                # Python package manager (Astral)
+
 	# Security
 	bitwarden-cli
 
