@@ -528,6 +528,9 @@ echo " Installing..."
 echo "============================================================"
 echo ""
 
+# Pre-authenticate sudo to avoid password prompts during installation
+sudo -v
+
 # --- OS-specific package install (run first to ensure git/curl are available) ---
 
 if [[ "$OS" == "macOS" ]]; then
