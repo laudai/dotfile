@@ -52,13 +52,16 @@ done
 # Linux-only CLI packages should also go here; availability is auto-detected at runtime
 common_formula=(
 	# System monitoring
-	glances
 	htop
+	glances
+	btop
+	iftop
+	speedtest-cli
 
 	# File / Text search
-	bat               # cat alternative with syntax highlighting
-	fd                # find alternative
-	ripgrep           # grep alternative
+	bat                              # cat alternative with syntax highlighting
+	fd                               # find alternative
+	ripgrep                          # grep alternative
 
 	# Code stats / Editor
 	cloc
@@ -73,18 +76,106 @@ common_formula=(
 	fzf
 	zoxide
 	pet
+	tree
+	jq
+	midnight-commander               # terminal file manager (apt: mc)
+	urlview                          # tmux-urlview dependency
+
+	# Development / System admin
+	git
+	build-essential                  # gcc/g++/make (Linux only, macOS uses Xcode CLT)
+	openssh-server                   # Linux only (macOS built-in)
+	flatpak                          # Linux package manager (Linux only, snap is preinstalled)
+	gparted                          # disk partition tool (Linux only)
+	gnome-tweaks                     # GNOME advanced settings (Linux desktop)
+	llvm                             # compiler infrastructure
+
+	# Network / Security
+	mtr
+	nmap
+	bind9-dnsutils                   # dig/nslookup (Linux only, macOS built-in)
+	hping3                           # TCP/IP packet tool (Linux only)
+	iperf3                           # network bandwidth test
+	httpie                           # human-friendly HTTP client
+	sqlmap                           # SQL injection testing
+	sshfs                            # mount remote dir via SSH
+	mosh                             # mobile SSH (auto-reconnect)
+	sshuttle                         # poor man's VPN via SSH
+	tailscale                        # mesh VPN (needs extra repo on Linux)
+
+	# System / Debug
+	strace                           # syscall tracer (Linux only in practice)
+	ltrace                           # library call tracer (Linux only)
+	gdb                              # GNU debugger (Linux only in practice)
+	graphviz                         # graph drawing tool (dot)
 
 	# Linter
 	ruff
 
 	# Python
-	uv                # Python package manager (Astral)
+	uv                               # Python package manager (Astral)
+	ipython                          # interactive Python (apt: ipython3)
 
 	# Security
 	bitwarden-cli
 
-	# Other
-	figlet
+	# Entertainment / Eye candy
+	screenfetch                      # system info display
+	cowsay
+	lolcat                           # rainbow text
+	cmatrix                          # Matrix screen effect
+	fortune                          # random quotes (apt: fortunes)
+	hollywood                        # fake hacker screen (Linux only)
+	toilet                           # ASCII art text
+	figlet                           # ASCII art text
+
+	# Media
+	ffmpeg                           # audio/video converter
+	imagemagick                      # image processing
+	screenkey                        # screencast keystroke display (Linux only)
+
+	# Linux desktop
+	dunst                            # notification daemon (Wayland compatible)
+	pavucontrol                      # PulseAudio volume control (Linux only)
+	mako-notifier                    # sway notifier (Linux only)
+	sway-notification-center         # sway notification center (Linux only)
+
+	# Docker
+	docker-ce                        # Docker Engine (needs extra repo on Linux)
+	docker-ce-cli                    # Docker CLI
+
+	# --- X11 / Wayland transition (keep both during migration) ---
+
+	# Clipboard / Automation
+	xdotool                          # x11 only → ydotool
+	wl-clipboard                     # wayland, replaces xclip/xsel (oh-my-zsh clipcopy auto-detects)
+	ydotool                          # wayland, replaces xdotool
+
+	# Window manager / Status bar
+	i3                               # x11 only → sway
+	sway                             # wayland, replaces i3
+	polybar                          # x11 only → waybar
+	waybar                           # wayland, replaces polybar
+
+	# Desktop tools
+	picom                            # x11 only (wayland compositor built-in)
+	nitrogen                         # x11 only → swaybg
+	swaybg                           # wayland, replaces nitrogen
+	feh                              # x11 only → imv
+	imv                              # wayland, replaces feh
+	lxrandr                          # x11 only → wlr-randr/kanshi
+	wlr-randr                        # wayland, replaces lxrandr
+	kanshi                           # wayland, replaces lxrandr (auto profile)
+	redshift                         # x11 only → gammastep
+	gammastep                        # wayland, replaces redshift
+	simplescreenrecorder             # x11 only → wf-recorder
+	wf-recorder                      # wayland, replaces simplescreenrecorder
+
+	# Input method (replaces fcitx 4.x / ibus-chewing)
+	fcitx5-chewing                   # Zhuyin input
+	fcitx5-rime                      # Rime input engine
+	rime-data-bopomofo               # Rime Zhuyin data
+	rime-data-double-pinyin          # Rime Shuangpin data
 )
 
 # --- Cross-platform GUI apps ---
@@ -96,6 +187,7 @@ cross_platform_cask=(
 	joplin
 	obsidian
 	visual-studio-code
+	vscodium                         # open-source VS Code (testing, may replace visual-studio-code)
 	masscode
 	ghostty
 	gitkraken
@@ -108,8 +200,12 @@ cross_platform_cask=(
 	# Security
 	bitwarden
 
-	# Other
+	# Media / Graphics
 	flameshot
+	gimp                             # image editor (replaces pinta)
+	balena-etcher                    # USB boot disk creator (Linux only)
+
+	# Other
 	anki
 )
 
@@ -127,9 +223,9 @@ macos_only_cask=(
 	alfred
 
 	# Window management / Desktop
-	amethyst          # Tiling window manager for macOS along the lines of xmonad
-	easy-move+resize  # Similar or alternative to move window in the Gnome way
-	rectangle         # Open source window manager in MacOS
+	amethyst                         # Tiling window manager for macOS along the lines of xmonad
+	easy-move+resize                 # Similar or alternative to move window in the Gnome way
+	rectangle                        # Open source window manager in MacOS
 
 	# Menu bar utilities
 	clocker
@@ -139,14 +235,17 @@ macos_only_cask=(
 	stats
 
 	# Display / Monitor
-	monitorcontrol    # Control external monitor brightness/contrast/volume from menulet
+	monitorcontrol                   # Control external monitor brightness/contrast/volume from menulet
 	betterdisplay
 
 	# Audio
-	background-music  # Not work in M1 MacOS
+	background-music                 # auto-pause music, per-app volume, record system audio
 
 	# Keyboard / Peripherals
 	karabiner-elements
+
+	# Input method
+	squirrel-app                     # 鼠鬚管 Rime input method engine
 
 	# Other
 	qr-journal
@@ -164,9 +263,19 @@ font_casks=(
 # Remove from here when you want to install them.
 skip_pkgs=(
 	wireshark
+	visual-studio-code
 	joplin
 	gitkraken
 	anki
+	gnome-tweaks
+	llvm
+	httpie
+	cowsay
+	lolcat
+	fortune
+	hollywood
+	balena-etcher
+	screenkey
 )
 
 # --- Linux apt config ---
@@ -175,6 +284,9 @@ skip_pkgs=(
 # Note: declare -A requires bash 4.0+ or zsh. macOS default bash is 3.2 — use zsh instead.
 declare -A apt_name_map=(
 	[fd]="fd-find"
+	[midnight-commander]="mc"
+	[fortune]="fortunes"
+	[ipython]="ipython3"
 )
 
 # --- Platform exclusion lists ---
