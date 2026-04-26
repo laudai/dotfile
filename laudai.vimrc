@@ -38,11 +38,15 @@ set smartcase "scs, 智慧搜尋
 " works likes zsh
 set wildmenu "wmnu, default is off"
 set wildmode=full "wim, default is full"
+" need try later
+" https://www.reddit.com/r/vim/comments/vvtz3v/comment/ifocpxd/?utm_source=share&utm_medium=web2x&context=3
+" set wildoptions+=fuzzy
 set history=200 "set history number, default is 50
 set pastetoggle=<F7> "pt, toggle vim paste mode"
 " edit-setting
 " enable X11-based-system clipboard, In Ubuntu & Debian, u need install vim-gtk3
-set clipboard=unnamedplus
+" https://stackoverflow.com/questions/3961859/how-to-copy-to-clipboard-in-vim
+set clipboard^=unnamedplus,unnamed " this setting run on both Linux, and MacOS M1
 filetype plugin indent on " enable filetype plugins and indent
 set undofile
 set autochdir " acd, 當開啟多個不同資料夾檔案時，會自動切換到目前編輯檔案路徑
@@ -191,6 +195,27 @@ vnoremap <C-d> "+d
 " 中文版	http://haoxiang.org/2011/09/vim-modes-and-mappin/
 " 英文版	https://medium.com/vim-drops/understand-vim-mappings-and-create-your-own-shortcuts-f52ee4a6b8ed
 
+" coc.nvim <TAB>, <CR> map
+" https://github.com/neoclide/coc.nvim
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 
 " Plugin
 " vim-plug automatic installation
@@ -216,6 +241,15 @@ Plug 'wellle/targets.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'justinmk/vim-sneak'
 Plug 'yggdroot/indentline'
+" coc, vim auto complete. Use release branch (recommended)
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'berdandy/ansiesc.vim'
+" Pending
+" 'jiangmiao/auto-pairs'
+" 'preservim/nerdtree'
+"
 "
 " Initialize plugin system
 call plug#end()
@@ -240,6 +274,7 @@ let g:jedi#auto_initialization = 1
 let g:jedi#popup_on_dot = 0
 autocmd FileType python setlocal completeopt-=preview
 " indentLine plugin
+let g:vim_json_conceal=0 "disable JSON conceal to show double quotes
 let g:indentLine_enabled = 1
 let g:indentLine_setColors = 1
 let g:indentLine_color_term = 214

@@ -10,6 +10,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+[[ "$OSTYPE" == "darwin"* ]] && export PATH=/opt/homebrew/sbin:/opt/homebrew/bin:$PATH # for m1 homebrew
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -26,8 +27,52 @@ ZSH_THEME="cloud"
 #steeef.zsh-theme
 #powerlevel10k/powerlevel10k # need install
 
+SYMBOL_FILE="$HOME/.dotfile/symbol.txt"
+
 #CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
+
+# Host-level config and secrets
+[[ -f "$HOME/.env" ]] && set -a && source "$HOME/.env" && set +a
+
+# Version A: zsh glob (no fork, faster ~10-20ms)
+function _sz_function() {
+  local -a folders=(
+    $HOME/.dotfile/private
+  )
+  local -a exts=(sh function alias)
+  local f
+  for d in $folders; do
+    # Non-recursive: * matches single directory level only (no /),
+    # so subdirectories like internal_script/ are excluded.
+    # Only .sh/.function/.alias are sourced; .zsh scripts are standalone executables.
+    # ${(j:|:)~exts} joins exts array with | → "sh|function|alias"
+    # ~ enables glob expansion so the joined string is treated as a glob pattern
+    # *.(pattern) matches files by extension, (N) suppresses error if no match
+    for f in $d/*.(${(j:|:)~exts})(N); do
+      source "$f"
+    done
+  done
+}
+_sz_function
+
+# Version B: find (fork subprocess, more familiar syntax)
+# _sz_function() {
+#   local -a folders=(
+#     $HOME/.dotfile/private
+#   )
+#   local f
+#   for d in $folders; do
+#     for f in $(find "$d" -maxdepth 1 -type f \( -name '*.sh' -o -name '*.function' -o -name '*.alias' \) 2>/dev/null); do
+#       source "$f"
+#     done
+#   done
+# }
+# _sz_function
+
+# export NVM_NO_USE in zsh-nvm before load plugin to avoid the autoload node
+export NVM_LAZY_LOAD=true
+export NVM_LAZY_LOAD_EXTRA_COMMANDS=("vim" "view" "kiro-cli")
 
 #if [ "$HOST"="raspberrypi" ]
 #then
@@ -90,7 +135,6 @@ plugins=(
     docker
     docker-compose
     encode64
-    autojump
     history-substring-search
     zsh-autosuggestions
     zsh-syntax-highlighting
@@ -99,10 +143,17 @@ plugins=(
     vi-mode
     zsh-navigation-tools
     git-open
-    nvm
+    zsh-nvm
+    aws
+    zoxide
 )
 # plugin history-substring-search should load before zsh-syntax-highlighting to avoid syantax error
 
+
+# Deduplicate fpath and path to keep them clean across multiple source calls
+typeset -U fpath path
+# Custom completions (must be before oh-my-zsh source, which calls compinit)
+fpath=(~/.dotfile/completions $fpath)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -156,6 +207,7 @@ bindkey '^Y^Y' undo # bind ^Y^Y undo like emacs ^Y keymaps
 bindkey '^[l' forward-word # alt-l
 bindkey '^[h' backward-word # alt-h
 bindkey '^[.' insert-last-word # alt-.
+bindkey '^[/' _run-help-clean # alt-/
 # How to switch comfortably to vi command mode on the zsh command line?
 # https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
 bindkey -M viins 'jk' vi-cmd-mode
@@ -171,6 +223,28 @@ zle -N znt-cd-widget
 bindkey "^B" znt-cd-widget
 zle -N znt-kill-widget
 bindkey "^Y" znt-kill-widget
+# Set up fzf key bindings and fuzzy completion
+# fzf 0.48.0+ supports --zsh; older versions use separate source files
+if fzf --zsh &>/dev/null; then
+	source <(fzf --zsh)
+else
+	[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+	[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+fi
+# Rebind fzf cd widget from alt-c to alt-p (avoid conflict with vi/emacs toggle)
+bindkey -M emacs '\ep' fzf-cd-widget
+bindkey -M viins '\ep' fzf-cd-widget
+bindkey -M vicmd '\ep' fzf-cd-widget
+# pet query keybindings
+bindkey '^s' pet-snippet-search # ctrl-s
+# kiro agent selector
+bindkey '^k' kiro-agent-select # ctrl-k
+# Bind Ctrl+U to .kill-whole-line instead of vi-kill-line:
+# 1. Deletes entire line regardless of insert-mode entry point (vi-kill-line
+#    does nothing after A, unlike vim's <C-g>u<C-u> remap in .vimrc)
+# 2. Dot prefix bypasses vi-mode plugin's clipcopy wrapper that clears
+#    system clipboard with empty CUTBUFFER
+bindkey '^U' .kill-whole-line
 # keybindings reference
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
 # https://github.com/ThiefMaster/zsh-config/blob/master/zshrc.d/keybinds.zsh
@@ -253,6 +327,245 @@ function _select-vi() {
 }
 zle -N _select-vi
 
+# reset the Alfred 4/5 to factory mode
+# How can I reset Alfred to defaults?
+# https://www.alfredapp.com/help/troubleshooting/reset-alfred/
+function resetAlfred() {
+  declare -a Alfred_file_array=(
+  "~/Library/Application Support/Alfred"
+  "~/Library/Preferences/com.runningwithcrayons.Alfred-Preferences.plist"
+  "~/Library/Preferences/com.alfredapp.Alfred.plist"
+  "~/Library/Caches/com.runningwithcrayons.Alfred"
+  )
+
+  if [[ "$OSTYPE" =~ "[D|d]arwin"* ]]; then
+    # test grep in version: MacOS 13.3
+    if ls -l /Applications | grep "Alfred [4-5]" &> /dev/null; then
+      echo -n "Will delete below files to reset the Alfred
+Please quit Alfred and agree this request, re-launch Alfred after delete those files.\n
+"
+      for item in ${Alfred_file_array[@]}; do echo $item; done
+      echo
+      echo -n "[Yes/No]: "
+        read AGREEMENT # can't use local, will not wait for input
+        AGREEMENT=$(echo $AGREEMENT | tr "[:upper:]" "[:lower:]")
+        echo
+
+        if [[ "$AGREEMENT" == "yes" || "$AGREEMENT" == "y" ]]; then
+          for item in ${Alfred_file_array[@]};
+          do
+            rm "$item"
+          done
+          echo "Remove the file list finished. Please re-launch the Alfred."
+    else
+      echo -n "\nPlease run it again and selete 'yes' to reset the Alfred configure."
+    fi
+
+  unset AGREEMENT
+  else
+  echo "Didn't find and Alfred 4/5 in the /Applications folder."
+    fi
+
+  else
+    echo "Not in MacOS." 1>&2 && return
+  fi
+}
+
+
+# TODO function or alias to count the total word in specific file
+# TODO function to filter the csv or json via jq or other
+
+# generate the timestamp in format ISO 8601 and copy to the clipboard
+function dateISO8601ToClip() {
+  if [[ "$OSTYPE" =~ [Dd]arwin* ]]; then
+    date -Iseconds -u | tr -d "\n" | pbcopy
+  elif [[ "$OSTYPE" =~ [Ll]inux* ]]; then
+    date -Isec -u | xclip -selection clipboard
+  else
+    echo "can't match the os type." 1>&2
+  fi
+}
+
+# generate the timestamp in format offset with day/Hour granularity from now
+function offsetDayHourinISO8601(){
+  if [[ "$OSTYPE" =~ [Dd]arwin* ]]; then
+    read "?offset in Day (-/+)(default is -): " Dayoffset
+    [[ ! ( $Dayoffset == "-" || $Dayoffset == "+") ]] && Dayoffset="-"
+    read "?offset Num in Day (:digit:)(default is 0): " DayoffsetNum
+    [[ ! $DayoffsetNum =~ ^[[:digit:]].*$ ]] && DayoffsetNum="0"
+    read "?offset in Hour (-/+)(default is -): " Houroffset
+    [[ ! ( $Houroffset == "-" || $Houroffset == "+") ]] && Houroffset="-"
+    read "?offset Num in Hour (:digit:)(default is 0): " HouroffsetNum
+    [[ ! $HouroffsetNum =~ ^[[:digit:]].*$ ]] && HouroffsetNum="0"
+    echo "Result:"
+    date -v "${Dayoffset}${DayoffsetNum}d" -v "${Houroffset}${HouroffsetNum}H" -Iseconds -u | tr -d "\n" | tee >(pbcopy)
+
+  elif [[ "$OSTYPE" =~ [Ll]inux* ]]; then
+    read -p "offset in Day (-/+)(default is -): " Dayoffset
+    [[ ! ( $Dayoffset == "-" || $Dayoffset == "+") ]] && Dayoffset="-"
+    read -p "offset Num in Day (:digit:)(default is 0): " DayoffsetNum
+    [[ ! $DayoffsetNum =~ ^[[:digit:]].*$ ]] && DayoffsetNum="0"
+    read -p "offset in Hour (-/+)(default is -): " Houroffset
+    [[ ! ( $Houroffset == "-" || $Houroffset == "+") ]] && Houroffset="-"
+    read -p "offset Num in Hour (:digit:)(default is 0): " HouroffsetNum
+    [[ ! $HouroffsetNum =~ ^[[:digit:]].*$ ]] && HouroffsetNum="0"
+    echo "Result:"
+    date -d "$(date) ${Dayoffset} ${DayoffsetNum} day ${Houroffset} ${HouroffsetNum} hour" -Isec -u
+
+  else
+    echo "can't match the os type." 1>&2
+  fi
+}
+
+# generate the epoch UNIX time from the ISO8601 time (%Y-%m-%d %H:%M:%S)(cloud-init)
+function dateISO8601_to_epoch(){
+  local timestamp="${*%,*}"  # merge all args and remove milliseconds
+  case "$OSTYPE" in
+    "linux-gnu"*)
+        date -d "$timestamp" +%s
+        ;;
+    "darwin"*)
+        date -j -f "%Y-%m-%d %H:%M:%S" "$timestamp" +%s
+        ;;
+    *)
+      echo "Not support OSTYPE." 1>&2
+      ;;
+  esac
+}
+
+# generate timestamp in journalctl format and copy to clipboard
+function dateJournalctl() {
+  local ts=$(date -u +"%Y-%m-%d %H:%M:%S")
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo -n "$ts" | pbcopy
+  else
+    echo -n "$ts" | xclip -selection clipboard
+  fi
+  echo "Copied: $ts"
+}
+
+# generate the Epoch Time (Linux and MacOS)
+function epochTimeDate_get(){
+  date +%s
+}
+
+# generate the timestamp by ISO8601 by two epoch UNIX time
+function epochTimetoDate_transfer (){
+  case "$OSTYPE" in
+    "linux-gnu"*)
+        date -d @${1} -Isec -u
+        ;;
+    "darwin"*)
+        date -r ${1} -Iseconds -u
+        ;;
+    *)
+      echo "Not support OSTYPE." 1>&2
+      ;;
+  esac
+}
+
+# generate the timestamp by ISO8601 by two epoch UNIX time
+function epochTimetoDate_calcuate (){
+  case "$OSTYPE" in
+    "linux-gnu"*)
+        date -d @$((${1}+${2})) -Isec -u
+        ;;
+    "darwin"*)
+        date -Iseconds -r $((${1}+${2})) -u
+        ;;
+    *)
+      echo "Not support OSTYPE." 1>&2
+      ;;
+  esac
+}
+
+# AWS Documents transfer to english ver
+function trimdoc() {
+  local original_url=$1
+  case "$OSTYPE" in
+    "linux-gnu"*)
+      command -v sed &>/dev/null || { echo "can't find sed" >&2; return 1; }
+      new_url=$(sed "s/\/[a-z_]\+_[a-z]\+//g" <<< $original_url)
+      echo $new_url | xclip -selection clipboard
+      ;;
+    "darwin"*)
+      command -v gsed &>/dev/null || { echo "can't find gsed" >&2; return 1; }
+      new_url=$(gsed "s/\/[a-z_]\+_[a-z]\+//g" <<< $original_url)
+      echo $new_url | pbcopy
+      ;;
+  esac
+  echo $new_url
+}
+
+
+# open symbol.txt file with less
+function lsymbol() {
+  if [[ -e "$SYMBOL_FILE" ]]; then
+    less "$SYMBOL_FILE"
+  else
+	echo "can't find $SYMBOL_FILE" 1>&2
+  fi
+}
+
+# edit symbol.txt file with vim editor
+function esymbol() {
+  [[ ! -e "$SYMBOL_FILE" ]] && echo "can't find $SYMBOL_FILE" >&2 && return 1
+  command -v vim &>/dev/null || { echo "vim not found" >&2; return 1; }
+  vim "$SYMBOL_FILE"
+}
+
+# go to folder path by zoxide command, and use the VSCode to open this folder
+function gfv() {
+  command -v zoxide &>/dev/null || { echo "zoxide not found" >&2; return 1; }
+  command -v code &>/dev/null || { echo "code not found" >&2; return 1; }
+  z "$1" || return
+  code -n .
+}
+
+# 切換 MacOS 的“依據應用程式將視窗分組” "Group windows by application"
+function toggle-expose-apps() {
+  local expose_group_apps=$(defaults read com.apple.dock expose-group-apps)
+  if [[ $expose_group_apps -eq 1 ]]; then
+    defaults write com.apple.dock expose-group-apps -boolean false; killall Dock
+    echo "turn off 'Group windows by application'"
+  else
+    defaults write com.apple.dock expose-group-apps -boolean true; killall Dock
+    echo "turn on 'Group windows by application'"
+  fi
+}
+
+# leverage the pmset need root privilege
+# modify the displaysleep & sleep settings in battery/charging
+function toggle-or-setting-displaysleep() {
+  [[ ! "$OSTYPE" == "darwin"* ]] && echo "This function only run on MacOS" && return
+  ! which gawk >/dev/null && echo "Please install awk(gawk) first" && return
+
+  local displaysleep=$(sudo pmset -g | gawk '/displaysleep/ { print $2 }')
+  local dst=${1:-$(( displaysleep != 0 ? 0 : 5 ))}
+  local st=$((dst == 0 ? 0 : dst + 10))
+
+  echo "Modify the DisplaySleep time to $( ((dst)) && echo "$dst mins" || echo "Never" )"
+  sudo pmset -b sleep $st displaysleep $dst
+  sudo pmset -c sleep $st displaysleep $dst
+}
+
+# Toggle between headphones and MacBook Pro Speakers
+# If External Headphones available, use it instead of Plantronics
+function toggle-AudioSource() {
+  ! command -v SwitchAudioSource >/dev/null && echo "Install: brew install switchaudio-osx" && return 1
+
+  local headphone_ext="External Headphones"
+  local headphone_plt="Plantronics Blackwire 5220 Series"
+  local speaker_mbp="MacBook Pro Speakers"
+  local current=$(SwitchAudioSource -c)
+  local available=$(SwitchAudioSource -a -t output)
+  local headphone=$(echo "$available" | grep -q "^$headphone_ext$" && echo "$headphone_ext" || echo "$headphone_plt")
+  local target=$([[ "$current" == "$speaker_mbp" ]] && echo "$headphone" || echo "$speaker_mbp")
+  echo "$available" | grep -q "^$target$" || { echo "Device not found: $target"; return 1; }
+
+  SwitchAudioSource -s "$target" && echo "✓ $current → $target" || { echo "✗ Failed"; return 1; }
+}
+
 # toggle your gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
 # 切換自動鎖定螢幕、暫停時鎖定螢幕
 toggle-sll() {
@@ -327,7 +640,7 @@ toggle-workspace-primary-monitor-only() {
 
 # Show weather by city supported by wttr via ImageMagick
 # TODO: fix the senario when the city not in the supported list
-funciton wttr_to_png() {
+function wttr_to_png() {
   city=$1
   curl wttr.in/"$city".png --output /tmp/weather.png &> /dev/null
   if which display &> /dev/null; then
@@ -338,11 +651,258 @@ funciton wttr_to_png() {
 }
 
 # Show weather by city supported by wttr via cli command
-funciton wttr_city() {
+function wttr_city() {
   # printf '\033c'
   clear
   curl wttr.in/$1
 }
+
+
+function count_characters() {
+  printf $1 | wc -m
+}
+
+# fzf interactive git diff preview
+# usage: fgd (unstaged) | fgd --cached (staged) | fgd HEAD~3 | fgd main
+function fgd() {
+  git diff --name-only "$@" |
+    fzf --height=100% \
+        --preview "git diff --color=always $* -- {}" \
+        --preview-window down:80%
+}
+
+# fzf interactive git log preview
+# usage: fgl (all) | fgl -20 (recent 20) | fgl --all | fgl -- path/to/file
+function fgl() {
+  git log --oneline --color=always "$@" |
+    fzf --ansi --height=100% \
+        --preview 'git show --color=always {1}' \
+        --preview-window down:80%
+}
+
+# fzf interactive git log with stat → file drill-down
+# usage: fgls (all) | fgls -20 | fgls --all | fgls -- path/to/file
+#        fgls --print (output commit hash and file path)
+# 1st layer: select commit (preview: modified files)
+# 2nd layer: select file (preview: diff of that file), ESC to go back
+function fgls() {
+  local print=false commit file
+  [[ "$1" == "--print" ]] && print=true && shift
+  while true; do
+    commit=$(git log --oneline --color=always "$@" |
+      fzf --ansi --height=100% \
+          --preview 'git show --stat --color=always {1}' \
+          --preview-window down:80%) || return
+    commit=${commit%% *}
+    file=$(git diff-tree --no-commit-id --name-only -r "$commit" |
+      fzf --height=100% \
+          --preview "git show --color=always $commit -- {}" \
+          --preview-window down:80%)
+    [[ -z "$file" ]] && continue
+    $print && echo "$commit" && echo "$file"
+    break
+  done
+}
+
+# Fuzzy search file contents with ripgrep and open selection in vim at matching line
+# usage: rgvim
+# requires: rg, fzf (>=0.38 for become()), vim
+function rgvim() {
+  (( ! $+commands[node] )) && _zsh_nvm_load
+  rg --line-number . |
+       fzf --delimiter : --nth 3.. --bind 'enter:become(vim {1} +{2})'
+}
+
+# fzf interactive systemd journal viewer (Linux only, requires jq)
+# usage: fjl [pattern]
+#   pattern  optional, filter unit names (default: all units)
+# preview: systemctl status, enter: open full journal
+function fjl() {
+  [[ "$OSTYPE" != linux* ]] && echo "fjl: Linux only (systemd)" >&2 && return 1
+  systemctl list-units --output json |
+    jq '.[].unit | select(test($pattern))' --arg pattern "${1:-.}" --raw-output |
+    fzf --height=100% \
+        --preview "systemctl status {}" \
+        --preview-window down:80% \
+        --bind "enter:execute(journalctl -u {})"
+}
+
+# fzf interactive systemd journal raw log viewer (Linux only)
+# usage: fjlr [service] [query] [lines]
+#   service  optional, systemd unit name; if omitted, fzf select from active units
+#   query    optional, pre-fill fzf search (default: empty, use - to skip)
+#   lines    optional, number of recent log lines (default: 500)
+# raw mode: all lines visible, matches highlighted, ctrl-p/n to jump between matches
+function fjlr() {
+  [[ "$OSTYPE" != linux* ]] && echo "fjlr: Linux only (systemd)" >&2 && return 1
+  local unit=${1:-$(systemctl list-units --output json | jq -r '.[].unit' | fzf)} || return
+  local query="${2:-}"
+  [[ "$query" == "-" ]] && query=""
+  journalctl --no-pager -u "$unit" -n "${3:-500}" |
+    fzf --raw --query "$query"
+}
+
+# pet related function
+function pet() {
+  case "$1" in
+    edit|configure)
+      # Load nvm only if node is not yet in PATH, so coc.nvim can find node.
+      # _zsh_nvm_load (from zsh-nvm plugin) loads nvm and unsets all lazy
+      # functions at once, avoiding double nvm loading when pet spawns vim.
+      (( ! $+commands[node] )) && _zsh_nvm_load
+      ;;
+  esac
+  command pet "$@"
+}
+
+function prev_pet_add() {
+  PREV=$(fc -lrn | head -n 1)
+  sh -c "pet new `printf %q "$PREV"`"
+}
+
+function pet-snippet-search() {
+  BUFFER=$(pet search --query "$LBUFFER")
+  CURSOR=$#BUFFER
+  zle redisplay
+}
+zle -N pet-snippet-search
+stty -ixon
+
+function kiro-agent-select() {
+  local dotai_agents="$HOME/.dotai/kiro/agents"
+  local built_agents="$HOME/.kiro/agents"
+  local list=""
+  for f in "$dotai_agents"/*.json(N); do
+    local name="${${f:t}%.json}"
+    if [[ -f "$built_agents/$name.json" ]]; then
+      list+="$name"$'\n'
+    else
+      list+="$name  [BUILD FAILED]"$'\n'
+    fi
+  done
+  [[ -n "$list" ]] || return
+  local selected=$(echo "$list" | fzf --prompt='kiro agent> ' --header='enter: chat | ctrl-t: chat --tui' --expect=ctrl-t)
+  [[ -n "$selected" ]] || return
+  local key="${selected%%$'\n'*}"
+  local entry="${selected#*$'\n'}"
+  local name="${entry%%  \[*}"
+  [[ -n "$name" ]] || return
+  if [[ "$entry" == *"[BUILD FAILED]"* ]]; then
+    BUFFER=" # agent '$name' failed to build — run: cd ~/.dotai && ./build.sh"
+    CURSOR=$#BUFFER
+    zle redisplay
+    return
+  fi
+  BUFFER="kiro-cli chat --agent \"${name}\""
+  [[ "$key" == "ctrl-t" ]] && BUFFER+=" --tui"
+  CURSOR=$#BUFFER
+  zle redisplay
+}
+zle -N kiro-agent-select
+
+# Check dirty git repos and open them in tmux windows or Ghostty tabs
+# --newtab: use Ghostty AppleScript to open tabs (macOS only, requires Ghostty 1.3.0+)
+# default: use tmux to open windows (cross-platform, requires active tmux session)
+function OpenDirtyRepository() {
+    local check_unpushed=false no_cmd=false use_newtab=false
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --unpushed|-u) check_unpushed=true ;;
+            --no-cmd|--silent|-s) no_cmd=true ;;
+            --newtab|-t) use_newtab=true ;;
+        esac
+        shift
+    done
+
+    local repos=(
+        ~/Documents/projects/*/*
+        ~/.dotfile
+        ~/.dotai
+    )
+    local dirty=() unpushed=() clean=() skipped=()
+
+    for repo in "${repos[@]}"; do
+        if [[ ! -d "$repo/.git" ]]; then
+            skipped+=("$repo")
+        elif git -C "$repo" status --porcelain | grep -q .; then
+            dirty+=("$repo")
+        elif $check_unpushed && git -C "$repo" log --oneline @{u}..HEAD 2>/dev/null | grep -q .; then
+            unpushed+=("$repo")
+        else
+            clean+=("$repo")
+        fi
+    done
+
+    echo "=== Summary ==="
+    echo "Dirty:    ${#dirty[@]}"
+    $check_unpushed && echo "Unpushed: ${#unpushed[@]}"
+    echo "Clean:    ${#clean[@]}"
+    echo "Skipped:  ${#skipped[@]} (not a git repo)"
+    echo ""
+    (( ${#clean[@]} )) && printf "  [clean]     %s\n" "${clean[@]}"
+    (( ${#skipped[@]} )) && printf "  [skip]      %s\n" "${skipped[@]}"
+    (( ${#unpushed[@]} )) && printf "  [unpushed]  %s\n" "${unpushed[@]}"
+    (( ${#dirty[@]} )) && printf "  [dirty]     %s\n" "${dirty[@]}"
+
+    local targets=("${dirty[@]}" "${unpushed[@]}")
+    if [[ ${#targets[@]} -eq 0 ]]; then
+        echo ""
+        echo "Nothing to open."
+        return 0
+    fi
+
+    # Validate backend
+    if $use_newtab; then
+        [[ "$OSTYPE" != darwin* ]] && echo "--newtab is macOS only." >&2 && return 1
+    elif [[ -z "$TMUX" ]]; then
+        echo "Not in a tmux session. Starting one and re-running..."
+        local _args=()
+        $check_unpushed && _args+=(--unpushed)
+        $no_cmd && _args+=(--silent)
+        tmux new-session -s "dirty-repos-$$" "zsh -ic 'OpenDirtyRepository ${_args[*]}; exec zsh'"
+        return
+    fi
+
+    echo ""
+    local _open_repo
+    if $use_newtab; then
+        echo "Opening ${#targets[@]} tab(s) in Ghostty..."
+        _open_repo() {
+            local repo=$1 cmd=$2
+            osascript -e "tell application \"Ghostty\"
+                set t to new tab in front window
+                set term to focused terminal of t
+                input text \"cd '${repo}' && clear${cmd:+ && $cmd}\n\" to term
+            end tell"
+        }
+    else
+        echo "Opening ${#targets[@]} window(s) in tmux..."
+        _open_repo() {
+            local repo=$1 cmd=$2
+            if [[ -n "$cmd" ]]; then
+                tmux new-window -c "$repo" "zsh -ic '$cmd; exec zsh'"
+            else
+                tmux new-window -c "$repo"
+            fi
+        }
+    fi
+
+    for repo in "${dirty[@]}"; do
+        $no_cmd && _open_repo "$repo" "" || _open_repo "$repo" "gd"
+    done
+    for repo in "${unpushed[@]}"; do
+        $no_cmd && _open_repo "$repo" "" || _open_repo "$repo" "glup"
+    done
+    unfunction _open_repo 2>/dev/null
+}
+
+# run-help wrapper: clear autosuggestion before invoking run-help,
+# otherwise the grey suggestion text gets included in the command buffer
+function _run-help-clean() {
+	zle autosuggest-clear
+	zle run-help
+}
+zle -N _run-help-clean
 
 
 #    ______                      __
@@ -357,13 +917,62 @@ export EDITOR="vim"
 export VISUAL="$EDITOR"
 export MYVIMRC="$HOME/.vimrc"
 export DOTFILE="$HOME/.dotfile"
-[[ "$OSTYPE" == "darwin"* ]] && export PATH=/opt/homebrew/bin:$PATH # for m1 homebrew
+# Custom dotfile scripts
+export PATH="$HOME/.dotfile/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
 
 
 # let urlview to use firefox browser to show
 if [ -e '/usr/bin/firefox' ] ; then
-  export BROWSER='/usr/bin/firefox'
+  #export BROWSER='/usr/bin/firefox'
+  # comment this block to use xdg-settings set default-web-browser firefox_firefox.desktop
 fi
+
+# fzf global defaults
+# note: ctrl-y is fzf built-in yank (emacs style: paste back killed text),
+#       overridden in FZF_CTRL_R_OPTS to copy selection to system clipboard
+export FZF_DEFAULT_OPTS="
+  --reverse
+  --cycle
+  --height=60%
+  --highlight-line
+  --border
+  --preview-window down
+  --bind 'ctrl-b:half-page-up,ctrl-f:half-page-down'
+  --bind 'shift-page-up:preview-page-up,shift-page-down:preview-page-down'
+  --bind '?:toggle-preview'
+  --bind 'ctrl-\:change-preview-window(right:50%|hidden|)'
+  --bind 'alt-y:execute-silent(echo -n {} | sed \"s/^[[:space:]]*[0-9]*\\t//\" | if command -v pbcopy >/dev/null; then pbcopy; else xclip -selection clipboard; fi)+accept'
+  --header 'ctrl+y (emacs yank/recover) | alt+y (copy) | ? (preview) | ctrl+\\ (preview pos) | ctrl+/ (line wrap) | shift+pgup/dn (preview page)'"
+
+# Ctrl+T: search files and paste path to command line
+# Use fd for speed (parallel, respects .gitignore) and --hidden for dotfiles
+export FZF_CTRL_T_COMMAND="fd --type f --type d --hidden --follow --exclude .git --exclude node_modules --exclude target"
+export FZF_CTRL_T_OPTS="
+  --preview '[ -d {} ] && tree -C {} || bat -n --color=always {}'"
+
+# Print tree structure in the preview window
+# Alt+P (rebound from Alt+C): cd into selected directory
+# Env var names must stay as FZF_ALT_C_* — fzf hardcodes these names
+# regardless of which key triggers fzf-cd-widget (see bindkey above)
+export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --exclude .git --exclude node_modules --exclude target"
+
+# bind alt-o to save to pet, ctrl-y to copy to clipboard in fzf history search
+# fzf action: +accept = close fzf and output selection to terminal
+#             +abort  = close fzf without output (silent operation)
+export FZF_CTRL_R_OPTS="
+  --info=right
+  --height=80%
+  --no-multi-line
+  --color header:italic:bold
+  --color 'fg:#bbccdd,fg+:#ddeeff,bg:#334455,preview-bg:#223344,border:#778899'
+  --header 'alt+o (pet new) | alt+y (copy) | ctrl+s (sort: +S relevance, -S recency)'
+  --preview 'echo {}' --preview-window hidden:50%:wrap
+  --bind 'ctrl-\:change-preview-window(down:50%|right:50%|)'
+  --bind 'ctrl-s:toggle-sort'
+  --bind 'alt-o:execute(pet new --tag {2..})+abort'"
 
 
 #     ___    ___
@@ -372,12 +981,9 @@ fi
 #  / ___ |/ / / /_/ (__  )
 # /_/  |_/_/_/\__,_/____/
 
+# TODO
+# add new alias for case folder in internal alias .alias file
 # alias
-# docker alias
-alias dcp="docker-compose"
-alias dcls="docker container ls"
-alias dclsa="docker container ls -a"
-
 # operating alias
 alias cls="printf '\033c'"
 alias gquit="gnome-session-quit"
@@ -386,48 +992,68 @@ alias dotfile="cd ~/.dotfile"
 alias li="set -o | grep 'emacs\|^vi'"
 alias kagt="killall gnome-terminal-server"
 alias kagc="killall gnome-calculator"
-alias less="less -r" # in raw-control-chars for default
+alias less="less -N --RAW-CONTROL-CHARS --quit-if-one-screen" # in RAW-CONTROL-CHARS for default, recommend in the manual.
 
-# line alias
-alias line="chromium-browser chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html#popout > /dev/null 2>&1 &"
 # git alias
 alias glodsd="glods --date=local" # must use with zsh git plugin
+alias glolar="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar, %aI) %C(bold blue)<%an>%Creset'" # show the git log without --all flag to run commit to commit
+alias glolara="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar, %aI) %C(bold blue)<%an>%Creset' --all" # show the git log in relative/absolute timestamp
 alias grf="git reflog"
 alias gdst="git diff --stat"
 alias gsa="git show --all --shortstat --stat"
+alias glup='git log @{u}..HEAD --oneline'
 
-# oh-my-zsh plugin git alias
-alias gmd="less ~/.oh-my-zsh/plugins/git/README.md 2> /dev/null || echo 'File not founded.'"
+# ssh alias
+alias sshr="ssh-keygen -R " # to remove specify ssh key by name
+
+# curl alias
+alias wttrhelp="curl wttr.in/:help | less"
 
 # python alias
 #alias python="/usr/bin/python3"
 #alias pip="/usr/bin/pip3"
 
-# curl alias
-alias wttrhelp="curl wttr.in/:help | less"
+# oh-my-zsh plugin git alias
+alias gmd="less ~/.oh-my-zsh/plugins/git/README.md 2> /dev/null || echo 'File not founded.'"
 
 # zsh-navigation-tools plugin alias
 alias naliases=n-aliases ncd=n-cd nenv=n-env nfunctions=n-functions nhistory=n-history
 alias nkill=n-kill noptions=n-options npanelize=n-panelize nhelp=n-help
 
-# suffix alias
-alias -s {md,py,txt,vimrc,zshrc,conf,toml}=vim
-alias -s sh=bash
+# line alias
+alias line="chromium-browser chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html#popout > /dev/null 2>&1 &"
 
-# global alais
-# https://thorsten-hans.com/5-types-of-zsh-aliases
-# e.g. cd && ls -l G do
-alias -g G=" | grep -i"
-alias -g xc=" | sed -z 's/\n$//' | xclip -selection clipboard"
-alias -g ca=" | cat"
+# docker alias
+alias dcp="docker-compose"
+alias dcls="docker container ls"
+alias dclsa="docker container ls -a"
 
 # edit and source config
 alias ez="$EDITOR $HOME/.zshrc"
 alias et="$EDITOR $HOME/.tmux.conf"
 alias ev="$EDITOR $HOME/.vimrc"
 alias es="$EDITOR $HOME/.config/starship.toml"
+alias eg="$EDITOR $HOME/.config/ghostty/config"
+alias ei="$EDITOR $HOME/.config/i3/config"
 alias sz="source $HOME/.zshrc"
 
+# suffix alias
+alias -s {md,py,txt,vimrc,zshrc,conf,toml}=vim
+
+# global alias
+# https://thorsten-hans.com/5-types-of-zsh-aliases
+# e.g. cd && ls -l G do
+alias -g G=" | grep -i"
+alias -g lxc=" | sed -z 's/\n$//' | xclip -selection clipboard"
+alias -g mxc=" | gsed -z 's/\n$//' | pbcopy"
+alias -g ca=" | cat"
+alias -g pa=" | less"
+alias -g ppa=" | \less" # purge pager
+
+# managent related alias
+# make usb port 1-3 wakeup from s3 situation
+# please make sure the XHC in /proc/acpi/wakeup is enabled
+alias usb_s3_wakeup="echo 'enabled' | sudo tee /sys/bus/usb/devices/1-3/power/wakeup"
 
 #    ____      _ __
 #   /  _/___  (_) /_
@@ -436,11 +1062,43 @@ alias sz="source $HOME/.zshrc"
 #/___/_/ /_/_/\__/
 
 # nvm
+# export NVM_DIR="$HOME/.nvm"
+# export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# https://medium.com/@ankitbabber/how-i-improved-my-shell-load-time-with-a-lazy-load-3acd89f8c4a3
+# manually lazy load the nvm if needed
+# _nvm_lazy_load() {
+#   unset -f nvm node npm npx yarn pnpm node_modules vim &> /dev/null
+#   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+#   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# }
+# nvm()  { _nvm_lazy_load; nvm  "$@"; }
+# node() { _nvm_lazy_load; node "$@"; }
+# npm()  { _nvm_lazy_load; npm  "$@"; }
+# npx()  { _nvm_lazy_load; npx  "$@"; }
+# vim()  { _nvm_lazy_load; vim  "$@"; }
+# other way to node lazy load
+# https://sumercip.com/posts/lazyload-zsh/
+# https://github.com/qoomon/zsh-lazyload
+
+#    ___         __        __                __
+#   /   | __  __/ /_____  / /___  ____ _____/ /
+#  / /| |/ / / / __/ __ \/ / __ \/ __ `/ __  /
+# / ___ / /_/ / /_/ /_/ / / /_/ / /_/ / /_/ /
+#/_/  |_\__,_/\__/\____/_/\____/\__,_/\__,_/
+
+# autoload
+# run-help: enable zsh built-in help for builtins (whence, bindkey, etc.)
+unalias run-help 2>/dev/null
+autoload -Uz run-help
+autoload -Uz run-help-git run-help-sudo run-help-openssl
 
 # starship
 eval "$(starship init zsh)"
 
 # https://superuser.com/questions/117841/when-reading-a-file-with-less-or-more-how-can-i-get-the-content-in-colors
 #export LESS="-r" #useful for raw-control-chars, but can't like alias to escape via backslash \
+

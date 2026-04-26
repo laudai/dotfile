@@ -1,3 +1,5 @@
+:: TODO
+:: 有天要從某個清單去與Linux的檔案進行同步安裝，卸載
 @echo off
 echo This script can set hardlink to your VSCode settings.json, keybindings.json etc on your Windows OS.
 echo.
@@ -43,13 +45,15 @@ IF exist %USERPROFILE%\Documents\dotfile (
     code --install-extension vscode-icons-team.vscode-icons  --force
     code --install-extension mikestead.dotenv  --force
     code --install-extension editorconfig.editorconfig  --force
-    code --install-extension shan.code-settings-sync  --force
     code --install-extension hoovercj.vscode-settings-cycler --force
     code --install-extension gruntfuggly.todo-tree --force
     code --install-extension spywhere.guides --force
     code --install-extension mhutchie.git-graph --force
     code --install-extension donjayamanne.githistory --force
     code --install-extension leodevbro.blockman --force
+    code --install-extension j4ng5y.charactercount --force
+    code --install-extension brokenbonesdd.opencclint --force
+    code --install-extension hediet.debug-visualizer --force
 
     echo.
     echo Set hardlink ^& install extension completed!

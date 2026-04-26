@@ -1,0 +1,36 @@
+[General]
+  Backend = "gitlab"
+  Cmd = []
+  Color = true
+  Column = 40
+  Editor = "vim"
+  Format = "[$description]: $command $tags"
+  SelectCmd = "fzf --ansi --layout=reverse --border --height=90% --pointer=* --cycle --prompt=Snippets: --preview='echo {2..}' --preview-window down:15:wrap --bind 'alt-y:execute-silent(echo -n {} | sed \"s/^\\[.*\\]: //;s/ #[^ ]*//g\" | if command -v pbcopy >/dev/null; then pbcopy; else xclip -selection clipboard; fi)+accept'"
+  SnippetDirs = []
+  SnippetFile = "~/.config/pet/snippet.toml"
+  SortBy = ""
+
+[GHEGist]
+  Public = false
+  access_token = ""
+  auto_sync = false
+  base_url = ""
+  file_name = ""
+  gist_id = ""
+  upload_url = ""
+
+[Gist]
+  Public = false
+  access_token = ""
+  auto_sync = false
+  file_name = "pet-snippet.toml"
+  gist_id = ""
+
+[GitLab]
+  ID = "5974688"
+  Url = "https://gitlab.com"
+  Visibility = "private"
+  access_token = ""
+  auto_sync = true
+  file_name = "pet-snippet.toml"
+  skip_ssl = false

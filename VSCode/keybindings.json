@@ -97,6 +97,10 @@
     "key": "ctrl+alt+right",
     "command": "-workbench.action.moveEditorToNextGroup"
   },
+  {
+    "key": "ctrl+k a",
+    "command": "workbench.action.maximizeEditor"
+  },
   // Focus on
   {
     "key": "shift+alt+e",
@@ -162,6 +166,23 @@
     "key": "ctrl+alt+b",
     "command": "blockman.toggleEnableDisable"
   },
+  // opencclint
+  {
+    "key": "ctrl+cmd+c",
+    "command": "opencclint.translateFile"
+  },
+  {
+    "key": "ctrl+cmd+o",
+    "command": "-opencclint.translateFile"
+  },
+  {
+    "key": "ctrl+shift+cmd+c",
+    "command": "opencclint.translateFileRevert"
+  },
+  {
+    "key": "ctrl+shift+cmd+o",
+    "command": "-opencclint.translateFileRevert"
+  },
   /*
  _    ___              __ __           __    _           ___
 | |  / (_)___ ___     / //_/__  __  __/ /_  (_)___  ____/ (_)___  ____ ______
@@ -199,6 +220,32 @@
                                            /____/                            /____/
   MacOS Keybindings
   */
+  // Focus at editor group
+  {
+    "key": "ctrl+shift+1",
+    "command": "workbench.action.focusFirstEditorGroup"
+  },
+  {
+    "key": "ctrl+shift+2",
+    "command": "workbench.action.focusSecondEditorGroup"
+  },
+  {
+    "key": "ctrl+shift+3",
+    "command": "workbench.action.focusThirdEditorGroup"
+  },
+  {
+    "key": "ctrl+shift+4",
+    "command": "workbench.action.focusFourthEditorGroup"
+  },
+  {
+    "key": "ctrl+shift+5",
+    "command": "workbench.action.focusFifthEditorGroup"
+  },
+  {
+    "key": "ctrl+shift+0",
+    "command": "workbench.action.focusLastEditorGroup"
+  },
+  // Focus at editor index
   {
     "key": "cmd+1",
     "command": "workbench.action.openEditorAtIndex1"
@@ -268,24 +315,36 @@
   },
   {
     "key": "cmd+9",
-    "command": "workbench.action.openEditorAtIndex9"
-  },
-  {
-    "key": "cmd+9",
     "command": "-workbench.action.lastEditorInGroup"
   },
   {
-    "key": "cmd+0",
+    "key": "cmd+9",
     "command": "workbench.action.lastEditorInGroup"
+  },
+  {
+    "key": "cmd+0",
+    "command": "workbench.action.zoomReset"
   },
   {
     "key": "ctrl+0",
     "command": "workbench.action.focusSideBar",
     "when": "isMac"
   },
+  // Misc
   {
-    "key": "cmd+0",
-    "command": "-workbench.action.focusSideBar"
+    "key": "cmd+k cmd+o",
+    "command": "workbench.action.files.openFileFolder",
+    "when": "openFolderWorkspaceSupport"
+  },
+  {
+    "key": "f2",
+    "command": "renameFile",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+  },
+  {
+    "key": "enter",
+    "command": "explorer.openAndPassFocus",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsFolder && !inputFocus"
   },
   /*
     ____  _                          __   ____       ____            ____     _____      __  __  _
@@ -335,5 +394,22 @@
   {
     "key": "ctrl+0",
     "command": "-workbench.action.lastEditorInGroup"
-  }
+  },
+  {
+    "key": "enter",
+    "command": "-renameFile",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+  },
+  {
+    "key": "cmd+numpad0",
+    "command": "-workbench.action.zoomReset"
+  },
+  {
+    "key": "cmd+0",
+    "command": "-workbench.action.focusSideBar"
+  },
+  {
+    "key": "cmd+q",
+    "command": "-workbench.action.quit"
+  } // Remove the MacOS default quit application keybindings
 ]

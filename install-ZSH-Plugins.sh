@@ -1,18 +1,39 @@
-# Install Zsh Plugins
+#!/usr/bin/env zsh
+# =============================================================================
+# install-ZSH-Plugins.sh — Install oh-my-zsh custom plugins
+#
+# Usage:
+#   ./install-ZSH-Plugins.sh
+#   zsh install-ZSH-Plugins.sh
+# =============================================================================
 
-# autojump
-git clone git://github.com/wting/autojump.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autojump
-cd ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autojump
-[[ ! -e /usr/bin/python ]] && sudo ln -s /usr/bin/python3 /usr/bin/python && echo '/usr/bin/python not found, use soft link /usr/bin/pyhton3 to /usr/bin/python3.'
-/usr/bin/env python3 ./install.py
-cd $HOME
-# zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-#  zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-# zsh-navigation-tools
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/psprint/zsh-navigation-tools/master/doc/install.sh)"
-# git-open
-git clone https://github.com/paulirish/git-open.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/git-open
-# zsh-history-substring-search
-git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+plugins=(
+	"zsh-users/zsh-autosuggestions"
+	"zsh-users/zsh-syntax-highlighting"
+	"paulirish/git-open"
+	"zsh-users/zsh-history-substring-search"
+	"lukechilds/zsh-nvm"
+)
+
+for repo in "${plugins[@]}"; do
+	name="${repo##*/}"
+	dest="$ZSH_CUSTOM/plugins/$name"
+	if [[ -d "$dest" ]]; then
+		echo "✓ $name already installed, skipping"
+	else
+		echo "Installing $name..."
+		git clone "https://github.com/$repo.git" "$dest"
+	fi
+done
+
+# zsh-navigation-tools (separate installer)
+if [[ -d "$HOME/.config/znt" ]]; then
+	echo "✓ zsh-navigation-tools already installed, skipping"
+else
+	echo "Installing zsh-navigation-tools..."
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/psprint/zsh-navigation-tools/master/doc/install.sh)"
+fi
+
+echo "ZSH plugins setup complete."
