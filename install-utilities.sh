@@ -549,7 +549,7 @@ elif [[ "$OS" == "Linux" ]]; then
 	if [[ "$PKG_MGR" == "brew" ]]; then
 		batch_install "brew install" "${pkg_install[@]}"
 	elif [[ "$PKG_MGR" == "apt" ]]; then
-		batch_install "sudo apt install -y" "${pkg_install[@]}"
+		batch_install "sudo DEBIAN_FRONTEND=noninteractive apt install -y" "${pkg_install[@]}"
 	fi
 fi
 
