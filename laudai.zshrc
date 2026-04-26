@@ -917,6 +917,8 @@ export EDITOR="vim"
 export VISUAL="$EDITOR"
 export MYVIMRC="$HOME/.vimrc"
 export DOTFILE="$HOME/.dotfile"
+# GPG: use current TTY for pinentry (required for GPG signing over SSH)
+export GPG_TTY=$(tty)
 # Custom dotfile scripts
 export PATH="$HOME/.dotfile/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
