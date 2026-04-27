@@ -11,7 +11,7 @@
 #
 # Dry-run (default) shows:
 #   1. All packages and which are skipped
-#   2. OS-detected install plan (macOS: brew formula/cask | Linux: apt/manual)
+#   2. OS-detected install plan (macOS: brew formula+cask | Linux: apt/manual)
 #   3. No actual installation happens
 #
 # --install flag triggers actual installation
@@ -50,10 +50,9 @@ LISTS_FILE="$(dirname "$0")/install-utilities.lists.sh"
 [[ -f "$LISTS_FILE" ]] || { echo "Error: package list file not found: $LISTS_FILE" >&2; exit 1; }
 source "$LISTS_FILE"
 
-# --- Platform exclusion lists ---
 # These are now auto-detected at runtime in the "Build install plan" section.
 # --check-apt and --check-brew are kept for manual verification.
-# apt_name_map is still needed for name translation (e.g., fd → fd-find).
+# brew_name_map is used on macOS to translate apt-based keys to brew names.
 
 # --- Runtime state ---
 # Collects packages that failed during batch_install fallback
@@ -97,13 +96,15 @@ function print_section() {
 }
 
 # classify packages against brew_all: available → target array, unavailable → pkg_manual
+# On macOS, translates apt-based keys to brew names via brew_name_map.
 # Requires brew_all to be set before calling.
 # -cx instead of -qx: grep -q with pipefail causes SIGPIPE false failures
 function brew_classify() {
 	local target_name=$1; shift
 	for pkg in "$@"; do
-		if echo "$brew_all" | grep -cx "$pkg" >/dev/null; then
-			eval "${target_name}+=(\"$pkg\")"
+		local brew_pkg="${brew_name_map[$pkg]:-$pkg}"
+		if echo "$brew_all" | grep -cx "$brew_pkg" >/dev/null; then
+			eval "${target_name}+=(\"$brew_pkg\")"
 		else
 			pkg_manual+=("$pkg")
 		fi
@@ -139,8 +140,9 @@ if $CHECK_BREW; then
 	brew_yes=()
 	brew_no=()
 	for pkg in "${common_formula[@]}" "${cross_platform_cask[@]}" "${macos_only_cask[@]}"; do
-		if echo "$brew_all" | grep -cx "$pkg" >/dev/null; then
-			brew_yes+=("$pkg")
+		local brew_pkg="${brew_name_map[$pkg]:-$pkg}"
+		if echo "$brew_all" | grep -cx "$brew_pkg" >/dev/null; then
+			brew_yes+=("$brew_pkg")
 		else
 			brew_no+=("$pkg")
 		fi
@@ -171,8 +173,7 @@ if $CHECK_APT; then
 	apt_yes=()
 	apt_no=()
 	for pkg in "${common_formula[@]}" "${linux_only_formula[@]}" "${cross_platform_cask[@]}"; do
-		apt_pkg="${apt_name_map[$pkg]:-$pkg}"
-		if apt-cache show "$apt_pkg" &>/dev/null; then
+		if apt-cache show "$pkg" &>/dev/null; then
 			apt_yes+=("$pkg")
 		else
 			apt_no+=("$pkg")
@@ -209,7 +210,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
 		brew_classify pkg_install_fonts $(filter_skip "${font_casks[@]}")
 		brew_classify pkg_install       $(filter_skip "${common_formula[@]}")
-		# Cannot merge CLI + GUI: CLI → brew install, GUI → brew install --cask
+		# Cannot merge formula + cask arrays: Linuxbrew only supports formula.
+		# macOS uses separate install commands: brew install (formula) vs brew install --cask (cask).
 		brew_classify pkg_install_cask  $(filter_skip "${cross_platform_cask[@]}" "${macos_only_cask[@]}")
 	else
 		echo "brew not found. Install Homebrew first:"
@@ -221,21 +223,19 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 	OS="Linux"
 	if command -v brew >/dev/null; then
 		PKG_MGR="brew"
-		# Linuxbrew — auto-detect available formulae
+		# Linuxbrew — formula only (no cask support on Linux)
 		brew_all=$(brew formulae)
 
 		brew_classify pkg_install $(filter_skip "${common_formula[@]}" "${linux_only_formula[@]}")
-		# all GUI apps need manual install on Linux (no brew cask)
+		# GUI apps → manual install on Linux (Linuxbrew has no cask support)
 		pkg_manual+=($(filter_skip "${cross_platform_cask[@]}"))
 
 	elif command -v apt >/dev/null; then
 		PKG_MGR="apt"
 		# auto-detect: check each package against apt-cache
 		for pkg in $(filter_skip "${common_formula[@]}" "${linux_only_formula[@]}" "${cross_platform_cask[@]}"); do
-			# map the package name from formula to apt
-			apt_pkg="${apt_name_map[$pkg]:-$pkg}"
-			if apt-cache show "$apt_pkg" &>/dev/null; then
-				pkg_install+=("$apt_pkg")
+			if apt-cache show "$pkg" &>/dev/null; then
+				pkg_install+=("$pkg")
 			else
 				pkg_manual+=("$pkg")
 			fi

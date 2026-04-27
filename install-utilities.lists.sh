@@ -8,9 +8,14 @@
 # are required unless install logic itself changes.
 # =============================================================================
 
-# --- Cross-platform CLI tools (formula) ---
-# Works on both macOS (brew) and Linux (brew/apt).
+# --- Cross-platform CLI tools ---
+# Package names use apt convention (the key is the apt package name).
+# On macOS, brew_name_map translates to the correct brew name where they differ.
 # For packages that only exist or only make sense on Linux, use linux_only_formula.
+#
+# Note: "formula" and "cask" array names are kept because Linuxbrew (Linux)
+# only supports formula, not cask. The distinction is needed so the Linux
+# Linuxbrew path knows which packages it can install vs. skip to manual.
 common_formula=(
 	# System monitoring
 	htop
@@ -21,7 +26,7 @@ common_formula=(
 
 	# File / Text search
 	bat                              # cat alternative with syntax highlighting
-	fd                               # find alternative
+	fd-find                          # find alternative (brew: fd)
 	ripgrep                          # grep alternative
 
 	# Code stats / Editor
@@ -61,14 +66,14 @@ common_formula=(
 
 	# File management
 	czkawka                          # duplicate file finder (macOS: CLI+GUI via brew; Linux: manual/flatpak)
-	midnight-commander               # terminal file manager (apt: mc)
+	mc                               # terminal file manager (brew: midnight-commander)
 
 	# Linter
 	ruff
 
 	# Python
 	uv                               # Python package manager (Astral)
-	ipython                          # interactive Python (apt: ipython3)
+	ipython3                         # interactive Python (brew: ipython)
 
 	# Security
 	bitwarden-cli
@@ -78,12 +83,12 @@ common_formula=(
 	cowsay
 	cmatrix
 	lolcat                           # rainbow text
-	fortune                          # random quotes (apt: fortunes)
+	fortunes                         # random quotes (brew: fortune)
 	toilet                           # ASCII art text
 	figlet                           # ASCII art text
 )
 
-# --- Linux-only CLI tools (formula) ---
+# --- Linux-only CLI tools ---
 # Packages that are either Linux-exclusive (Wayland/X11/systemd-specific) or
 # where the macOS equivalent differs enough that brew install is not meaningful
 # (e.g., strace → dtrace, gdb → lldb). Installed only when OS is Linux.
@@ -156,9 +161,11 @@ linux_only_formula=(
 	bottles                          # flatpak: Wine prefix manager
 )
 
-# --- Cross-platform GUI apps ---
-# macOS: brew --cask (auto-detected at runtime)
-# Linux: auto-detected via apt-cache; run --check-apt to verify manually
+# --- Cross-platform GUI apps (cask on macOS, apt/manual on Linux) ---
+# Kept separate from common_formula because Linuxbrew does not support --cask.
+# On macOS: brew --cask (auto-detected at runtime)
+# On Linux + apt: auto-detected via apt-cache
+# On Linux + Linuxbrew: all go to manual install (no cask support)
 cross_platform_cask=(
 	# Productivity / Notes / Development / Terminal / Editor / IDE
 	anytype
@@ -172,14 +179,14 @@ cross_platform_cask=(
 	wireshark
 
 	# Browser
-	chromium                         # apt: chromium-browser (Ubuntu snap stub)
-	firefox                          # apt: firefox (Ubuntu snap stub)
+	chromium-browser                 # brew: chromium (Ubuntu snap stub)
+	firefox                          # Ubuntu snap stub
 	brave-browser
 
 	# Communication / Sync
 	thunderbird
 	syncthing
-	telegram                         # apt: telegram-desktop
+	telegram                         # no native apt; needs PPA or manual
 	rambox                           # multi-messenger (Linux: manual)
 	pcloud                           # cloud storage (both: manual)
 
@@ -202,7 +209,7 @@ cross_platform_cask=(
 	anki
 )
 
-# --- macOS only GUI apps ---
+# --- macOS-only GUI apps (cask) ---
 # These are macOS-exclusive and cannot run on Linux, even with Linuxbrew.
 # Linux alternatives: i3/sway (window mgmt), rofi (launcher), keyd (key remap)
 macos_only_cask=(
@@ -262,7 +269,7 @@ skip_pkgs=(
 	httpie
 	cowsay
 	lolcat
-	fortune
+	fortunes
 	hollywood
 	balenaetcher
 	screenkey
@@ -276,11 +283,11 @@ skip_on_mac=(
 	nmap
 	iperf3
 	sqlmap
-	ipython
+	ipython3
 	screenfetch
 	cmatrix
 	toilet
-	chromium
+	chromium-browser
 	telegram
 	rambox
 	surfshark
@@ -291,15 +298,16 @@ skip_on_linux=(
 	# e.g., ... — Linux has native alternatives
 )
 
-# --- Linux apt config ---
+# --- Brew name mapping ---
 
-# brew name → apt name (only list where names differ)
+# apt name (key) → brew name (only list where names differ)
+# On macOS, the script queries this map to get the correct brew package name.
+# On Linux, the key is used directly as the apt package name.
 # Note: declare -A requires bash 4.0+ or zsh. macOS default bash is 3.2 — use zsh instead.
-declare -A apt_name_map=(
-	[fd]="fd-find"
-	[midnight-commander]="mc"
-	[fortune]="fortunes"
-	[ipython]="ipython3"
-	[chromium]="chromium-browser"
-	[telegram]="telegram-desktop"
+declare -A brew_name_map=(
+	[fd-find]="fd"
+	[mc]="midnight-commander"
+	[fortunes]="fortune"
+	[ipython3]="ipython"
+	[chromium-browser]="chromium"
 )
