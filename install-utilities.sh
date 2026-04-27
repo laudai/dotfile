@@ -139,7 +139,7 @@ if $CHECK_BREW; then
 
 	brew_yes=()
 	brew_no=()
-	for pkg in "${common_formula[@]}" "${cross_platform_cask[@]}" "${macos_only_cask[@]}"; do
+	for pkg in "${common_pkgs[@]}" "${cross_platform_gui[@]}" "${macos_only_gui[@]}"; do
 		local brew_pkg="${brew_name_map[$pkg]:-$pkg}"
 		if echo "$brew_all" | grep -cx "$brew_pkg" >/dev/null; then
 			brew_yes+=("$brew_pkg")
@@ -172,7 +172,7 @@ if $CHECK_APT; then
 	echo ""
 	apt_yes=()
 	apt_no=()
-	for pkg in "${common_formula[@]}" "${linux_only_formula[@]}" "${cross_platform_cask[@]}"; do
+	for pkg in "${common_pkgs[@]}" "${linux_only_pkgs[@]}" "${cross_platform_gui[@]}"; do
 		if apt-cache show "$pkg" &>/dev/null; then
 			apt_yes+=("$pkg")
 		else
@@ -197,7 +197,7 @@ fi
 # Build install plan based on OS (auto-detect available packages)
 # =============================================================================
 pkg_install=()
-pkg_install_cask=()
+pkg_install_gui=()
 pkg_install_fonts=()
 pkg_manual=()
 
@@ -208,11 +208,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 		# auto-detect: fetch all available brew formulae and casks (~0.3s)
 		brew_all=$(brew formulae; brew casks)
 
-		brew_classify pkg_install_fonts $(filter_skip "${font_casks[@]}")
-		brew_classify pkg_install       $(filter_skip "${common_formula[@]}")
+		brew_classify pkg_install_fonts $(filter_skip "${macos_fonts[@]}")
+		brew_classify pkg_install       $(filter_skip "${common_pkgs[@]}")
 		# Cannot merge formula + cask arrays: Linuxbrew only supports formula.
 		# macOS uses separate install commands: brew install (formula) vs brew install --cask (cask).
-		brew_classify pkg_install_cask  $(filter_skip "${cross_platform_cask[@]}" "${macos_only_cask[@]}")
+		brew_classify pkg_install_gui   $(filter_skip "${cross_platform_gui[@]}" "${macos_only_gui[@]}")
 	else
 		echo "brew not found. Install Homebrew first:"
 		echo '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
@@ -226,14 +226,14 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 		# Linuxbrew — formula only (no cask support on Linux)
 		brew_all=$(brew formulae)
 
-		brew_classify pkg_install $(filter_skip "${common_formula[@]}" "${linux_only_formula[@]}")
+		brew_classify pkg_install $(filter_skip "${common_pkgs[@]}" "${linux_only_pkgs[@]}")
 		# GUI apps → manual install on Linux (Linuxbrew has no cask support)
-		pkg_manual+=($(filter_skip "${cross_platform_cask[@]}"))
+		pkg_manual+=($(filter_skip "${cross_platform_gui[@]}"))
 
 	elif command -v apt >/dev/null; then
 		PKG_MGR="apt"
 		# auto-detect: check each package against apt-cache
-		for pkg in $(filter_skip "${common_formula[@]}" "${linux_only_formula[@]}" "${cross_platform_cask[@]}"); do
+		for pkg in $(filter_skip "${common_pkgs[@]}" "${linux_only_pkgs[@]}" "${cross_platform_gui[@]}"); do
 			if apt-cache show "$pkg" &>/dev/null; then
 				pkg_install+=("$pkg")
 			else
@@ -272,8 +272,8 @@ fi
 
 if [[ "$OS" == "macOS" ]]; then
 	print_section "Fonts (brew --cask)" "${pkg_install_fonts[@]}"
-	print_section "CLI tools (brew formula)" "${pkg_install[@]}"
-	print_section "GUI apps (brew --cask)" "${pkg_install_cask[@]}"
+	print_section "CLI tools (brew)" "${pkg_install[@]}"
+	print_section "GUI apps (brew --cask)" "${pkg_install_gui[@]}"
 	if [[ ${#pkg_manual[@]} -gt 0 ]]; then
 		print_section "Not in brew (manual install)" "${pkg_manual[@]}"
 	fi
@@ -283,7 +283,7 @@ elif [[ "$OS" == "Linux" ]]; then
 		print_section "Need manual install (PPA/flatpak/snap/pip/official website)" "${pkg_manual[@]}"
 	fi
 	echo "--- macOS-only apps (NOT installable on Linux) ---"
-	echo "  (see macos_only_cask in script)"
+	echo "  (see macos_only_gui in install-utilities.lists.sh)"
 	echo ""
 fi
 
@@ -316,7 +316,7 @@ if [[ "$OS" == "macOS" ]]; then
 	if command -v brew >/dev/null; then
 		batch_install "brew install --cask" "${pkg_install_fonts[@]}"
 		batch_install "brew install" "${pkg_install[@]}"
-		batch_install "brew install --cask" "${pkg_install_cask[@]}"
+		batch_install "brew install --cask" "${pkg_install_gui[@]}"
 	else
 		echo "Didn't find brew. Please reinstall and run again."
 		exit 1
