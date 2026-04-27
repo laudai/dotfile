@@ -69,10 +69,17 @@ TC_RESET="\033[0m"
 # =============================================================================
 
 function filter_skip() {
+	# Reads: $OS (set before calling), $skip_pkgs, $skip_on_mac, $skip_on_linux
+	local -a os_skip=()
+	case "$OS" in
+		macOS) os_skip=("${skip_on_mac[@]}") ;;
+		Linux) os_skip=("${skip_on_linux[@]}") ;;
+	esac
+
 	local -a result=()
 	for pkg in "$@"; do
 		local skip=false
-		for s in "${skip_pkgs[@]}"; do
+		for s in "${skip_pkgs[@]}" "${os_skip[@]}"; do
 			[[ "$pkg" == "$s" ]] && skip=true && break
 		done
 		$skip || result+=("$pkg")
@@ -254,7 +261,13 @@ echo "Mode: $( $DO_INSTALL && echo 'INSTALL' || echo 'DRY-RUN (use --install to 
 echo ""
 
 if [[ ${#skip_pkgs[@]} -gt 0 ]]; then
-	print_section "Skipped packages" "${skip_pkgs[@]}"
+	print_section "Skipped packages (all platforms)" "${skip_pkgs[@]}"
+fi
+
+if [[ "$OS" == "macOS" && ${#skip_on_mac[@]} -gt 0 ]]; then
+	print_section "Skipped on macOS only" "${skip_on_mac[@]}"
+elif [[ "$OS" == "Linux" && ${#skip_on_linux[@]} -gt 0 ]]; then
+	print_section "Skipped on Linux only" "${skip_on_linux[@]}"
 fi
 
 if [[ "$OS" == "macOS" ]]; then

@@ -174,6 +174,7 @@ cross_platform_cask=(
 	# Browser
 	chromium                         # apt: chromium-browser (Ubuntu snap stub)
 	firefox                          # apt: firefox (Ubuntu snap stub)
+	brave-browser
 
 	# Communication / Sync
 	thunderbird
@@ -266,6 +267,28 @@ skip_pkgs=(
 	balenaetcher
 	screenkey
 	screenrec
+)
+
+# --- Platform-specific skip lists ---
+# Packages to skip only on a specific platform.
+# Combines with skip_pkgs (which skips on all platforms).
+skip_on_mac=(
+	nmap
+	iperf3
+	sqlmap
+	ipython
+	screenfetch
+	cmatrix
+	toilet
+	chromium
+	telegram
+	rambox
+	surfshark
+	mmex
+)
+
+skip_on_linux=(
+	# e.g., ... — Linux has native alternatives
 )
 
 # --- Linux apt config ---
