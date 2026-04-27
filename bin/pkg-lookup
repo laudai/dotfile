@@ -1,0 +1,71 @@
+#!/usr/bin/env zsh
+# =============================================================================
+# pkg-lookup — Check if packages exist in brew and apt
+#
+# Usage:
+#   pkg-lookup <name> [name...]     Check one or more packages
+#
+# When brew/apt is not installed locally, falls back to HTTP API.
+# Fallback apt source: packages.ubuntu.com (noble = 24.04 LTS)
+# =============================================================================
+set -eo pipefail
+
+if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+	echo "Usage: pkg-lookup <name> [name...]"
+	exit 0
+fi
+
+# --- Load brew index (one-time cost) ---
+if command -v brew >/dev/null; then
+	brew_formulae=$(brew formulae 2>/dev/null)
+	brew_casks=$(brew casks 2>/dev/null)
+else
+	brew_formulae=$(curl -fsSL "https://formulae.brew.sh/api/formula.json" 2>/dev/null | jq -r '.[].name')
+	brew_casks=$(curl -fsSL "https://formulae.brew.sh/api/cask.json" 2>/dev/null | jq -r '.[].token')
+fi
+
+function brew_check() {
+	echo "$brew_formulae" | grep -cx "$1" >/dev/null && { echo "formula"; return; }
+	echo "$brew_casks" | grep -cx "$1" >/dev/null && { echo "cask"; return; }
+	echo ""
+}
+
+# --- apt check ---
+function apt_check() {
+	if command -v apt-cache >/dev/null; then
+		apt-cache show "$1" >/dev/null 2>&1 && { echo "yes"; return; }
+	else
+		# API fallback: packages.ubuntu.com (noble = 24.04 LTS)
+		local found
+		found=$(curl -fsSL "https://packages.ubuntu.com/search?keywords=$1&searchon=names&exact=1&suite=noble&section=all" 2>/dev/null \
+			| grep -o "Package $1" | head -1 || true)
+		[[ -n "$found" ]] && { echo "yes"; return; }
+	fi
+	echo ""
+}
+
+# --- check single package, write result to temp file ---
+function check_pkg() {
+	local pkg="$1" tmpdir="$2"
+	local brew_result apt_result
+	brew_result=$(brew_check "$pkg")
+	apt_result=$(apt_check "$pkg")
+	printf "%-30s  brew: %-10s  apt: %s\n" \
+		"$pkg" \
+		"${brew_result:-✗}" \
+		"${apt_result:-✗}" > "$tmpdir/$pkg"
+}
+
+# --- main ---
+tmpdir=$(mktemp -d)
+trap "rm -rf $tmpdir" EXIT  # Clean up temp files on exit
+
+# Parallel apt lookups (brew uses local grep, already fast)
+for pkg in "$@"; do
+	check_pkg "$pkg" "$tmpdir" &
+done
+wait
+
+for pkg in "$@"; do
+	cat "$tmpdir/$pkg"
+done
