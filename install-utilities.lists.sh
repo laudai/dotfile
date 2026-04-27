@@ -76,7 +76,7 @@ common_pkgs=(
 	ipython3                         # interactive Python (brew: ipython)
 
 	# Security
-	bitwarden-cli
+	bw                               # Bitwarden CLI (brew: bitwarden-cli)
 
 	# Entertainment / Eye candy
 	screenfetch                      # system info display
@@ -303,6 +303,8 @@ skip_on_linux=(
 # apt name (key) → brew name (only list where names differ)
 # On macOS, the script queries this map to get the correct brew package name.
 # On Linux, the key is used directly as the apt package name.
+# Only add formula packages here. Cask packages must stay in cross_platform_gui
+# (Linuxbrew cannot install casks).
 # Note: declare -A requires bash 4.0+ or zsh. macOS default bash is 3.2 — use zsh instead.
 declare -A brew_name_map=(
 	[fd-find]="fd"
@@ -310,4 +312,5 @@ declare -A brew_name_map=(
 	[fortunes]="fortune"
 	[ipython3]="ipython"
 	[chromium-browser]="chromium"
+	[bw]="bitwarden-cli"
 )
