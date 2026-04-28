@@ -8,10 +8,10 @@ New machine setup order:
 
 ```bash
 # 1. Install utilities, symlinks, zsh plugins (includes bitwarden-cli)
-./install-utilities.sh --install
+./scripts/install-utilities.sh --install
 
 # 2. Restore host-level secrets from Bitwarden → ~/.env (requires bw from step 1)
-./linux_script/sync-env.sh
+./scripts/sync-env.sh
 
 # 3. Open a new terminal session to load ~/.env
 ```
@@ -19,7 +19,7 @@ New machine setup order:
 **`~/.env` setup** (first time only, before running `sync-env.sh`):
 - Create a Bitwarden Secure Note named `host-env`
 - Contents should match `host.env.example`
-- Run `bw login` then `./linux_script/sync-env.sh`
+- Run `bw login` then `./scripts/sync-env.sh`
 
 **Contents**
 

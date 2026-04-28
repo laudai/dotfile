@@ -367,11 +367,11 @@ nvm install --lts
 
 echo -e "\n${TC_CYAN}>>> Symlink setup${TC_RESET}"
 # Delegate to setup-symlinks.sh (single source of truth for all symlinks)
-zsh "$HOME/.dotfile/setup-symlinks.sh"
+zsh "$HOME/.dotfile/scripts/setup-symlinks.sh"
 
 echo -e "\n${TC_CYAN}>>> ZSH plugins${TC_RESET}"
 # Delegate to install-ZSH-Plugins.sh
-zsh "$HOME/.dotfile/install-ZSH-Plugins.sh"
+zsh "$HOME/.dotfile/scripts/install-ZSH-Plugins.sh"
 
 # Set zsh as default shell (Linux only, macOS already defaults to zsh)
 if [[ "$OS" == "Linux" ]] && [[ "$(basename "$SHELL")" != "zsh" ]]; then

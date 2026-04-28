@@ -27,10 +27,10 @@ ZSH_THEME="cloud"
 #steeef.zsh-theme
 #powerlevel10k/powerlevel10k # need install
 
-SYMBOL_FILE="$HOME/.dotfile/symbol.txt"
+SYMBOL_FILE="$HOME/.dotfile/config/symbol.txt"
 
 #CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
+test -e "$HOME/.dotfile/config/color.txt" && source "$HOME/.dotfile/config/color.txt"
 
 # Host-level config and secrets
 [[ -f "$HOME/.env" ]] && set -a && source "$HOME/.env" && set +a

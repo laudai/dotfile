@@ -2,7 +2,7 @@
 # Author : laudai
 
 # source the color if file exists
-test -e "$HOME/.dotfile/color.txt" && source "$HOME/.dotfile/color.txt"
+test -e "$HOME/.dotfile/config/color.txt" && source "$HOME/.dotfile/config/color.txt"
 
 
 #curl checkip.amazonaws.com
