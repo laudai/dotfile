@@ -173,7 +173,7 @@ if $CHECK_APT; then
 	apt_yes=()
 	apt_no=()
 	for pkg in "${common_pkgs[@]}" "${linux_only_pkgs[@]}" "${cross_platform_gui[@]}"; do
-		if apt-cache show "$pkg" &>/dev/null; then
+		if apt-cache show "$pkg" 2>/dev/null | grep -q "^Package:"; then
 			apt_yes+=("$pkg")
 		else
 			apt_no+=("$pkg")
@@ -241,7 +241,7 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 		pkg_unknown=()       # not defined anywhere
 
 		for pkg in $(filter_skip "${common_pkgs[@]}" "${linux_only_pkgs[@]}" "${cross_platform_gui[@]}"); do
-			if apt-cache show "$pkg" &>/dev/null; then
+			if apt-cache show "$pkg" 2>/dev/null | grep -q "^Package:"; then
 				pkg_install+=("$pkg")
 			elif [[ -n "${extra_apt_repos[$pkg]+x}" ]]; then
 				pkg_apt_repo+=("$pkg")
