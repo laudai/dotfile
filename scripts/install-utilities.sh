@@ -233,11 +233,26 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 	elif command -v apt >/dev/null; then
 		PKG_MGR="apt"
 		# auto-detect: check each package against apt-cache
+		# Packages not in apt are further classified by Layer 1-4 definitions
+		pkg_apt_repo=()      # Layer 1: extra apt repo
+		pkg_official=()      # Layer 2: official recommended
+		pkg_flatpak=()       # Layer 3: flatpak
+		pkg_snap=()          # Layer 4: snap
+		pkg_unknown=()       # not defined anywhere
+
 		for pkg in $(filter_skip "${common_pkgs[@]}" "${linux_only_pkgs[@]}" "${cross_platform_gui[@]}"); do
 			if apt-cache show "$pkg" &>/dev/null; then
 				pkg_install+=("$pkg")
+			elif [[ -n "${extra_apt_repos[$pkg]+x}" ]]; then
+				pkg_apt_repo+=("$pkg")
+			elif [[ -n "${official_install[$pkg]+x}" ]]; then
+				pkg_official+=("$pkg")
+			elif [[ -n "${flatpak_pkgs[$pkg]+x}" ]]; then
+				pkg_flatpak+=("$pkg")
+			elif [[ -n "${snap_pkgs[$pkg]+x}" ]]; then
+				pkg_snap+=("$pkg")
 			else
-				pkg_manual+=("$pkg")
+				pkg_unknown+=("$pkg")
 			fi
 		done
 	else
@@ -279,8 +294,48 @@ if [[ "$OS" == "macOS" ]]; then
 	fi
 elif [[ "$OS" == "Linux" ]]; then
 	print_section "Will be installed via $PKG_MGR" "${pkg_install[@]}"
-	if [[ ${#pkg_manual[@]} -gt 0 ]]; then
-		print_section "Need manual install (PPA/flatpak/snap/pip/official website)" "${pkg_manual[@]}"
+	if [[ "$PKG_MGR" == "apt" ]]; then
+		if [[ ${#pkg_apt_repo[@]} -gt 0 ]]; then
+			echo "--- Layer 1: Extra apt repo (${#pkg_apt_repo[@]}) ---"
+			for pkg in "${pkg_apt_repo[@]}"; do
+				val="${extra_apt_repos[$pkg]}"
+				repo_url="${val#*::}"; repo_url="${repo_url%%::*}"
+				echo "  - $pkg  (repo: $repo_url)"
+			done
+			echo ""
+		fi
+		if [[ ${#pkg_official[@]} -gt 0 ]]; then
+			echo "--- Layer 2: Official recommended (${#pkg_official[@]}) ---"
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				echo "  - $pkg  ($method)"
+			done
+			echo ""
+		fi
+		if [[ ${#pkg_flatpak[@]} -gt 0 ]]; then
+			echo "--- Layer 3: Flatpak (${#pkg_flatpak[@]}) ---"
+			for pkg in "${pkg_flatpak[@]}"; do
+				echo "  - $pkg  (${flatpak_pkgs[$pkg]})"
+			done
+			echo ""
+		fi
+		if [[ ${#pkg_snap[@]} -gt 0 ]]; then
+			echo "--- Layer 4: Snap (${#pkg_snap[@]}) ---"
+			for pkg in "${pkg_snap[@]}"; do
+				val="${snap_pkgs[$pkg]}"
+				confinement="${val#*::}"
+				echo "  - $pkg  ($confinement)"
+			done
+			echo ""
+		fi
+		if [[ ${#pkg_unknown[@]} -gt 0 ]]; then
+			print_section "Unknown (no install method defined)" "${pkg_unknown[@]}"
+		fi
+	else
+		if [[ ${#pkg_manual[@]} -gt 0 ]]; then
+			print_section "Need manual install" "${pkg_manual[@]}"
+		fi
 	fi
 	echo "--- macOS-only apps (NOT installable on Linux) ---"
 	echo "  (see macos_only_gui in install-utilities.lists.sh)"
@@ -326,7 +381,235 @@ elif [[ "$OS" == "Linux" ]]; then
 	if [[ "$PKG_MGR" == "brew" ]]; then
 		batch_install "brew install" "${pkg_install[@]}"
 	elif [[ "$PKG_MGR" == "apt" ]]; then
+		# Pre-requisite: ~/.local/bin for uv, tokei, bw wrapper, etc.
+		mkdir -p "$HOME/.local/bin"
+
+		# --- Batch apt install ---
 		batch_install "sudo DEBIAN_FRONTEND=noninteractive apt install -y" "${pkg_install[@]}"
+
+		# --- Layer 1: Extra apt repos ---
+		if [[ ${#pkg_apt_repo[@]} -gt 0 ]]; then
+			echo -e "\n${TC_CYAN}>>> Layer 1: Setting up extra apt repos${TC_RESET}"
+			codename
+			codename=$(lsb_release -cs)
+			for pkg in "${pkg_apt_repo[@]}"; do
+				val="${extra_apt_repos[$pkg]}"
+				IFS='::' read -r key_url _ repo_url _ suite _ components _ dearmor <<< "$val"
+				suite="${suite//\{codename\}/$codename}"
+				key_url="${key_url//\{codename\}/$codename}"
+
+				echo -e "${TC_CYAN}  Setting up repo for: $pkg${TC_RESET}"
+				keyring="/usr/share/keyrings/${pkg}-archive-keyring.gpg"
+				if [[ "$dearmor" == "yes" ]]; then
+					curl -fsSL "https://$key_url" | sudo gpg --dearmor -o "$keyring"
+				else
+					sudo curl -fsSL "https://$key_url" -o "$keyring"
+				fi
+
+				sudo tee "/etc/apt/sources.list.d/${pkg}.sources" > /dev/null <<-SOURCES
+				Types: deb
+				URIs: https://$repo_url
+				Suites: $suite
+				Components: $components
+				Signed-By: $keyring
+				SOURCES
+			done
+			sudo apt update
+			apt_repo_pkgs=("${pkg_apt_repo[@]}")
+			batch_install "sudo DEBIAN_FRONTEND=noninteractive apt install -y" "${apt_repo_pkgs[@]}"
+		fi
+
+		# --- Layer 2: Official recommended ---
+		if [[ ${#pkg_official[@]} -gt 0 ]]; then
+			echo -e "\n${TC_CYAN}>>> Layer 2: Official recommended installs${TC_RESET}"
+
+			# 2a. curl script (uv must be first for dependencies)
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				args="${val#*::}"
+				[[ "$method" == "curl" ]] || continue
+				echo -e "${TC_CYAN}  Installing $pkg (curl script)${TC_RESET}"
+				curl -LsSf "$args" | sh
+			done
+
+			# 2b. uv tool install
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				args="${val#*::}"
+				[[ "$method" == "uv" ]] || continue
+				echo -e "${TC_CYAN}  Installing $pkg (uv tool)${TC_RESET}"
+				"$HOME/.local/bin/uv" tool install "$args" || install_failed+=("$pkg")
+			done
+
+			# 2c. script download
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				args="${val#*::}"
+				[[ "$method" == "script" ]] || continue
+				echo -e "${TC_CYAN}  Installing $pkg (script)${TC_RESET}"
+				curl -fsSL "$args" -o "$HOME/.local/bin/$pkg" && chmod +x "$HOME/.local/bin/$pkg" || install_failed+=("$pkg")
+			done
+
+			# 2c. github binary
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				[[ "$method" == "github_binary" ]] || continue
+				rest="${val#*::}"
+				repo="${rest%%::*}"
+				asset="${rest#*::}"
+				echo -e "${TC_CYAN}  Installing $pkg (github binary)${TC_RESET}"
+				url
+				url=$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest" | grep -o "https://.*$asset" | head -1)
+				if [[ -n "$url" ]]; then
+					curl -fsSL "$url" -o "/tmp/$asset"
+					tar xf "/tmp/$asset" -C "$HOME/.local/bin/" 2>/dev/null || cp "/tmp/$asset" "$HOME/.local/bin/$pkg"
+					chmod +x "$HOME/.local/bin/$pkg"
+					rm -f "/tmp/$asset"
+				else
+					install_failed+=("$pkg")
+				fi
+			done
+
+			# 2c. wrapper
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				args="${val#*::}"
+				[[ "$method" == "wrapper" ]] || continue
+				echo -e "${TC_CYAN}  Creating wrapper for $pkg${TC_RESET}"
+				cat > "$HOME/.local/bin/$pkg" <<-WRAPPER
+				#!/bin/sh
+				exec $args "\$@"
+				WRAPPER
+				chmod +x "$HOME/.local/bin/$pkg"
+			done
+
+			# 2d. github .deb
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				args="${val#*::}"
+				[[ "$method" == "github_deb" ]] || continue
+				echo -e "${TC_CYAN}  Installing $pkg (github .deb)${TC_RESET}"
+				url
+				url=$(curl -fsSL "https://api.github.com/repos/$args/releases/latest" | grep -o 'https://.*amd64\.deb' | head -1)
+				if [[ -n "$url" ]]; then
+					curl -fsSL "$url" -o "/tmp/${pkg}.deb"
+					sudo DEBIAN_FRONTEND=noninteractive dpkg -i "/tmp/${pkg}.deb" || sudo apt install -f -y
+					rm -f "/tmp/${pkg}.deb"
+				else
+					install_failed+=("$pkg")
+				fi
+			done
+
+			# 2d. url .deb
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				args="${val#*::}"
+				[[ "$method" == "url_deb" ]] || continue
+				echo -e "${TC_CYAN}  Installing $pkg (url .deb)${TC_RESET}"
+				curl -fsSL "$args" -o "/tmp/${pkg}.deb"
+				sudo DEBIAN_FRONTEND=noninteractive dpkg -i "/tmp/${pkg}.deb" || sudo apt install -f -y
+				rm -f "/tmp/${pkg}.deb"
+			done
+
+			# 2e. pre-deps for manual packages
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				[[ "$method" == "manual" ]] || continue
+				if [[ -n "${pre_deps[$pkg]+x}" ]]; then
+					echo -e "${TC_CYAN}  Installing pre-dependency for $pkg: ${pre_deps[$pkg]}${TC_RESET}"
+					sudo DEBIAN_FRONTEND=noninteractive apt install -y "${pre_deps[$pkg]}"
+				fi
+			done
+		fi
+
+		# --- Layer 3: Flatpak ---
+		if [[ ${#pkg_flatpak[@]} -gt 0 ]]; then
+			echo -e "\n${TC_CYAN}>>> Layer 3: Flatpak installs${TC_RESET}"
+			flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+			# Install bitwarden first (bw wrapper depends on it)
+			for pkg in bitwarden "${pkg_flatpak[@]}"; do
+				[[ "$pkg" == "bitwarden" ]] || continue
+				fid="${flatpak_pkgs[$pkg]}"
+				[[ -n "$fid" ]] || continue
+				echo -e "${TC_CYAN}  Installing $pkg ($fid)${TC_RESET}"
+				flatpak install -y flathub "$fid" || install_failed+=("$pkg")
+			done
+			for pkg in "${pkg_flatpak[@]}"; do
+				[[ "$pkg" == "bitwarden" ]] && continue
+				fid="${flatpak_pkgs[$pkg]}"
+				echo -e "${TC_CYAN}  Installing $pkg ($fid)${TC_RESET}"
+				flatpak install -y flathub "$fid" || install_failed+=("$pkg")
+			done
+		fi
+
+		# --- Layer 4: Snap ---
+		if [[ ${#pkg_snap[@]} -gt 0 ]]; then
+			echo -e "\n${TC_CYAN}>>> Layer 4: Snap installs${TC_RESET}"
+			for pkg in "${pkg_snap[@]}"; do
+				val="${snap_pkgs[$pkg]}"
+				snap_name="${val%%::*}"
+				confinement="${val#*::}"
+				snap_flags=""
+				[[ "$confinement" == "classic" ]] && snap_flags="--classic"
+				echo -e "${TC_CYAN}  Installing $pkg ($snap_name $confinement)${TC_RESET}"
+				sudo snap install "$snap_name" $snap_flags || install_failed+=("$pkg")
+			done
+		fi
+
+		# --- Post-install ---
+		echo -e "\n${TC_CYAN}>>> Post-install steps${TC_RESET}"
+		post_install_msgs=()
+
+		# tailscale
+		if printf '%s\n' "${pkg_apt_repo[@]}" "${pkg_install[@]}" | grep -qx tailscale; then
+			sudo systemctl enable --now tailscaled
+			post_install_msgs+=("tailscale:\n    Run 'sudo tailscale up' to join your Tailnet, then open the URL to authorize.\n    Docs: https://tailscale.com/kb/1017/install")
+		fi
+
+		# docker-ce
+		if printf '%s\n' "${pkg_install[@]}" | grep -qx docker-ce; then
+			sudo systemctl enable --now docker
+			sudo usermod -aG docker "$USER"
+			post_install_msgs+=("docker-ce:\n    Log out and back in for docker group to take effect.\n    Docs: https://docs.docker.com/engine/install/linux-postinstall/")
+		fi
+
+		# flatpak (first-time install)
+		if printf '%s\n' "${pkg_install[@]}" | grep -qx flatpak; then
+			post_install_msgs+=("flatpak:\n    Reboot or re-login for XDG desktop portal to take effect (file picker, notifications).\n    Docs: https://flatpak.org/setup/Ubuntu")
+		fi
+
+		# fcitx5
+		if printf '%s\n' "${pkg_install[@]}" | grep -q '^fcitx5'; then
+			mkdir -p "$HOME/.config/environment.d"
+			if [[ ! -f "$HOME/.config/environment.d/im.conf" ]]; then
+				cat > "$HOME/.config/environment.d/im.conf" <<-'IMCONF'
+				GTK_IM_MODULE=fcitx
+				QT_IM_MODULE=fcitx
+				XMODIFIERS=@im=fcitx
+				IMCONF
+			fi
+			post_install_msgs+=("fcitx5:\n    Created ~/.config/environment.d/im.conf (GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS)\n    Re-login for input method to take effect.\n    Note: On Wayland, GTK_IM_MODULE=fcitx may cause candidate window flickering.\n          Remove GTK_IM_MODULE line from im.conf after migrating away from X11/i3.\n    Docs: https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland")
+		fi
+
+		# syncthing
+		if printf '%s\n' "${pkg_install[@]}" | grep -qx syncthing; then
+			systemctl --user enable --now syncthing.service
+			post_install_msgs+=("syncthing:\n    Web GUI available at http://127.0.0.1:8384\n    Docs: https://docs.syncthing.net/users/autostart.html#linux")
+		fi
+
+		# chsh to zsh
+		if [[ "$(basename "$SHELL")" != "zsh" ]] && command -v zsh >/dev/null; then
+			echo -e "${TC_CYAN}  Setting zsh as default shell${TC_RESET}"
+			sudo chsh -s "$(command -v zsh)" "$USER"
+		fi
 	fi
 fi
 
@@ -374,19 +657,44 @@ echo -e "\n${TC_CYAN}>>> ZSH plugins${TC_RESET}"
 zsh "$HOME/.dotfile/scripts/install-ZSH-Plugins.sh"
 
 # Set zsh as default shell (Linux only, macOS already defaults to zsh)
-if [[ "$OS" == "Linux" ]] && [[ "$(basename "$SHELL")" != "zsh" ]]; then
-	echo -e "\n${TC_CYAN}>>> Setting zsh as default shell${TC_RESET}"
-	chsh -s "$(command -v zsh)"
-fi
+# Moved to post-install section in Linux apt path
 
 # --- Summary ---
 echo ""
-if [[ ${#pkg_manual[@]} -gt 0 ]]; then
-	echo "--- Need manual install ---"
-	for pkg in "${pkg_manual[@]}"; do
-		echo "  - $pkg"
+
+# Show manual install URLs
+if [[ "$OS" == "Linux" && "$PKG_MGR" == "apt" ]]; then
+	has_manual=false
+	for pkg in "${pkg_official[@]}"; do
+		val="${official_install[$pkg]}"
+		method="${val%%::*}"
+		if [[ "$method" == "manual" ]]; then
+			if ! $has_manual; then
+				echo "--- Manual install needed ---"
+				has_manual=true
+			fi
+			url="${val#*::}"
+			echo "  - $pkg: $url"
+		fi
 	done
-	echo ""
+	$has_manual && echo ""
+
+	if [[ ${#pkg_unknown[@]} -gt 0 ]]; then
+		echo "--- Unknown (no install method defined) ---"
+		for pkg in "${pkg_unknown[@]}"; do
+			echo "  - $pkg"
+		done
+		echo ""
+	fi
+
+	# Show post-install messages
+	if [[ ${#post_install_msgs[@]} -gt 0 ]]; then
+		echo "--- Post-install steps ---"
+		for msg in "${post_install_msgs[@]}"; do
+			echo -e "  $msg"
+		done
+		echo ""
+	fi
 fi
 
 if [[ ${#install_failed[@]} -gt 0 ]]; then
