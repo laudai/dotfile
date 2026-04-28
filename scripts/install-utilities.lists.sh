@@ -171,8 +171,8 @@ cross_platform_gui=(
 	anytype
 	joplin
 	obsidian
-	visual-studio-code
-	vscodium                         # open-source VS Code (testing, may replace visual-studio-code)
+	code                             # VS Code (apt: code, brew: visual-studio-code)
+	codium                           # open-source VS Code (apt: codium, brew: vscodium)
 	masscode
 	ghostty
 	gitkraken
@@ -260,7 +260,7 @@ macos_fonts=(
 # Remove from here when you want to install them.
 skip_pkgs=(
 	wireshark
-	visual-studio-code
+	code
 	joplin
 	gitkraken
 	anki
@@ -313,4 +313,6 @@ declare -A brew_name_map=(
 	[ipython3]="ipython"
 	[chromium-browser]="chromium"
 	[bw]="bitwarden-cli"
+	[code]="visual-studio-code"
+	[codium]="vscodium"
 )
