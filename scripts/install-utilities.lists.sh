@@ -67,6 +67,7 @@ common_pkgs=(
 	# File management
 	czkawka                          # duplicate file finder (macOS: CLI+GUI via brew; Linux: manual/flatpak)
 	mc                               # terminal file manager (brew: midnight-commander)
+	ncdu                             # disk usage analyzer
 
 	# Linter
 	ruff
@@ -189,6 +190,7 @@ cross_platform_gui=(
 	telegram                         # no native apt; needs PPA or manual
 	rambox                           # multi-messenger (Linux: manual)
 	pcloud                           # cloud storage (both: manual)
+	dropbox                          # cloud storage (Linux: .deb from official site)
 
 	# Security
 	bitwarden
@@ -292,6 +294,7 @@ skip_on_mac=(
 	rambox
 	surfshark
 	mmex
+	dropbox
 )
 
 skip_on_linux=(
