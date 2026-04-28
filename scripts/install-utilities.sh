@@ -390,13 +390,21 @@ elif [[ "$OS" == "Linux" ]]; then
 		# --- Layer 1: Extra apt repos ---
 		if [[ ${#pkg_apt_repo[@]} -gt 0 ]]; then
 			echo -e "\n${TC_CYAN}>>> Layer 1: Setting up extra apt repos${TC_RESET}"
-			codename
 			codename=$(lsb_release -cs)
+			added_repos=""
 			for pkg in "${pkg_apt_repo[@]}"; do
 				val="${extra_apt_repos[$pkg]}"
 				IFS='::' read -r key_url _ repo_url _ suite _ components _ dearmor <<< "$val"
 				suite="${suite//\{codename\}/$codename}"
 				key_url="${key_url//\{codename\}/$codename}"
+
+				# Skip if repo already added (e.g. docker-ce and docker-ce-cli share same repo)
+				if echo "$added_repos" | grep -qx "$repo_url"; then
+					echo -e "${TC_CYAN}  Repo already added for: $pkg (shared repo)${TC_RESET}"
+					continue
+				fi
+				added_repos="$added_repos
+$repo_url"
 
 				echo -e "${TC_CYAN}  Setting up repo for: $pkg${TC_RESET}"
 				keyring="/usr/share/keyrings/${pkg}-archive-keyring.gpg"

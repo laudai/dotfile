@@ -117,8 +117,7 @@ linux_only_pkgs=(
 	sway-notification-center         # sway notification center
 
 	# Docker (Linux native — needs extra repo)
-	docker-ce                        # Docker Engine
-	docker-ce-cli                    # Docker CLI
+	docker-ce                        # Docker Engine (docker-ce-cli is auto-installed as dependency)
 
 	# --- X11 / Wayland transition (keep both during migration) ---
 
@@ -333,6 +332,7 @@ declare -A extra_apt_repos=(
 	[brave-browser]="brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg::brave-browser-apt-release.s3.brave.com/::stable::main::no"
 	[code]="packages.microsoft.com/keys/microsoft.asc::packages.microsoft.com/repos/code::stable::main::yes"
 	[codium]="gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg::download.vscodium.com/debs::vscodium::main::yes"
+	[docker-ce]="download.docker.com/linux/ubuntu/gpg::download.docker.com/linux/ubuntu::{codename}::stable::yes"
 )
 
 # --- Layer 2: Official recommended install methods ---
