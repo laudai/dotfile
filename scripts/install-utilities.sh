@@ -290,7 +290,18 @@ if [[ "$OS" == "macOS" ]]; then
 	print_section "CLI tools (brew)" "${pkg_install[@]}"
 	print_section "GUI apps (brew --cask)" "${pkg_install_gui[@]}"
 	if [[ ${#pkg_manual[@]} -gt 0 ]]; then
-		print_section "Not in brew (manual install)" "${pkg_manual[@]}"
+		echo "--- Not in brew (manual install) ---"
+		for pkg in "${pkg_manual[@]}"; do
+			if [[ -n "${official_install[$pkg]+x}" ]]; then
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				url="${val#*::}"
+				echo "  - $pkg  ($method: $url)"
+			else
+				echo "  - $pkg"
+			fi
+		done
+		echo ""
 	fi
 elif [[ "$OS" == "Linux" ]]; then
 	print_section "Will be installed via $PKG_MGR" "${pkg_install[@]}"
