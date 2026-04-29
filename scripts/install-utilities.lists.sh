@@ -336,6 +336,12 @@ declare -A extra_apt_repos=(
 	[codium]="gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg::download.vscodium.com/debs::vscodium::main::yes"
 	[docker-ce]="download.docker.com/linux/ubuntu/gpg::download.docker.com/linux/ubuntu::{codename}::stable::yes"
 	[docker-ce-cli]="download.docker.com/linux/ubuntu/gpg::download.docker.com/linux/ubuntu::{codename}::stable::yes"
+	# syncthing: Ubuntu apt has v1.27.2 (config version 37) which is too old.
+	# Official repo provides latest stable (config version 51+).
+	# On existing machines, manually add repo + pinning to override Ubuntu version.
+	# On new machines, apt installs Ubuntu version first (no config conflict),
+	# then Tier 1 adds official repo + pinning, apt upgrade gets latest.
+	[syncthing]="syncthing.net/release-key.gpg::apt.syncthing.net/::syncthing::stable-v2::no"
 )
 
 # --- Layer 2: Official recommended install methods ---

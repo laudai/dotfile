@@ -533,6 +533,11 @@ $repo_url"
 				Components: $components
 				Signed-By: $keyring
 				SOURCES
+
+				# Syncthing: pin official repo to override Ubuntu's older version
+				if [[ "$pkg" == "syncthing" ]]; then
+					printf "Package: *\nPin: origin apt.syncthing.net\nPin-Priority: 990\n" | sudo tee /etc/apt/preferences.d/syncthing.pref > /dev/null
+				fi
 			done
 			sudo apt update
 			apt_repo_pkgs=("${pkg_apt_repo[@]}")
