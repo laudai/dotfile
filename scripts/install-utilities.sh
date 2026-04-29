@@ -210,10 +210,12 @@ if $CHECK_APT; then
 	fi
 	echo "Checking apt availability for all packages..."
 	echo ""
+	apt_cache_file=$(mktemp)
+	apt-cache pkgnames 2>/dev/null > "$apt_cache_file"
 	apt_yes=()
 	apt_no=()
 	for pkg in "${common_pkgs[@]}" "${linux_only_pkgs[@]}" "${cross_platform_gui[@]}"; do
-		if apt-cache show "$pkg" 2>/dev/null | grep -q "^Package:"; then
+		if grep -qx "$pkg" "$apt_cache_file"; then
 			apt_yes+=("$pkg")
 		else
 			apt_no+=("$pkg")
@@ -224,6 +226,7 @@ if $CHECK_APT; then
 	echo ""
 	echo "--- NOT in apt (${#apt_no[@]}) ---"
 	for pkg in "${apt_no[@]}"; do echo "  ✗ $pkg"; done
+	rm -f "$apt_cache_file"
 	echo ""
 	echo "Copy-paste for not_in_apt (if reverting to static list):"
 	echo "not_in_apt=(${apt_no[*]})"
@@ -289,8 +292,12 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 		declare -A flatpak_auto_id=()
 		declare -A snap_auto_info=()
 
+		# Fetch all available apt packages in one call, store in temp file for fast lookup
+		apt_cache_file=$(mktemp)
+		apt-cache pkgnames 2>/dev/null > "$apt_cache_file"
+
 		for pkg in $(filter_skip "${common_pkgs[@]}" "${linux_only_pkgs[@]}" "${cross_platform_gui[@]}"); do
-			if apt-cache show "$pkg" 2>/dev/null | grep -q "^Package:"; then
+			if grep -qx "$pkg" "$apt_cache_file"; then
 				pkg_install+=("$pkg")
 			elif [[ -n "${extra_apt_repos[$pkg]+x}" ]]; then
 				pkg_apt_repo+=("$pkg")
@@ -304,6 +311,7 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 				pkg_unknown+=("$pkg")
 			fi
 		done
+		rm -f "$apt_cache_file"
 
 		# Run auto-detect for unknown packages (Tier 5)
 		# In dry-run: uses current system state (may be incomplete on fresh install)
