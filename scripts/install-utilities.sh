@@ -665,6 +665,10 @@ $repo_url"
 		# --- Tier 5: Auto-detect (re-run after apt installed flatpak) ---
 		if [[ ${#pkg_unknown[@]} -gt 0 ]]; then
 			echo -e "\n${TC_CYAN}>>> Tier 5: Auto-detect for unknown packages${TC_RESET}"
+			# Ensure flatpak appstream index is up to date for search
+			if command -v flatpak >/dev/null; then
+				flatpak update --appstream 2>/dev/null || true
+			fi
 			run_auto_detect
 
 			for pkg in "${pkg_flatpak_auto[@]}"; do
