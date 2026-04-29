@@ -57,6 +57,8 @@ source "$LISTS_FILE"
 # --- Runtime state ---
 # Collects packages that failed during batch_install fallback
 install_failed=()
+# Collects packages that were skipped (already installed outside package manager)
+install_skipped=()
 
 # --- Colors ---
 TC_CYAN="\033[1;36m"
@@ -118,7 +120,16 @@ function batch_install() {
 	eval "$cmd $*" || {
 		echo -e "${TC_YELLOW}>>> Batch failed, retrying one-by-one...${TC_RESET}"
 		for pkg in "$@"; do
-			eval "$cmd $pkg" || install_failed+=("$pkg")
+			if ! eval "$cmd $pkg"; then
+				# Check if already installed outside package manager (e.g. manual .dmg)
+				if [[ -d "/Applications/${pkg}.app" ]] || \
+				   [[ -d "/Applications/${pkg^}.app" ]] || \
+				   ls /Applications/ 2>/dev/null | grep -qi "^${pkg}" ; then
+					install_skipped+=("$pkg")
+				else
+					install_failed+=("$pkg")
+				fi
+			fi
 		done
 	}
 }
@@ -830,6 +841,14 @@ if [[ "$OS" == "Linux" && "$PKG_MGR" == "apt" ]]; then
 		done
 		echo ""
 	fi
+fi
+
+if [[ ${#install_skipped[@]} -gt 0 ]]; then
+	echo "--- Already installed (not managed by package manager) ---"
+	for pkg in "${install_skipped[@]}"; do
+		echo "  - $pkg"
+	done
+	echo ""
 fi
 
 if [[ ${#install_failed[@]} -gt 0 ]]; then
