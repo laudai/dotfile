@@ -9,13 +9,29 @@
 # =============================================================================
 
 # --- Fonts ---
-# Nerd Font names used as keys (matches GitHub release filenames).
+# Nerd Font names used as keys.
+# font_github_name: GitHub release filename (differs from installed font name)
+# font_brew_map: brew cask name
+# Installed font files: {font_file_prefix}NerdFont-*.ttf
 # macOS: brew install --cask via font_brew_map
-# Linux: download from https://github.com/ryanoasis/nerd-fonts/releases/latest/download/{key}.tar.xz
+# Linux: download from https://github.com/ryanoasis/nerd-fonts/releases/latest/download/{github_name}.tar.xz
 fonts=(
 	JetBrainsMono    # i3/polybar/waybar bar (NL=no ligature) + VSCode fallback (ligature). Both NF.
 	CaskaydiaMono    # terminal: no ligature + NF
 	CaskaydiaCove    # editor: ligature + NF
+)
+
+# key → GitHub release filename (when different from key)
+declare -A font_github_name=(
+	[CaskaydiaMono]="CascadiaMono"
+	[CaskaydiaCove]="CascadiaCode"
+)
+
+# key → installed font file prefix (for idempotent check)
+declare -A font_file_prefix=(
+	[JetBrainsMono]="JetBrainsMonoNerdFont"
+	[CaskaydiaMono]="CaskaydiaMonoNerdFont"
+	[CaskaydiaCove]="CaskaydiaCoveNerdFont"
 )
 
 declare -A font_brew_map=(

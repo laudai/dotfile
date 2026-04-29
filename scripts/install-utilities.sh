@@ -509,13 +509,15 @@ elif [[ "$OS" == "Linux" ]]; then
 	FONT_DIR="$HOME/.local/share/fonts"
 	mkdir -p "$FONT_DIR"
 	for nf in "${fonts[@]}"; do
-		if ls "$FONT_DIR"/${nf}NerdFont* &>/dev/null; then
+		prefix="${font_file_prefix[$nf]}"
+		if find "$FONT_DIR" -name "${prefix}*" -print -quit 2>/dev/null | grep -q .; then
 			echo "  $nf Nerd Font already installed, skipping"
 		else
-			echo -e "${TC_CYAN}  Downloading $nf Nerd Font${TC_RESET}"
-			curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${nf}.tar.xz" -o "/tmp/${nf}.tar.xz" \
-				&& tar xf "/tmp/${nf}.tar.xz" -C "$FONT_DIR" \
-				&& rm -f "/tmp/${nf}.tar.xz" \
+			github_name="${font_github_name[$nf]:-$nf}"
+			echo -e "${TC_CYAN}  Downloading $nf Nerd Font ($github_name.tar.xz)${TC_RESET}"
+			curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${github_name}.tar.xz" -o "/tmp/${github_name}.tar.xz" \
+				&& tar xf "/tmp/${github_name}.tar.xz" -C "$FONT_DIR" \
+				&& rm -f "/tmp/${github_name}.tar.xz" \
 				|| echo "  Failed to download $nf Nerd Font"
 		fi
 	done
