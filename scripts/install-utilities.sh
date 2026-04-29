@@ -123,6 +123,46 @@ function batch_install() {
 	}
 }
 
+# Tier 5: auto-detect unknown packages in flatpak/snap
+# Can be called multiple times (e.g. after apt installs flatpak).
+# Clears and rebuilds pkg_flatpak_auto/pkg_snap_auto from pkg_unknown.
+function run_auto_detect() {
+	pkg_flatpak_auto=()
+	pkg_snap_auto=()
+	flatpak_auto_id=()
+	snap_auto_info=()
+
+	if [[ ${#pkg_unknown[@]} -gt 0 ]] && command -v flatpak >/dev/null; then
+		local remaining=()
+		for pkg in "${pkg_unknown[@]}"; do
+			local fid
+			fid=$(flatpak search --columns=application "$pkg" 2>/dev/null | head -1 || true)
+			if [[ -n "$fid" ]]; then
+				pkg_flatpak_auto+=("$pkg")
+				flatpak_auto_id[$pkg]="$fid"
+			else
+				remaining+=("$pkg")
+			fi
+		done
+		pkg_unknown=("${remaining[@]}")
+	fi
+	if [[ ${#pkg_unknown[@]} -gt 0 ]] && command -v snap >/dev/null; then
+		local remaining=()
+		for pkg in "${pkg_unknown[@]}"; do
+			local snap_name confinement
+			snap_name=$(snap info "$pkg" 2>/dev/null | grep "^name:" | awk '{print $2}' || true)
+			if [[ -n "$snap_name" ]]; then
+				confinement=$(snap info "$pkg" 2>/dev/null | grep "^confinement:" | awk '{print $2}' || true)
+				pkg_snap_auto+=("$pkg")
+				snap_auto_info[$pkg]="${snap_name}::${confinement:-strict}"
+			else
+				remaining+=("$pkg")
+			fi
+		done
+		pkg_unknown=("${remaining[@]}")
+	fi
+}
+
 # =============================================================================
 # --check-brew: verify brew availability (run on macOS)
 # =============================================================================
@@ -239,9 +279,11 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 		pkg_flatpak=()       # Tier 3: flatpak
 		pkg_snap=()          # Tier 4: snap
 		pkg_unknown=()       # not defined anywhere
-		# Auto-detected packages: found in flatpak/snap but not pre-defined in maps.
-		# These are installed automatically but marked [auto-detected] in output
-		# to remind the user to review and add them to the appropriate map.
+		# Tier 5 auto-detect: populated later (after apt install in --install mode,
+		# or using current system state in dry-run mode).
+		# Auto-detected packages are found in flatpak/snap but not pre-defined in maps.
+		# They are marked [auto-detected] in output to remind the user to review
+		# and add them to the appropriate map.
 		pkg_flatpak_auto=()
 		pkg_snap_auto=()
 		declare -A flatpak_auto_id=()
@@ -263,34 +305,10 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 			fi
 		done
 
-		# Auto-detect: try flatpak/snap for unknown packages
-		if [[ ${#pkg_unknown[@]} -gt 0 ]] && command -v flatpak >/dev/null; then
-			remaining=()
-			for pkg in "${pkg_unknown[@]}"; do
-				fid=$(flatpak search --columns=application "$pkg" 2>/dev/null | head -1 || true)
-				if [[ -n "$fid" ]]; then
-					pkg_flatpak_auto+=("$pkg")
-					flatpak_auto_id[$pkg]="$fid"
-				else
-					remaining+=("$pkg")
-				fi
-			done
-			pkg_unknown=("${remaining[@]}")
-		fi
-		if [[ ${#pkg_unknown[@]} -gt 0 ]] && command -v snap >/dev/null; then
-			remaining=()
-			for pkg in "${pkg_unknown[@]}"; do
-				snap_name=$(snap info "$pkg" 2>/dev/null | grep "^name:" | awk '{print $2}' || true)
-				if [[ -n "$snap_name" ]]; then
-					confinement=$(snap info "$pkg" 2>/dev/null | grep "^confinement:" | awk '{print $2}' || true)
-					pkg_snap_auto+=("$pkg")
-					snap_auto_info[$pkg]="${snap_name}::${confinement:-strict}"
-				else
-					remaining+=("$pkg")
-				fi
-			done
-			pkg_unknown=("${remaining[@]}")
-		fi
+		# Run auto-detect for unknown packages (Tier 5)
+		# In dry-run: uses current system state (may be incomplete on fresh install)
+		# In --install: called again after apt install when flatpak is available
+		run_auto_detect
 	else
 		echo "No supported package manager found (brew/apt)."
 		exit 1
@@ -342,7 +360,6 @@ if [[ "$OS" == "macOS" ]]; then
 elif [[ "$OS" == "Linux" ]]; then
 	print_section "Will be installed via $PKG_MGR" "${pkg_install[@]}"
 	if [[ "$PKG_MGR" == "apt" ]]; then
-		# Count total non-apt packages that will be installed
 		defined_total=$(( ${#pkg_apt_repo[@]} + ${#pkg_official[@]} + ${#pkg_flatpak[@]} + ${#pkg_snap[@]} + ${#pkg_flatpak_auto[@]} + ${#pkg_snap_auto[@]} ))
 		if [[ $defined_total -gt 0 ]]; then
 			echo "--- Not in apt — will be installed ($defined_total) ---"
@@ -365,35 +382,45 @@ elif [[ "$OS" == "Linux" ]]; then
 				done
 				echo ""
 			fi
-			flatpak_total=$(( ${#pkg_flatpak[@]} + ${#pkg_flatpak_auto[@]} ))
+			flatpak_total=${#pkg_flatpak[@]}
 			if [[ $flatpak_total -gt 0 ]]; then
 				echo "  Tier 3: flatpak ($flatpak_total)"
 				for pkg in "${pkg_flatpak[@]}"; do
 					echo "    - $pkg  (${flatpak_pkgs[$pkg]})"
 				done
-				for pkg in "${pkg_flatpak_auto[@]}"; do
-					echo "    - $pkg  (${flatpak_auto_id[$pkg]}) [auto-detected]"
-				done
 				echo ""
 			fi
-			snap_total=$(( ${#pkg_snap[@]} + ${#pkg_snap_auto[@]} ))
-			if [[ $snap_total -gt 0 ]]; then
-				echo "  Tier 4: snap ($snap_total)"
+			if [[ ${#pkg_snap[@]} -gt 0 ]]; then
+				echo "  Tier 4: snap (${#pkg_snap[@]})"
 				for pkg in "${pkg_snap[@]}"; do
 					val="${snap_pkgs[$pkg]}"
 					confinement="${val#*::}"
 					echo "    - $pkg  ($confinement)"
 				done
+				echo ""
+			fi
+			auto_total=$(( ${#pkg_flatpak_auto[@]} + ${#pkg_snap_auto[@]} ))
+			if [[ $auto_total -gt 0 ]]; then
+				echo "  Tier 5: auto-detected ($auto_total)"
+				for pkg in "${pkg_flatpak_auto[@]}"; do
+					echo "    - $pkg  (flatpak: ${flatpak_auto_id[$pkg]}) [auto-detected]"
+				done
 				for pkg in "${pkg_snap_auto[@]}"; do
 					val="${snap_auto_info[$pkg]}"
 					confinement="${val#*::}"
-					echo "    - $pkg  ($confinement) [auto-detected]"
+					echo "    - $pkg  (snap: $confinement) [auto-detected]"
 				done
 				echo ""
 			fi
 		fi
 		if [[ ${#pkg_unknown[@]} -gt 0 ]]; then
 			print_section "Not in apt — need manual install (${#pkg_unknown[@]})" "${pkg_unknown[@]}"
+		fi
+		# Note for dry-run on fresh systems
+		if ! $DO_INSTALL && [[ ${#pkg_unknown[@]} -gt 0 ]] && ! command -v flatpak >/dev/null; then
+			echo "  Note: flatpak not yet installed. Some packages above may move from"
+			echo "        'need manual install' to Tier 5 auto-detected after --install."
+			echo ""
 		fi
 	else
 		if [[ ${#pkg_manual[@]} -gt 0 ]]; then
@@ -619,11 +646,6 @@ $repo_url"
 				echo -e "${TC_CYAN}  Installing $pkg ($fid)${TC_RESET}"
 				flatpak install -y flathub "$fid" || install_failed+=("$pkg")
 			done
-			for pkg in "${pkg_flatpak_auto[@]}"; do
-				fid="${flatpak_auto_id[$pkg]}"
-				echo -e "${TC_CYAN}  Installing $pkg ($fid) [auto-detected]${TC_RESET}"
-				flatpak install -y flathub "$fid" || install_failed+=("$pkg")
-			done
 		fi
 
 		# --- Tier 4: Snap ---
@@ -637,6 +659,18 @@ $repo_url"
 				[[ "$confinement" == "classic" ]] && snap_flags="--classic"
 				echo -e "${TC_CYAN}  Installing $pkg ($snap_name $confinement)${TC_RESET}"
 				sudo snap install "$snap_name" $snap_flags || install_failed+=("$pkg")
+			done
+		fi
+
+		# --- Tier 5: Auto-detect (re-run after apt installed flatpak) ---
+		if [[ ${#pkg_unknown[@]} -gt 0 ]]; then
+			echo -e "\n${TC_CYAN}>>> Tier 5: Auto-detect for unknown packages${TC_RESET}"
+			run_auto_detect
+
+			for pkg in "${pkg_flatpak_auto[@]}"; do
+				fid="${flatpak_auto_id[$pkg]}"
+				echo -e "${TC_CYAN}  Installing $pkg ($fid) [auto-detected]${TC_RESET}"
+				flatpak install -y flathub "$fid" || install_failed+=("$pkg")
 			done
 			for pkg in "${pkg_snap_auto[@]}"; do
 				val="${snap_auto_info[$pkg]}"
