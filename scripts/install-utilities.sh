@@ -210,6 +210,8 @@ if $CHECK_APT; then
 	fi
 	echo "Checking apt availability for all packages..."
 	echo ""
+	# Fetch all apt package names once into temp file for fast grep lookup
+	# (avoids per-package apt-cache show which is ~30ms each × 115 packages = ~3s)
 	apt_cache_file=$(mktemp)
 	apt-cache pkgnames 2>/dev/null > "$apt_cache_file"
 	apt_yes=()
