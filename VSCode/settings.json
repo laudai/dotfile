@@ -4,7 +4,7 @@
   // Editor Setting
   "editor.fontLigatures": true,
   "editor.fontSize": 16, //編輯區字體大小
-  "editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace, 'Fira Code'",
+  "editor.fontFamily": "'CaskaydiaCove Nerd Font Mono', 'JetBrainsMono Nerd Font', monospace", // monospace = system default monospaced font (macOS: Menlo, Linux: DejaVu Sans Mono)
   "editor.cursorBlinking": "smooth",
   "editor.renderLineHighlight": "all", //將當前行標示全開
   "editor.renderControlCharacters": true, //開啟字元轉換控制
@@ -32,7 +32,7 @@
   },
   // Panel
   // Panel - Terminal Setting
-  "terminal.integrated.fontFamily": "'Fira Code', 'DejaVu Sans Mono','Monospace'", //字型
+  "terminal.integrated.fontFamily": "'CaskaydiaMono Nerd Font Mono', 'DejaVu Sans Mono', monospace", //字型
   "terminal.integrated.fontSize": 16, //字體大小
   "terminal.external.windowsExec": "C:\\Program Files\\Git\\git-bash.exe", //Windows Ctrl+Shift+C 開啟外部terminal
   "terminal.external.osxExec": "iTerm.app",
