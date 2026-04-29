@@ -584,7 +584,6 @@ $repo_url"
 				repo="${rest%%::*}"
 				asset="${rest#*::}"
 				echo -e "${TC_CYAN}  Installing $pkg (github binary)${TC_RESET}"
-				url
 				url=$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest" | grep -o "https://.*$asset" | head -1)
 				if [[ -n "$url" ]]; then
 					curl -fsSL "$url" -o "/tmp/$asset"
@@ -617,7 +616,6 @@ $repo_url"
 				args="${val#*::}"
 				[[ "$method" == "github_deb" ]] || continue
 				echo -e "${TC_CYAN}  Installing $pkg (github .deb)${TC_RESET}"
-				url
 				url=$(curl -fsSL "https://api.github.com/repos/$args/releases/latest" | grep -o 'https://.*amd64\.deb' | head -1)
 				if [[ -n "$url" ]]; then
 					curl -fsSL "$url" -o "/tmp/${pkg}.deb"
