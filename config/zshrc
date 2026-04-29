@@ -79,7 +79,7 @@ export NVM_LAZY_LOAD_EXTRA_COMMANDS=("vim" "view" "kiro-cli")
 #	ZSH_THEME="robbyrussell"
 #fi
 #
-#if [ "$HOST"="ldv" ]
+#if [ "$HOST"="linux-host" ]
 #then
 #	ZSH_THEME="cloud"
 #fi
