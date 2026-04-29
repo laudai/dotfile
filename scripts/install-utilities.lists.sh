@@ -295,6 +295,7 @@ skip_on_mac=(
 	surfshark
 	mmex
 	dropbox
+	sshfs                            # brew formula requires Linux; macOS needs macfuse + separate sshfs
 )
 
 skip_on_linux=(
