@@ -120,11 +120,12 @@ function batch_install() {
 	eval "$cmd $*" || {
 		echo -e "${TC_YELLOW}>>> Batch failed, retrying one-by-one...${TC_RESET}"
 		for pkg in "$@"; do
-			if ! eval "$cmd $pkg"; then
+			if ! eval "$cmd $pkg" 2>&1; then
 				# Check if already installed outside package manager (e.g. manual .dmg)
-				if [[ -d "/Applications/${pkg}.app" ]] || \
-				   [[ -d "/Applications/${pkg^}.app" ]] || \
-				   ls /Applications/ 2>/dev/null | grep -qi "^${pkg}" ; then
+				# Replace hyphens with .* for fuzzy match (brave-browser → Brave Browser)
+				local pattern
+				pattern=$(echo "$pkg" | sed 's/-/.*/g')
+				if ls /Applications/ 2>/dev/null | grep -qi "$pattern"; then
 					install_skipped+=("$pkg")
 				else
 					install_failed+=("$pkg")
