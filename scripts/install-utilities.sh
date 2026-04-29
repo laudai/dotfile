@@ -834,13 +834,18 @@ curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local
 # install TPM (Tmux Plugin Manager)
 [[ -d "$HOME/.tmux/plugins/tpm" ]] || git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 
-# install the latest nvm and lts nodejs for the vim plugin coc
-NVM_VERSION=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep "tag_name" | cut -d\" -f4)
-curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
+# install nvm and LTS nodejs (required by vim plugin coc.nvim)
+# nvm install.sh is idempotent: updates if already installed
+# Using pinned version URL (official recommended method, no GitHub API needed)
+# ref: https://github.com/nvm-sh/nvm#installing-and-updating
+NVM_VERSION="v0.40.4"
+PROFILE=/dev/null curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# Install LTS and set as default (coc.nvim needs a stable node)
+# nvm install --lts is idempotent: skips if already installed, upgrades if new LTS available
 nvm install --lts
+nvm alias default 'lts/*'
 
 # --- OS-specific config (symlinks) ---
 
