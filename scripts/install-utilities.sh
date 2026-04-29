@@ -779,6 +779,9 @@ echo -e "\n${TC_CYAN}>>> Common setup${TC_RESET}"
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/"{i3,conky,polybar,pet,ghostty}
 
+# massCode vault is git-cloned into this directory
+mkdir -p "$HOME/Documents/projects/Personal"
+
 # install cross-shell prompt starship (install to ~/.local/bin to avoid sudo)
 mkdir -p "$HOME/.local/bin"
 curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"

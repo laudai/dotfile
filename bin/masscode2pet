@@ -371,8 +371,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--vault",
-        default=str(Path.home() / ".massCode-vault/code"),
-        help="massCode vault path (default: ~/.massCode-vault/code)",
+        default=str(Path.home() / "Documents/projects/Personal/massCode-vault/code"),
+        help="massCode vault path (default: ~/Documents/projects/Personal/massCode-vault/code)",
     )
     parser.add_argument(
         "--pet-file",
