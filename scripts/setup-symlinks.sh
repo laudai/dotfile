@@ -33,12 +33,13 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 fi
 
 # --- SSH config ---
-if [[ -f "$HOME/.ssh/config" ]] && grep -q "Subject: SSH personal settings" "$HOME/.ssh/config"; then
-	echo "SSH config already appended. Skipping."
+# SSH config: use Include instead of append (machine-specific settings stay in ~/.ssh/config)
+if [[ -f "$HOME/.ssh/config" ]] && grep -q 'Include ~/.dotfile/config/ssh.config' "$HOME/.ssh/config"; then
+	echo "SSH config Include already present. Skipping."
 else
-	cat "$HOME/.dotfile/config/ssh.config" >> "$HOME/.ssh/config" 2>/dev/null \
-		&& echo "Appended SSH config to $HOME/.ssh/config" \
-		|| echo "Failed to append SSH config (missing .ssh directory?)"
+	echo 'Include ~/.dotfile/config/ssh.config' >> "$HOME/.ssh/config" 2>/dev/null \
+		&& echo "Added Include to $HOME/.ssh/config" \
+		|| echo "Failed to add Include (missing .ssh directory?)"
 fi
 
 echo "Symlinks setup complete."
