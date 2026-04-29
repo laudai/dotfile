@@ -542,6 +542,8 @@ $repo_url"
 			done
 
 			# 2b. uv tool install
+			# Use full path because bash scripts don't read .zshrc/.bashrc,
+			# so ~/.local/bin is not in PATH when run via `bash script.sh`.
 			for pkg in "${pkg_official[@]}"; do
 				val="${official_install[$pkg]}"
 				method="${val%%::*}"
