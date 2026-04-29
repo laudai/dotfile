@@ -265,7 +265,13 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 		# auto-detect: fetch all available brew formulae and casks (~0.3s)
 		brew_all=$(brew formulae; brew casks)
 
-		brew_classify pkg_install_fonts $(filter_skip "${macos_fonts[@]}")
+		pkg_install_fonts=()
+		for f in "${fonts[@]}"; do
+			brew_font="${font_brew_map[$f]}"
+			if [[ -n "$brew_font" ]] && echo "$brew_all" | grep -cx "$brew_font" >/dev/null; then
+				pkg_install_fonts+=("$brew_font")
+			fi
+		done
 		brew_classify pkg_install       $(filter_skip "${common_pkgs[@]}")
 		# Cannot merge formula + cask arrays: Linuxbrew only supports formula.
 		# macOS uses separate install commands: brew install (formula) vs brew install --cask (cask).
@@ -380,6 +386,14 @@ if [[ "$OS" == "macOS" ]]; then
 		echo ""
 	fi
 elif [[ "$OS" == "Linux" ]]; then
+	# Show fonts first (same order as macOS)
+	if [[ ${#fonts[@]} -gt 0 ]]; then
+		echo "--- Nerd Fonts (GitHub download) ---"
+		for nf in "${fonts[@]}"; do
+			echo "  - $nf"
+		done
+		echo ""
+	fi
 	print_section "Will be installed via $PKG_MGR" "${pkg_install[@]}"
 	if [[ "$PKG_MGR" == "apt" ]]; then
 		defined_total=$(( ${#pkg_apt_repo[@]} + ${#pkg_official[@]} + ${#pkg_flatpak[@]} + ${#pkg_snap[@]} + ${#pkg_flatpak_auto[@]} + ${#pkg_snap_auto[@]} ))
@@ -490,6 +504,23 @@ if [[ "$OS" == "macOS" ]]; then
 	fi
 
 elif [[ "$OS" == "Linux" ]]; then
+	# --- Nerd Fonts (before packages, same order as macOS brew cask fonts) ---
+	echo -e "\n${TC_CYAN}>>> Installing Nerd Fonts${TC_RESET}"
+	FONT_DIR="$HOME/.local/share/fonts"
+	mkdir -p "$FONT_DIR"
+	for nf in "${fonts[@]}"; do
+		if ls "$FONT_DIR"/${nf}NerdFont* &>/dev/null; then
+			echo "  $nf Nerd Font already installed, skipping"
+		else
+			echo -e "${TC_CYAN}  Downloading $nf Nerd Font${TC_RESET}"
+			curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${nf}.tar.xz" -o "/tmp/${nf}.tar.xz" \
+				&& tar xf "/tmp/${nf}.tar.xz" -C "$FONT_DIR" \
+				&& rm -f "/tmp/${nf}.tar.xz" \
+				|| echo "  Failed to download $nf Nerd Font"
+		fi
+	done
+	fc-cache -f "$FONT_DIR"
+
 	if [[ "$PKG_MGR" == "brew" ]]; then
 		batch_install "brew install" "${pkg_install[@]}"
 	elif [[ "$PKG_MGR" == "apt" ]]; then
@@ -791,11 +822,7 @@ mkdir -p "$HOME/Documents/projects/Personal"
 mkdir -p "$HOME/.local/bin"
 curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"
 
-# TODO: need to check is available automatically install in Linux
-echo
-echo "Download Nerd Fonts from web for starship:"
-echo "https://www.nerdfonts.com/font-downloads"
-echo
+
 
 # install oh-my-zsh framework
 # modify the original install script to non-interactive way

@@ -8,6 +8,22 @@
 # are required unless install logic itself changes.
 # =============================================================================
 
+# --- Fonts ---
+# Nerd Font names used as keys (matches GitHub release filenames).
+# macOS: brew install --cask via font_brew_map
+# Linux: download from https://github.com/ryanoasis/nerd-fonts/releases/latest/download/{key}.tar.xz
+fonts=(
+	JetBrainsMono    # i3/polybar/waybar bar (NL=no ligature) + VSCode fallback (ligature). Both NF.
+	CaskaydiaMono    # terminal: no ligature + NF
+	CaskaydiaCove    # editor: ligature + NF
+)
+
+declare -A font_brew_map=(
+	[JetBrainsMono]="font-jetbrains-mono-nerd-font"
+	[CaskaydiaMono]="font-caskaydia-mono-nerd-font"
+	[CaskaydiaCove]="font-caskaydia-cove-nerd-font"
+)
+
 # --- Cross-platform CLI tools ---
 # Package names use apt convention (the key is the apt package name).
 # On macOS, brew_name_map translates to the correct brew name where they differ.
@@ -248,13 +264,6 @@ macos_only_gui=(
 
 	# Other
 	qr-journal
-)
-
-# --- macOS Fonts (cask) ---
-macos_fonts=(
-	font-caskaydia-cove-nerd-font
-	font-fira-code
-	font-cascadia-code
 )
 
 # --- Skip list ---
