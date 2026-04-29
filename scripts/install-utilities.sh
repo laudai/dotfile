@@ -267,7 +267,7 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 		if [[ ${#pkg_unknown[@]} -gt 0 ]] && command -v flatpak >/dev/null; then
 			remaining=()
 			for pkg in "${pkg_unknown[@]}"; do
-				fid=$(flatpak search --columns=application "$pkg" 2>/dev/null | head -1)
+				fid=$(flatpak search --columns=application "$pkg" 2>/dev/null | head -1 || true)
 				if [[ -n "$fid" ]]; then
 					pkg_flatpak_auto+=("$pkg")
 					flatpak_auto_id[$pkg]="$fid"
@@ -280,9 +280,9 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 		if [[ ${#pkg_unknown[@]} -gt 0 ]] && command -v snap >/dev/null; then
 			remaining=()
 			for pkg in "${pkg_unknown[@]}"; do
-				snap_name=$(snap info "$pkg" 2>/dev/null | grep "^name:" | awk '{print $2}')
+				snap_name=$(snap info "$pkg" 2>/dev/null | grep "^name:" | awk '{print $2}' || true)
 				if [[ -n "$snap_name" ]]; then
-					confinement=$(snap info "$pkg" 2>/dev/null | grep "^confinement:" | awk '{print $2}')
+					confinement=$(snap info "$pkg" 2>/dev/null | grep "^confinement:" | awk '{print $2}' || true)
 					pkg_snap_auto+=("$pkg")
 					snap_auto_info[$pkg]="${snap_name}::${confinement:-strict}"
 				else
