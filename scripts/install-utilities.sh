@@ -233,12 +233,19 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 	elif command -v apt >/dev/null; then
 		PKG_MGR="apt"
 		# auto-detect: check each package against apt-cache
-		# Packages not in apt are further classified by Layer 1-4 definitions
-		pkg_apt_repo=()      # Layer 1: extra apt repo
-		pkg_official=()      # Layer 2: official recommended
-		pkg_flatpak=()       # Layer 3: flatpak
-		pkg_snap=()          # Layer 4: snap
+		# Packages not in apt are further classified by Tier 1-4 definitions
+		pkg_apt_repo=()      # Tier 1: extra apt repo
+		pkg_official=()      # Tier 2: official recommended
+		pkg_flatpak=()       # Tier 3: flatpak
+		pkg_snap=()          # Tier 4: snap
 		pkg_unknown=()       # not defined anywhere
+		# Auto-detected packages: found in flatpak/snap but not pre-defined in maps.
+		# These are installed automatically but marked [auto-detected] in output
+		# to remind the user to review and add them to the appropriate map.
+		pkg_flatpak_auto=()
+		pkg_snap_auto=()
+		declare -A flatpak_auto_id=()
+		declare -A snap_auto_info=()
 
 		for pkg in $(filter_skip "${common_pkgs[@]}" "${linux_only_pkgs[@]}" "${cross_platform_gui[@]}"); do
 			if apt-cache show "$pkg" 2>/dev/null | grep -q "^Package:"; then
@@ -255,6 +262,35 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 				pkg_unknown+=("$pkg")
 			fi
 		done
+
+		# Auto-detect: try flatpak/snap for unknown packages
+		if [[ ${#pkg_unknown[@]} -gt 0 ]] && command -v flatpak >/dev/null; then
+			remaining=()
+			for pkg in "${pkg_unknown[@]}"; do
+				fid=$(flatpak search --columns=application "$pkg" 2>/dev/null | head -1)
+				if [[ -n "$fid" ]]; then
+					pkg_flatpak_auto+=("$pkg")
+					flatpak_auto_id[$pkg]="$fid"
+				else
+					remaining+=("$pkg")
+				fi
+			done
+			pkg_unknown=("${remaining[@]}")
+		fi
+		if [[ ${#pkg_unknown[@]} -gt 0 ]] && command -v snap >/dev/null; then
+			remaining=()
+			for pkg in "${pkg_unknown[@]}"; do
+				snap_name=$(snap info "$pkg" 2>/dev/null | grep "^name:" | awk '{print $2}')
+				if [[ -n "$snap_name" ]]; then
+					confinement=$(snap info "$pkg" 2>/dev/null | grep "^confinement:" | awk '{print $2}')
+					pkg_snap_auto+=("$pkg")
+					snap_auto_info[$pkg]="${snap_name}::${confinement:-strict}"
+				else
+					remaining+=("$pkg")
+				fi
+			done
+			pkg_unknown=("${remaining[@]}")
+		fi
 	else
 		echo "No supported package manager found (brew/apt)."
 		exit 1
@@ -306,10 +342,10 @@ if [[ "$OS" == "macOS" ]]; then
 elif [[ "$OS" == "Linux" ]]; then
 	print_section "Will be installed via $PKG_MGR" "${pkg_install[@]}"
 	if [[ "$PKG_MGR" == "apt" ]]; then
-		# Count total defined non-apt packages
-		defined_total=$(( ${#pkg_apt_repo[@]} + ${#pkg_official[@]} + ${#pkg_flatpak[@]} + ${#pkg_snap[@]} ))
+		# Count total non-apt packages that will be installed
+		defined_total=$(( ${#pkg_apt_repo[@]} + ${#pkg_official[@]} + ${#pkg_flatpak[@]} + ${#pkg_snap[@]} + ${#pkg_flatpak_auto[@]} + ${#pkg_snap_auto[@]} ))
 		if [[ $defined_total -gt 0 ]]; then
-			echo "--- Not in apt — defined install method ($defined_total) ---"
+			echo "--- Not in apt — will be installed ($defined_total) ---"
 			echo ""
 			if [[ ${#pkg_apt_repo[@]} -gt 0 ]]; then
 				echo "  Tier 1: apt repo (${#pkg_apt_repo[@]})"
@@ -329,25 +365,35 @@ elif [[ "$OS" == "Linux" ]]; then
 				done
 				echo ""
 			fi
-			if [[ ${#pkg_flatpak[@]} -gt 0 ]]; then
-				echo "  Tier 3: flatpak (${#pkg_flatpak[@]})"
+			flatpak_total=$(( ${#pkg_flatpak[@]} + ${#pkg_flatpak_auto[@]} ))
+			if [[ $flatpak_total -gt 0 ]]; then
+				echo "  Tier 3: flatpak ($flatpak_total)"
 				for pkg in "${pkg_flatpak[@]}"; do
 					echo "    - $pkg  (${flatpak_pkgs[$pkg]})"
 				done
+				for pkg in "${pkg_flatpak_auto[@]}"; do
+					echo "    - $pkg  (${flatpak_auto_id[$pkg]}) [auto-detected]"
+				done
 				echo ""
 			fi
-			if [[ ${#pkg_snap[@]} -gt 0 ]]; then
-				echo "  Tier 4: snap (${#pkg_snap[@]})"
+			snap_total=$(( ${#pkg_snap[@]} + ${#pkg_snap_auto[@]} ))
+			if [[ $snap_total -gt 0 ]]; then
+				echo "  Tier 4: snap ($snap_total)"
 				for pkg in "${pkg_snap[@]}"; do
 					val="${snap_pkgs[$pkg]}"
 					confinement="${val#*::}"
 					echo "    - $pkg  ($confinement)"
 				done
+				for pkg in "${pkg_snap_auto[@]}"; do
+					val="${snap_auto_info[$pkg]}"
+					confinement="${val#*::}"
+					echo "    - $pkg  ($confinement) [auto-detected]"
+				done
 				echo ""
 			fi
 		fi
 		if [[ ${#pkg_unknown[@]} -gt 0 ]]; then
-			print_section "Not in apt — no install method defined (${#pkg_unknown[@]})" "${pkg_unknown[@]}"
+			print_section "Not in apt — need manual install (${#pkg_unknown[@]})" "${pkg_unknown[@]}"
 		fi
 	else
 		if [[ ${#pkg_manual[@]} -gt 0 ]]; then
@@ -404,9 +450,9 @@ elif [[ "$OS" == "Linux" ]]; then
 		# --- Batch apt install ---
 		batch_install "sudo DEBIAN_FRONTEND=noninteractive apt install -y" "${pkg_install[@]}"
 
-		# --- Layer 1: Extra apt repos ---
+		# --- Tier 1: Extra apt repos ---
 		if [[ ${#pkg_apt_repo[@]} -gt 0 ]]; then
-			echo -e "\n${TC_CYAN}>>> Layer 1: Setting up extra apt repos${TC_RESET}"
+			echo -e "\n${TC_CYAN}>>> Tier 1: Setting up extra apt repos${TC_RESET}"
 			codename=$(lsb_release -cs)
 			added_repos=""
 			for pkg in "${pkg_apt_repo[@]}"; do
@@ -444,9 +490,9 @@ $repo_url"
 			batch_install "sudo DEBIAN_FRONTEND=noninteractive apt install -y" "${apt_repo_pkgs[@]}"
 		fi
 
-		# --- Layer 2: Official recommended ---
+		# --- Tier 2: Official recommended ---
 		if [[ ${#pkg_official[@]} -gt 0 ]]; then
-			echo -e "\n${TC_CYAN}>>> Layer 2: Official recommended installs${TC_RESET}"
+			echo -e "\n${TC_CYAN}>>> Tier 2: Official recommended installs${TC_RESET}"
 
 			# 2a. curl script (uv must be first for dependencies)
 			for pkg in "${pkg_official[@]}"; do
@@ -555,9 +601,9 @@ $repo_url"
 			done
 		fi
 
-		# --- Layer 3: Flatpak ---
-		if [[ ${#pkg_flatpak[@]} -gt 0 ]]; then
-			echo -e "\n${TC_CYAN}>>> Layer 3: Flatpak installs${TC_RESET}"
+		# --- Tier 3: Flatpak ---
+		if [[ ${#pkg_flatpak[@]} -gt 0 || ${#pkg_flatpak_auto[@]} -gt 0 ]]; then
+			echo -e "\n${TC_CYAN}>>> Tier 3: Flatpak installs${TC_RESET}"
 			flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 			# Install bitwarden first (bw wrapper depends on it)
 			for pkg in bitwarden "${pkg_flatpak[@]}"; do
@@ -573,11 +619,16 @@ $repo_url"
 				echo -e "${TC_CYAN}  Installing $pkg ($fid)${TC_RESET}"
 				flatpak install -y flathub "$fid" || install_failed+=("$pkg")
 			done
+			for pkg in "${pkg_flatpak_auto[@]}"; do
+				fid="${flatpak_auto_id[$pkg]}"
+				echo -e "${TC_CYAN}  Installing $pkg ($fid) [auto-detected]${TC_RESET}"
+				flatpak install -y flathub "$fid" || install_failed+=("$pkg")
+			done
 		fi
 
-		# --- Layer 4: Snap ---
-		if [[ ${#pkg_snap[@]} -gt 0 ]]; then
-			echo -e "\n${TC_CYAN}>>> Layer 4: Snap installs${TC_RESET}"
+		# --- Tier 4: Snap ---
+		if [[ ${#pkg_snap[@]} -gt 0 || ${#pkg_snap_auto[@]} -gt 0 ]]; then
+			echo -e "\n${TC_CYAN}>>> Tier 4: Snap installs${TC_RESET}"
 			for pkg in "${pkg_snap[@]}"; do
 				val="${snap_pkgs[$pkg]}"
 				snap_name="${val%%::*}"
@@ -585,6 +636,15 @@ $repo_url"
 				snap_flags=""
 				[[ "$confinement" == "classic" ]] && snap_flags="--classic"
 				echo -e "${TC_CYAN}  Installing $pkg ($snap_name $confinement)${TC_RESET}"
+				sudo snap install "$snap_name" $snap_flags || install_failed+=("$pkg")
+			done
+			for pkg in "${pkg_snap_auto[@]}"; do
+				val="${snap_auto_info[$pkg]}"
+				snap_name="${val%%::*}"
+				confinement="${val#*::}"
+				snap_flags=""
+				[[ "$confinement" == "classic" ]] && snap_flags="--classic"
+				echo -e "${TC_CYAN}  Installing $pkg ($snap_name $confinement) [auto-detected]${TC_RESET}"
 				sudo snap install "$snap_name" $snap_flags || install_failed+=("$pkg")
 			done
 		fi
