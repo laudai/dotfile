@@ -295,42 +295,48 @@ if [[ "$OS" == "macOS" ]]; then
 elif [[ "$OS" == "Linux" ]]; then
 	print_section "Will be installed via $PKG_MGR" "${pkg_install[@]}"
 	if [[ "$PKG_MGR" == "apt" ]]; then
-		if [[ ${#pkg_apt_repo[@]} -gt 0 ]]; then
-			echo "--- Layer 1: Extra apt repo (${#pkg_apt_repo[@]}) ---"
-			for pkg in "${pkg_apt_repo[@]}"; do
-				val="${extra_apt_repos[$pkg]}"
-				repo_url="${val#*::}"; repo_url="${repo_url%%::*}"
-				echo "  - $pkg  (repo: $repo_url)"
-			done
+		# Count total defined non-apt packages
+		defined_total=$(( ${#pkg_apt_repo[@]} + ${#pkg_official[@]} + ${#pkg_flatpak[@]} + ${#pkg_snap[@]} ))
+		if [[ $defined_total -gt 0 ]]; then
+			echo "--- Not in apt — defined install method ($defined_total) ---"
 			echo ""
-		fi
-		if [[ ${#pkg_official[@]} -gt 0 ]]; then
-			echo "--- Layer 2: Official recommended (${#pkg_official[@]}) ---"
-			for pkg in "${pkg_official[@]}"; do
-				val="${official_install[$pkg]}"
-				method="${val%%::*}"
-				echo "  - $pkg  ($method)"
-			done
-			echo ""
-		fi
-		if [[ ${#pkg_flatpak[@]} -gt 0 ]]; then
-			echo "--- Layer 3: Flatpak (${#pkg_flatpak[@]}) ---"
-			for pkg in "${pkg_flatpak[@]}"; do
-				echo "  - $pkg  (${flatpak_pkgs[$pkg]})"
-			done
-			echo ""
-		fi
-		if [[ ${#pkg_snap[@]} -gt 0 ]]; then
-			echo "--- Layer 4: Snap (${#pkg_snap[@]}) ---"
-			for pkg in "${pkg_snap[@]}"; do
-				val="${snap_pkgs[$pkg]}"
-				confinement="${val#*::}"
-				echo "  - $pkg  ($confinement)"
-			done
-			echo ""
+			if [[ ${#pkg_apt_repo[@]} -gt 0 ]]; then
+				echo "  Tier 1: apt repo (${#pkg_apt_repo[@]})"
+				for pkg in "${pkg_apt_repo[@]}"; do
+					val="${extra_apt_repos[$pkg]}"
+					repo_url="${val#*::}"; repo_url="${repo_url%%::*}"
+					echo "    - $pkg  ($repo_url)"
+				done
+				echo ""
+			fi
+			if [[ ${#pkg_official[@]} -gt 0 ]]; then
+				echo "  Tier 2: official (${#pkg_official[@]})"
+				for pkg in "${pkg_official[@]}"; do
+					val="${official_install[$pkg]}"
+					method="${val%%::*}"
+					echo "    - $pkg  ($method)"
+				done
+				echo ""
+			fi
+			if [[ ${#pkg_flatpak[@]} -gt 0 ]]; then
+				echo "  Tier 3: flatpak (${#pkg_flatpak[@]})"
+				for pkg in "${pkg_flatpak[@]}"; do
+					echo "    - $pkg  (${flatpak_pkgs[$pkg]})"
+				done
+				echo ""
+			fi
+			if [[ ${#pkg_snap[@]} -gt 0 ]]; then
+				echo "  Tier 4: snap (${#pkg_snap[@]})"
+				for pkg in "${pkg_snap[@]}"; do
+					val="${snap_pkgs[$pkg]}"
+					confinement="${val#*::}"
+					echo "    - $pkg  ($confinement)"
+				done
+				echo ""
+			fi
 		fi
 		if [[ ${#pkg_unknown[@]} -gt 0 ]]; then
-			print_section "Unknown (no install method defined)" "${pkg_unknown[@]}"
+			print_section "Not in apt — no install method defined (${#pkg_unknown[@]})" "${pkg_unknown[@]}"
 		fi
 	else
 		if [[ ${#pkg_manual[@]} -gt 0 ]]; then
