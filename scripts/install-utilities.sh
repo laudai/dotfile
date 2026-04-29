@@ -595,6 +595,20 @@ $repo_url"
 				fi
 			done
 
+			# 2c. url binary (fixed URL, no GitHub API)
+			for pkg in "${pkg_official[@]}"; do
+				val="${official_install[$pkg]}"
+				method="${val%%::*}"
+				args="${val#*::}"
+				[[ "$method" == "url_binary" ]] || continue
+				echo -e "${TC_CYAN}  Installing $pkg (url binary)${TC_RESET}"
+				filename=$(basename "$args")
+				curl -fsSL "$args" -o "/tmp/$filename"
+				tar xf "/tmp/$filename" -C "$HOME/.local/bin/" 2>/dev/null || cp "/tmp/$filename" "$HOME/.local/bin/$pkg"
+				chmod +x "$HOME/.local/bin/$pkg"
+				rm -f "/tmp/$filename"
+			done
+
 			# 2c. wrapper
 			for pkg in "${pkg_official[@]}"; do
 				val="${official_install[$pkg]}"

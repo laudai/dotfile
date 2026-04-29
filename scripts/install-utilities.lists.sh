@@ -344,7 +344,8 @@ declare -A extra_apt_repos=(
 #   curl          — curl install script, pipe to sh. arg1=url
 #   uv            — uv tool install. arg1=package_spec
 #   script        — curl script to ~/.local/bin/. arg1=url
-#   github_binary — curl binary to ~/.local/bin/. arg1=owner/repo, arg2=asset_pattern
+#   github_binary — curl binary to ~/.local/bin/ from GitHub latest release. arg1=owner/repo, arg2=asset_pattern
+#   url_binary    — curl binary to ~/.local/bin/ from fixed URL. arg1=url
 #   wrapper       — create wrapper script in ~/.local/bin/. arg1=command
 #   github_deb    — .deb from GitHub latest release. arg1=owner/repo
 #   url_deb       — .deb from fixed URL. arg1=url
@@ -360,7 +361,7 @@ declare -A official_install=(
 
 	# 2c. curl download / wrapper
 	[i3-get-window-criteria]="script::https://gist.githubusercontent.com/jottr/8645010/raw"
-	[tokei]="github_binary::XAMPPRocky/tokei::tokei-x86_64-unknown-linux-gnu.tar.gz"
+	[tokei]="url_binary::https://github.com/XAMPPRocky/tokei/releases/download/v12.1.2/tokei-x86_64-unknown-linux-gnu.tar.gz"
 	[bw]="wrapper::flatpak run --command=bw com.bitwarden.desktop"
 
 	# 2d. GitHub .deb
