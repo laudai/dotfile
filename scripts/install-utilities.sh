@@ -136,7 +136,7 @@ function run_auto_detect() {
 		local remaining=()
 		for pkg in "${pkg_unknown[@]}"; do
 			local fid
-			fid=$(flatpak search --columns=application "$pkg" 2>/dev/null | head -1 || true)
+			fid=$(flatpak search --columns=application "$pkg" 2>/dev/null | grep -v "^No matches" | head -1 || true)
 			if [[ -n "$fid" ]]; then
 				pkg_flatpak_auto+=("$pkg")
 				flatpak_auto_id[$pkg]="$fid"
