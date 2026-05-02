@@ -206,6 +206,7 @@ cross_platform_gui=(
 	obsidian
 	code                             # VS Code (apt: code, brew: visual-studio-code)
 	codium                           # open-source VS Code (apt: codium, brew: vscodium)
+	zed                              # GPU-accelerated code editor (brew: zed cask, Linux: curl script)
 	masscode
 	ghostty
 	gitkraken
@@ -384,6 +385,7 @@ declare -A extra_apt_repos=(
 declare -A official_install=(
 	# 2a. curl script
 	[uv]="curl::https://astral.sh/uv/install.sh"
+	[zed]="curl::https://zed.dev/install.sh"
 
 	# 2b. uv tool install (depends on uv)
 	[ruff]="uv::ruff"
