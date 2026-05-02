@@ -328,6 +328,16 @@ skip_on_linux=(
 	# e.g., ... — Linux has native alternatives
 )
 
+# --- Deprecated list ---
+# Packages that were previously installed but are no longer needed.
+# Kept in original lists (common_pkgs, cross_platform_gui, etc.) for history,
+# but filtered out by filter_skip() — same mechanism as skip_pkgs.
+# Future `make uninstall` will read this list to remove them.
+# Format: package_name  # (original_list) reason, deprecated date
+deprecated_pkgs=(
+	# e.g., pinta  # (cross_platform_gui) replaced by gimp, 2026-05
+)
+
 # --- Brew name mapping ---
 
 # apt name (key) → brew name (only list where names differ)

@@ -70,7 +70,7 @@ TC_RESET="\033[0m"
 # =============================================================================
 
 function filter_skip() {
-	# Reads: $OS (set before calling), $skip_pkgs, $skip_on_mac, $skip_on_linux
+	# Reads: $OS (set before calling), $skip_pkgs, $skip_on_mac, $skip_on_linux, $deprecated_pkgs
 	local -a os_skip=()
 	case "$OS" in
 		macOS) os_skip=("${skip_on_mac[@]}") ;;
@@ -80,7 +80,7 @@ function filter_skip() {
 	local -a result=()
 	for pkg in "$@"; do
 		local skip=false
-		for s in "${skip_pkgs[@]}" "${os_skip[@]}"; do
+		for s in "${skip_pkgs[@]}" "${os_skip[@]}" "${deprecated_pkgs[@]}"; do
 			[[ "$pkg" == "$s" ]] && skip=true && break
 		done
 		$skip || result+=("$pkg")
@@ -359,6 +359,10 @@ echo ""
 
 if [[ ${#skip_pkgs[@]} -gt 0 ]]; then
 	print_section "Skipped packages (all platforms)" "${skip_pkgs[@]}"
+fi
+
+if [[ ${#deprecated_pkgs[@]} -gt 0 ]]; then
+	print_section "Deprecated packages (will be uninstalled)" "${deprecated_pkgs[@]}"
 fi
 
 if [[ "$OS" == "macOS" && ${#skip_on_mac[@]} -gt 0 ]]; then
