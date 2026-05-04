@@ -118,6 +118,9 @@ export NVM_LAZY_LOAD_EXTRA_COMMANDS=("vim" "view" "kiro-cli")
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # HIST_STAMPS="mm/dd/yyyy"
+# Must be set BEFORE `source $ZSH/oh-my-zsh.sh` — oh-my-zsh reads this
+# once at source time to define the `history` alias (lib/history.zsh).
+HIST_STAMPS="%Y-%m-%dT%H:%M:%S%z"  # ISO 8601
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -258,7 +261,9 @@ bindkey '^U' .kill-whole-line
 #                          /____/
 
 # setting
-HIST_STAMPS="yyyy-mm-dd"
+# Override oh-my-zsh defaults (lib/history.zsh: HISTSIZE=50000, SAVEHIST=10000)
+HISTSIZE=100000
+SAVEHIST=100000
 
 # Default ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
 # See more document via man zshzle
