@@ -101,6 +101,10 @@ common_pkgs=(
 	mc                               # terminal file manager (brew: midnight-commander)
 	ncdu                             # disk usage analyzer
 
+	# AI / Document processing
+	docling                          # document parser for AI pipelines (uv tool; no brew)
+	markitdown                       # file-to-markdown converter for LLMs (uv tool; no brew)
+
 	# Linter
 	ruff
 
@@ -302,6 +306,7 @@ skip_pkgs=(
 	balenaetcher
 	screenkey
 	screenrec
+	docling
 )
 
 # --- Platform-specific skip lists ---
@@ -392,6 +397,9 @@ declare -A extra_apt_repos=(
 #   github_deb    — .deb from GitHub latest release. arg1=owner/repo
 #   url_deb       — .deb from fixed URL. arg1=url
 #   manual        — show URL in summary. arg1=url
+#
+# macOS fallback (install-utilities.sh) auto-executes: uv, curl
+# Other methods are Linux-only and skipped on macOS.
 declare -A official_install=(
 	# 2a. curl script
 	[uv]="curl::https://astral.sh/uv/install.sh"
@@ -399,6 +407,8 @@ declare -A official_install=(
 
 	# 2b. uv tool install (depends on uv)
 	[ruff]="uv::ruff"
+	[docling]="uv::docling"                    # document parser for AI (IBM/LF AI)
+	[markitdown]="uv::markitdown[all]"         # file-to-markdown for LLMs (Microsoft)
 	[i3-resurrect]="uv::i3-resurrect"
 	[i3-swap-focus]="uv::git+https://codeberg.org/olivierlm/i3-swap-focus"
 
