@@ -276,6 +276,25 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 		# Cannot merge formula + cask arrays: Linuxbrew only supports formula.
 		# macOS uses separate install commands: brew install (formula) vs brew install --cask (cask).
 		brew_classify pkg_install_gui   $(filter_skip "${cross_platform_gui[@]}" "${macos_only_gui[@]}")
+
+		# Split pkg_manual by official_install method.
+		# macOS-applicable methods: uv, curl (mirror of Linux Tier 2a/2b).
+		# Other methods (github_deb, url_deb, url_binary, wrapper, script, manual)
+		# are Linux-only and stay in pkg_manual for user to handle.
+		pkg_official=()
+		pkg_still_manual=()
+		mac_auto_methods=(uv curl)
+		for pkg in "${pkg_manual[@]}"; do
+			if [[ -n "${official_install[$pkg]+x}" ]]; then
+				method="${official_install[$pkg]%%::*}"
+				if [[ " ${mac_auto_methods[*]} " == *" $method "* ]]; then
+					pkg_official+=("$pkg")
+					continue
+				fi
+			fi
+			pkg_still_manual+=("$pkg")
+		done
+		pkg_manual=("${pkg_still_manual[@]}")
 	else
 		echo "brew not found. Install Homebrew first:"
 		echo '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
@@ -375,8 +394,18 @@ if [[ "$OS" == "macOS" ]]; then
 	print_section "Fonts (brew --cask)" "${pkg_install_fonts[@]}"
 	print_section "CLI tools (brew)" "${pkg_install[@]}"
 	print_section "GUI apps (brew --cask)" "${pkg_install_gui[@]}"
+	if [[ ${#pkg_official[@]} -gt 0 ]]; then
+		echo "--- Not in brew — will auto-install (${#pkg_official[@]}) ---"
+		for pkg in "${pkg_official[@]}"; do
+			val="${official_install[$pkg]}"
+			method="${val%%::*}"
+			args="${val#*::}"
+			echo "  - $pkg  ($method: $args)"
+		done
+		echo ""
+	fi
 	if [[ ${#pkg_manual[@]} -gt 0 ]]; then
-		echo "--- Not in brew (manual install) ---"
+		echo "--- Not in brew — need manual install (${#pkg_manual[@]}) ---"
 		for pkg in "${pkg_manual[@]}"; do
 			if [[ -n "${official_install[$pkg]+x}" ]]; then
 				val="${official_install[$pkg]}"
@@ -505,6 +534,33 @@ if [[ "$OS" == "macOS" ]]; then
 	else
 		echo "Didn't find brew. Please reinstall and run again."
 		exit 1
+	fi
+
+	# --- Tier 2 equivalent: install pkg_official via cross-platform methods ---
+	# Mirror of Linux Tier 2a/2b structure. Only uv/curl methods apply on macOS
+	# (other methods are Linux-only and live in pkg_manual for user to handle).
+	if [[ ${#pkg_official[@]} -gt 0 ]]; then
+		echo -e "\n${TC_CYAN}>>> Installing pkg_official (uv/curl)${TC_RESET}"
+
+		# 2a. curl script (run first; uv itself may be installed this way if not in brew)
+		for pkg in "${pkg_official[@]}"; do
+			val="${official_install[$pkg]}"
+			method="${val%%::*}"
+			args="${val#*::}"
+			[[ "$method" == "curl" ]] || continue
+			echo -e "${TC_CYAN}  Installing $pkg (curl script)${TC_RESET}"
+			curl -LsSf "$args" | sh || install_failed+=("$pkg")
+		done
+
+		# 2b. uv tool install (depends on uv being available in PATH via brew)
+		for pkg in "${pkg_official[@]}"; do
+			val="${official_install[$pkg]}"
+			method="${val%%::*}"
+			args="${val#*::}"
+			[[ "$method" == "uv" ]] || continue
+			echo -e "${TC_CYAN}  Installing $pkg (uv tool)${TC_RESET}"
+			uv tool install "$args" || install_failed+=("$pkg")
+		done
 	fi
 
 elif [[ "$OS" == "Linux" ]]; then
@@ -900,6 +956,23 @@ if [[ "$OS" == "Linux" && "$PKG_MGR" == "apt" ]]; then
 		done
 		echo ""
 	fi
+fi
+
+# macOS: show manual install items that the script cannot auto-install
+# (methods like url_deb, github_deb, url_binary, wrapper, script, manual are Linux-only)
+if [[ "$OS" == "macOS" && ${#pkg_manual[@]} -gt 0 ]]; then
+	echo "--- Manual install needed ---"
+	for pkg in "${pkg_manual[@]}"; do
+		if [[ -n "${official_install[$pkg]+x}" ]]; then
+			val="${official_install[$pkg]}"
+			method="${val%%::*}"
+			url="${val#*::}"
+			echo "  - $pkg  ($method: $url)"
+		else
+			echo "  - $pkg  (no install method defined)"
+		fi
+	done
+	echo ""
 fi
 
 if [[ ${#install_skipped[@]} -gt 0 ]]; then
