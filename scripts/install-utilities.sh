@@ -418,6 +418,23 @@ if [[ "$OS" == "macOS" ]]; then
 		done
 		echo ""
 	fi
+	# Show outdated casks (will be upgraded if --upgrade is used in the future)
+	outdated_casks=$(brew outdated --cask --greedy --quiet 2>/dev/null)
+	if [[ -n "$outdated_casks" ]]; then
+		echo "--- Outdated casks (will NOT be upgraded by --install) ---"
+		while IFS= read -r cask; do
+			echo "  - $cask"
+		done <<< "$outdated_casks"
+		echo ""
+		echo "  Note: --install will not upgrade these (HOMEBREW_NO_INSTALL_UPGRADE=1)."
+		echo "  To upgrade casks, use: brew upgrade --cask"
+		echo ""
+		echo -e "  ${TC_YELLOW}⚠  Upgrading casks may require re-granting macOS privacy permissions"
+		echo -e "  (Accessibility, Screen Recording, etc.) unless your terminal has"
+		echo -e "  'App Management' permission enabled.${TC_RESET}"
+		echo "  → System Settings → Privacy & Security → App Management → enable your terminal"
+		echo ""
+	fi
 elif [[ "$OS" == "Linux" ]]; then
 	# Show fonts first (same order as macOS)
 	if [[ ${#fonts[@]} -gt 0 ]]; then
@@ -528,6 +545,12 @@ if [[ "$OS" == "macOS" ]]; then
 	command -v brew >/dev/null || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 	if command -v brew >/dev/null; then
+		# Prevent brew install from upgrading already-installed casks.
+		# Without this, outdated casks get upgraded via uninstall/reinstall,
+		# which causes macOS to revoke privacy permissions (Accessibility, etc.)
+		# unless the terminal has "App Management" permission.
+		export HOMEBREW_NO_INSTALL_UPGRADE=1
+
 		batch_install "brew install --cask" "${pkg_install_fonts[@]}"
 		batch_install "brew install" "${pkg_install[@]}"
 		batch_install "brew install --cask" "${pkg_install_gui[@]}"
