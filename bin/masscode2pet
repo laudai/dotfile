@@ -348,7 +348,7 @@ def sync(
     )
 
     if not (added or updated or removed):
-        print("No changes.")
+        print("No changes, skip sync step to remote.")
     elif dry_run:
         print("\n[dry-run] Would write:")
         print("\n".join(snippet_to_toml(s) for s in pet_snippets))
