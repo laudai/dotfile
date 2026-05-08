@@ -186,6 +186,11 @@ if $CHECK_BREW; then
 	echo "Checking brew availability for all packages..."
 	echo ""
 
+	# Ensure required taps are available
+	for tap in "${brew_taps[@]}"; do
+		brew tap "$tap" 2>/dev/null || true
+	done
+
 	# fetch all available formulae and casks in one call each
 	brew_all=$(brew formulae; brew casks)
 
@@ -262,6 +267,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 	OS="macOS"
 
 	if command -v brew >/dev/null; then
+		# Ensure required taps are available (for casks not in default repos)
+		for tap in "${brew_taps[@]}"; do
+			brew tap "$tap" 2>/dev/null || true
+		done
+
 		# auto-detect: fetch all available brew formulae and casks (~0.3s)
 		brew_all=$(brew formulae; brew casks)
 

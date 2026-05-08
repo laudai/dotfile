@@ -8,6 +8,11 @@
 # are required unless install logic itself changes.
 # =============================================================================
 
+# --- Brew taps (required for some casks not in default repos) ---
+brew_taps=(
+	gechr/tap                        # whichspace (menu bar Space indicator)
+)
+
 # --- Fonts ---
 # Nerd Font names used as keys.
 # font_github_name: GitHub release filename (differs from installed font name)
@@ -267,7 +272,7 @@ macos_only_gui=(
 	clocker
 	hiddenbar
 	mos
-	spaceid
+	whichspace                       # menu bar Space indicator (gechr/tap, replaces spaceid)
 	stats
 
 	# Display / Monitor
