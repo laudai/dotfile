@@ -889,6 +889,12 @@ $repo_url"
 			post_install_msgs+=("fcitx5:\n    Created ~/.config/environment.d/im.conf (GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS)\n    Re-login for input method to take effect.\n    Note: On Wayland, GTK_IM_MODULE=fcitx may cause candidate window flickering.\n          Remove GTK_IM_MODULE line from im.conf after migrating away from X11/i3.\n    Docs: https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland")
 		fi
 
+		# default terminal (i3-sensible-terminal reads $TERMINAL)
+		if printf '%s\n' "${pkg_install[@]}" "${pkg_snap[@]}" | grep -qx ghostty; then
+			mkdir -p "$HOME/.config/environment.d"
+			echo "TERMINAL=ghostty" > "$HOME/.config/environment.d/terminal.conf"
+		fi
+
 		# syncthing
 		if printf '%s\n' "${pkg_install[@]}" | grep -qx syncthing; then
 			systemctl --user enable --now syncthing.service
