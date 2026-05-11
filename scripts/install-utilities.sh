@@ -582,7 +582,7 @@ if [[ "$OS" == "macOS" ]]; then
 			args="${val#*::}"
 			[[ "$method" == "curl" ]] || continue
 			echo -e "${TC_CYAN}  Installing $pkg (curl script)${TC_RESET}"
-			curl -LsSf "$args" | sh || install_failed+=("$pkg")
+			curl -LsSf "$args" | bash || install_failed+=("$pkg")
 		done
 
 		# 2b. uv tool install (depends on uv being available in PATH via brew)
