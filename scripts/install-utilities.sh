@@ -940,6 +940,15 @@ export NVM_DIR="$HOME/.nvm"
 nvm install --lts
 nvm alias default 'lts/*'
 
+# --- Ad-hoc tools (NOT installed, documented only) ---
+# Jupyter Notebook / JupyterLab
+# Official uv guide recommends ad-hoc execution over permanent install:
+#   uvx jupyter lab                          # standalone, isolated env
+#   uv run --with jupyter jupyter lab        # within a project
+# ref: https://docs.astral.sh/uv/guides/integration/jupyter/
+# JupyterLab (IDE-like) is the default modern interface;
+# Jupyter Notebook (classic) uses `pip install notebook` + `jupyter notebook`.
+
 # --- OS-specific config (symlinks) ---
 
 echo -e "\n${TC_CYAN}>>> Symlink setup${TC_RESET}"

@@ -140,6 +140,8 @@ linux_only_pkgs=(
 	openssh-server                   # Linux only (macOS built-in)
 	bind9-dnsutils                   # dig/nslookup (macOS built-in)
 	hping3                           # TCP/IP packet tool
+	sysstat                          # system performance monitoring (sar/iostat/mpstat)
+	acpi                             # battery/lid state (i3 render_i3_monitor.sh)
 	gparted                          # disk partition tool
 	gnome-tweaks                     # GNOME advanced settings
 	ltrace                           # library call tracer
@@ -153,7 +155,14 @@ linux_only_pkgs=(
 
 	# Linux desktop / Notification
 	dunst                            # notification daemon (Wayland compatible)
+	libnotify-bin                    # notify-send command (i3/sway config)
 	pavucontrol                      # PulseAudio volume control
+	pulseaudio-utils                 # pactl command (i3 volume keybindings)
+	network-manager-gnome            # nm-applet network tray (i3 config)
+	conky-all                        # desktop system monitor (i3 config)
+	blueman                          # bluetooth manager applet (i3 config)
+	rofi                             # application launcher (i3 config, replaces dmenu)
+	vicinae                          # keyboard launcher (i3 config, Alfred-like)
 	mako-notifier                    # sway notifier
 	sway-notification-center         # sway notification center
 
@@ -162,6 +171,11 @@ linux_only_pkgs=(
 	docker-ce-cli                    # Docker CLI (shares docker-ce repo)
 
 	# --- X11 / Wayland transition (keep both during migration) ---
+
+	# X11 base utilities
+	x11-xserver-utils                # xset, xrandr (DPMS, display config)
+	x11-utils                        # xwininfo, xdpyinfo (i3 scripts)
+	xclip                            # X11 clipboard (tmux-yank, supports binary/image)
 
 	# Clipboard / Automation
 	xdotool                          # x11 only → ydotool
@@ -409,6 +423,7 @@ declare -A official_install=(
 	# 2a. curl script
 	[uv]="curl::https://astral.sh/uv/install.sh"
 	[zed]="curl::https://zed.dev/install.sh"
+	[vicinae]="curl::https://vicinae.com/install.sh"
 
 	# 2b. uv tool install (depends on uv)
 	[ruff]="uv::ruff"
