@@ -423,7 +423,7 @@ declare -A official_install=(
 	# 2a. curl script
 	[uv]="curl::https://astral.sh/uv/install.sh"
 	[zed]="curl::https://zed.dev/install.sh"
-	[vicinae]="curl::https://vicinae.com/install.sh"
+	[vicinae]="curl_sudo::https://vicinae.com/install.sh"
 
 	# 2b. uv tool install (depends on uv)
 	[ruff]="uv::ruff"

@@ -293,7 +293,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 		# are Linux-only and stay in pkg_manual for user to handle.
 		pkg_official=()
 		pkg_still_manual=()
-		mac_auto_methods=(uv curl)
+		mac_auto_methods=(uv curl curl_sudo)
 		for pkg in "${pkg_manual[@]}"; do
 			if [[ -n "${official_install[$pkg]+x}" ]]; then
 				method="${official_install[$pkg]%%::*}"
@@ -580,9 +580,15 @@ if [[ "$OS" == "macOS" ]]; then
 			val="${official_install[$pkg]}"
 			method="${val%%::*}"
 			args="${val#*::}"
-			[[ "$method" == "curl" ]] || continue
+			case "$method" in
+				curl|curl_sudo) ;;
+				*) continue ;;
+			esac
 			echo -e "${TC_CYAN}  Installing $pkg (curl script)${TC_RESET}"
-			curl -LsSf "$args" | bash || install_failed+=("$pkg")
+			case "$method" in
+				curl)      curl -LsSf "$args" | bash || install_failed+=("$pkg") ;;
+				curl_sudo) curl -LsSf "$args" | sudo bash || install_failed+=("$pkg") ;;
+			esac
 		done
 
 		# 2b. uv tool install (depends on uv being available in PATH via brew)
@@ -679,9 +685,15 @@ $repo_url"
 				val="${official_install[$pkg]}"
 				method="${val%%::*}"
 				args="${val#*::}"
-				[[ "$method" == "curl" ]] || continue
+				case "$method" in
+					curl|curl_sudo) ;;
+					*) continue ;;
+				esac
 				echo -e "${TC_CYAN}  Installing $pkg (curl script)${TC_RESET}"
-				curl -LsSf "$args" | bash || install_failed+=("$pkg")
+				case "$method" in
+					curl)      curl -LsSf "$args" | bash || install_failed+=("$pkg") ;;
+					curl_sudo) curl -LsSf "$args" | sudo bash || install_failed+=("$pkg") ;;
+				esac
 			done
 
 			# 2b. uv tool install
