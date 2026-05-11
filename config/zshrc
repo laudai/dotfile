@@ -383,9 +383,9 @@ Please quit Alfred and agree this request, re-launch Alfred after delete those f
 # generate the timestamp in format ISO 8601 and copy to the clipboard
 function dateISO8601ToClip() {
   if [[ "$OSTYPE" =~ [Dd]arwin* ]]; then
-    date -Iseconds -u | tr -d "\n" | pbcopy
+    date -Iseconds -u | tr -d "\n" | clipcopy
   elif [[ "$OSTYPE" =~ [Ll]inux* ]]; then
-    date -Isec -u | xclip -selection clipboard
+    date -Isec -u | clipcopy
   else
     echo "can't match the os type." 1>&2
   fi
@@ -403,7 +403,7 @@ function offsetDayHourinISO8601(){
     read "?offset Num in Hour (:digit:)(default is 0): " HouroffsetNum
     [[ ! $HouroffsetNum =~ ^[[:digit:]].*$ ]] && HouroffsetNum="0"
     echo "Result:"
-    date -v "${Dayoffset}${DayoffsetNum}d" -v "${Houroffset}${HouroffsetNum}H" -Iseconds -u | tr -d "\n" | tee >(pbcopy)
+    date -v "${Dayoffset}${DayoffsetNum}d" -v "${Houroffset}${HouroffsetNum}H" -Iseconds -u | tr -d "\n" | tee >(clipcopy)
 
   elif [[ "$OSTYPE" =~ [Ll]inux* ]]; then
     read -p "offset in Day (-/+)(default is -): " Dayoffset
@@ -415,7 +415,7 @@ function offsetDayHourinISO8601(){
     read -p "offset Num in Hour (:digit:)(default is 0): " HouroffsetNum
     [[ ! $HouroffsetNum =~ ^[[:digit:]].*$ ]] && HouroffsetNum="0"
     echo "Result:"
-    date -d "$(date) ${Dayoffset} ${DayoffsetNum} day ${Houroffset} ${HouroffsetNum} hour" -Isec -u
+    date -d "$(date) ${Dayoffset} ${DayoffsetNum} day ${Houroffset} ${HouroffsetNum} hour" -Isec -u | tr -d "\n" | tee >(clipcopy)
 
   else
     echo "can't match the os type." 1>&2
@@ -441,11 +441,7 @@ function dateISO8601_to_epoch(){
 # generate timestamp in journalctl format and copy to clipboard
 function dateJournalctl() {
   local ts=$(date -u +"%Y-%m-%d %H:%M:%S")
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo -n "$ts" | pbcopy
-  else
-    echo -n "$ts" | xclip -selection clipboard
-  fi
+  echo -n "$ts" | clipcopy
   echo "Copied: $ts"
 }
 
@@ -491,14 +487,13 @@ function trimdoc() {
     "linux-gnu"*)
       command -v sed &>/dev/null || { echo "can't find sed" >&2; return 1; }
       new_url=$(sed "s/\/[a-z_]\+_[a-z]\+//g" <<< $original_url)
-      echo $new_url | xclip -selection clipboard
       ;;
     "darwin"*)
       command -v gsed &>/dev/null || { echo "can't find gsed" >&2; return 1; }
       new_url=$(gsed "s/\/[a-z_]\+_[a-z]\+//g" <<< $original_url)
-      echo $new_url | pbcopy
       ;;
   esac
+  echo $new_url | clipcopy
   echo $new_url
 }
 
@@ -1051,8 +1046,7 @@ alias -s {md,py,txt,vimrc,zshrc,conf,toml}=vim
 # https://thorsten-hans.com/5-types-of-zsh-aliases
 # e.g. cd && ls -l G do
 alias -g G=" | grep -i"
-alias -g lxc=" | sed -z 's/\n$//' | xclip -selection clipboard"
-alias -g mxc=" | gsed -z 's/\n$//' | pbcopy"
+alias -g xc=" | perl -pe 'chomp if eof' | clipcopy" # strip trailing newline only (cross-platform, replaces sed -z)
 alias -g ca=" | cat"
 alias -g pa=" | less"
 alias -g ppa=" | \less" # purge pager
