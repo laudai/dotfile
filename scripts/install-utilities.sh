@@ -681,7 +681,7 @@ $repo_url"
 				args="${val#*::}"
 				[[ "$method" == "curl" ]] || continue
 				echo -e "${TC_CYAN}  Installing $pkg (curl script)${TC_RESET}"
-				curl -LsSf "$args" | sh
+				curl -LsSf "$args" | bash || install_failed+=("$pkg")
 			done
 
 			# 2b. uv tool install
