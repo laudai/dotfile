@@ -586,7 +586,7 @@ if [[ "$OS" == "macOS" ]]; then
 			esac
 			echo -e "${TC_CYAN}  Installing $pkg (curl script)${TC_RESET}"
 			case "$method" in
-				curl)      curl -LsSf "$args" | bash || install_failed+=("$pkg") ;;
+				curl)      curl -LsSf "$args" | UV_NO_MODIFY_PATH=1 bash || install_failed+=("$pkg") ;;
 				curl_sudo) curl -LsSf "$args" | sudo bash || install_failed+=("$pkg") ;;
 			esac
 		done
@@ -691,7 +691,7 @@ $repo_url"
 				esac
 				echo -e "${TC_CYAN}  Installing $pkg (curl script)${TC_RESET}"
 				case "$method" in
-					curl)      curl -LsSf "$args" | bash || install_failed+=("$pkg") ;;
+					curl)      curl -LsSf "$args" | UV_NO_MODIFY_PATH=1 bash || install_failed+=("$pkg") ;;
 					curl_sudo) curl -LsSf "$args" | sudo bash || install_failed+=("$pkg") ;;
 				esac
 			done
