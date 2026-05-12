@@ -950,8 +950,10 @@ curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local
 # Using pinned version URL (official recommended method, no GitHub API needed)
 # ref: https://github.com/nvm-sh/nvm#installing-and-updating
 NVM_VERSION="v0.40.4"
-PROFILE=/dev/null curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
 export NVM_DIR="$HOME/.nvm"
+# Unset XDG_CONFIG_HOME in subprocess so nvm_default_install_dir() returns ~/.nvm
+# (matches our NVM_DIR; otherwise nvm refuses to mkdir a "non-default" path)
+PROFILE=/dev/null curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | XDG_CONFIG_HOME= NVM_DIR="$HOME/.nvm" bash
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 # Install LTS and set as default (coc.nvim needs a stable node)
 # nvm install --lts is idempotent: skips if already installed, upgrades if new LTS available

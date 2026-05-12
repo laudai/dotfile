@@ -1063,12 +1063,10 @@ alias usb_s3_wakeup="echo 'enabled' | sudo tee /sys/bus/usb/devices/1-3/power/wa
 #/___/_/ /_/_/\__/
 
 # nvm
-# export NVM_DIR="$HOME/.nvm"
-# export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-#
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# install path: ~/.nvm (hardcoded path)
+# XDG_CONFIG_HOME variant removed — caused wrong path on desktop login
+# where gnome-session sets XDG_CONFIG_HOME=~/.config but nvm is in ~/.nvm
+export NVM_DIR="$HOME/.nvm"
 # https://medium.com/@ankitbabber/how-i-improved-my-shell-load-time-with-a-lazy-load-3acd89f8c4a3
 # manually lazy load the nvm if needed
 # _nvm_lazy_load() {
