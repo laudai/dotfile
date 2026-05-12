@@ -11,6 +11,7 @@
 # --- Brew taps (required for some casks not in default repos) ---
 brew_taps=(
 	gechr/tap                        # whichspace (menu bar Space indicator)
+	deskflow/tap                     # deskflow (software KVM, mouse/keyboard sharing)
 )
 
 # --- Fonts ---
@@ -234,6 +235,7 @@ cross_platform_gui=(
 	ghostty
 	gitkraken
 	wireshark
+	deskflow                         # software KVM: share mouse/keyboard across machines (macOS: deskflow/tap cask)
 
 	# Browser
 	chromium-browser                 # brew: chromium (Ubuntu snap stub)
@@ -460,6 +462,7 @@ declare -A flatpak_pkgs=(
 	[bottles]="com.usebottles.bottles"
 	[telegram]="org.telegram.desktop"
 	[mmex]="org.moneymanagerex.MMEX"
+	[deskflow]="org.deskflow.deskflow"
 )
 
 # --- Layer 4: Snap ---
