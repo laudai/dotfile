@@ -15,6 +15,8 @@ ln -sf "$HOME/.dotfile/config/gitconfig" "$HOME/.gitconfig"
 ln -sf "$HOME/.dotfile/config/gitignore_global" "$HOME/.gitignore_global"
 ln -sf "$HOME/.dotfile/config/starship.toml" "$HOME/.config/starship.toml"
 ln -sf "$HOME/.dotfile/config/ghostty" "$HOME/.config/ghostty/config"
+# Ghostty host-specific overrides: copy template if not yet customized
+[[ -f "$HOME/.config/ghostty/platform-specific" ]] || cp "$HOME/.dotfile/config/ghostty-platform-specific.example" "$HOME/.config/ghostty/platform-specific"
 ln -sf "$HOME/.dotfile/config/pet.config.toml" "$HOME/.config/pet/config.toml"
 
 # --- SSH helper scripts ---

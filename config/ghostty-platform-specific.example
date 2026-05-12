@@ -1,0 +1,9 @@
+# Host-specific Ghostty overrides
+# Copy this file to ~/.config/ghostty/host and customize per machine.
+# This file is NOT tracked by git.
+#
+# Reference values:
+#   macOS Retina + 1080p external: font-size = 16
+#   Linux 1080p @ 96 DPI:          font-size = 12
+
+font-size = 16
