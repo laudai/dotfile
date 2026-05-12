@@ -99,6 +99,9 @@ keybind = cmd+s>z=toggle_split_zoom
 keybind = global:control+command+t=new_window
 keybind = shift+cmd+f=start_search
 
+# Linux keybindings
+keybind = ctrl+shift+k=clear_screen
+
 # Host-specific overrides (not tracked by git)
 # Copy ghostty-platform-specific.example to ~/.config/ghostty/platform-specific and customize
 config-file = ?~/.config/ghostty/platform-specific
