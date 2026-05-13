@@ -74,7 +74,7 @@ keybind = cmd+s>r=reload_config
 keybind = cmd+h=esc:h
 keybind = cmd+l=esc:l
 keybind = cmd+b=esc:b
-keybind = cmd+d=esc:d
+keybind = cmd+i=esc:i
 keybind = cmd+f=esc:f
 keybind = cmd+.=esc:.
 keybind = cmd+o=esc:o
