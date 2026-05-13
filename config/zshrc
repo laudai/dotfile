@@ -199,7 +199,7 @@ source $ZSH/oh-my-zsh.sh
 # keybindings
 # You can use C-v in your shell to check what key combinaiton you press
 bindkey '^[\' autosuggest-toggle # alt-\
-bindkey -s '^[d' '^Uexit^M'
+bindkey -s '^[i' '^Uexit^M' # alt-i
 bindkey '^P' history-substring-search-up
 bindkey '^N' history-substring-search-down
 bindkey -M menuselect 'j' vi-down-line-or-history
