@@ -51,9 +51,7 @@
   "files.trimFinalNewlines": true,
   // https://www.zhihu.com/question/34415763
   "files.autoGuessEncoding": false, // 不推薦開啟autoGuessEncoding
-  "zenMode.hideStatusBar": false,
-  // Source : https://stackoverflow.com/questions/49196146/how-do-you-show-tabs-in-zen-mode-of-visual-studio-code
-  "zenMode.hideTabs": false, // 如果沒有開啟的話，會像Vim一樣只會顯示當前視窗的Buffer，不會將全部已開啟Tab展示
+  "zenMode.hideStatusBar": false, // enable the status bar when zen Mode
   // Specific File Formatter
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
