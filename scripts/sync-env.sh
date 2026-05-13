@@ -8,10 +8,10 @@
 # Dependencies:
 #   bw CLI must be in PATH
 #   macOS:  brew install bitwarden-cli
-#   Linux:  ~/.local/bin/bw wrapper (created by install-utilities.sh)
+#   Linux:  ~/.local/bin/bw wrapper (created by pkg-mgr.sh)
 set -eo pipefail
 
-command -v bw >/dev/null || { echo "ERROR: bw not found. Run install-utilities.sh first."; exit 1; }
+command -v bw >/dev/null || { echo "ERROR: bw not found. Run pkg-mgr.sh first."; exit 1; }
 
 # Login if needed, then unlock (one master password prompt either way)
 if bw login --check 2>/dev/null; then

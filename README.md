@@ -8,7 +8,7 @@ New machine setup order:
 
 ```bash
 # 1. Install utilities, symlinks, zsh plugins (includes bitwarden-cli)
-./scripts/install-utilities.sh --install
+./scripts/pkg-mgr.sh --install
 
 # 2. Restore host-level secrets from Bitwarden → ~/.env (requires bw from step 1)
 ./scripts/sync-env.sh

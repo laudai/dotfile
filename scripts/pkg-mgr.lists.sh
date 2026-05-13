@@ -1,10 +1,10 @@
 #!/usr/bin/env zsh
 # =============================================================================
-# install-utilities.lists.sh
+# pkg-mgr.lists.sh
 #
-# Package lists sourced by install-utilities.sh.
+# Package lists sourced by pkg-mgr.sh.
 # This file is NOT executable on its own — it is loaded via `source`.
-# Edit this file to add/remove packages; no changes to install-utilities.sh
+# Edit this file to add/remove packages; no changes to pkg-mgr.sh
 # are required unless install logic itself changes.
 # =============================================================================
 
@@ -419,7 +419,7 @@ declare -A extra_apt_repos=(
 #   url_deb       — .deb from fixed URL. arg1=url
 #   manual        — show URL in summary. arg1=url
 #
-# macOS fallback (install-utilities.sh) auto-executes: uv, curl
+# macOS fallback (pkg-mgr.sh) auto-executes: uv, curl
 # Other methods are Linux-only and skipped on macOS.
 declare -A official_install=(
 	# 2a. curl script

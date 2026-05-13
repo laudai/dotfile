@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
 # =============================================================================
-# install-utilities.sh
+# pkg-mgr.sh
 #
 # Usage:
-#   ./install-utilities.sh              Show what will be installed (dry-run)
-#   ./install-utilities.sh --install    Actually install everything
-#   ./install-utilities.sh --check-apt  Check which packages are available in apt
-#   ./install-utilities.sh --check-brew Check which packages are available in brew
-#   ./install-utilities.sh --help       Show usage
+#   ./pkg-mgr.sh              Show what will be installed (dry-run)
+#   ./pkg-mgr.sh --install    Actually install everything
+#   ./pkg-mgr.sh --check-apt  Check which packages are available in apt
+#   ./pkg-mgr.sh --check-brew Check which packages are available in brew
+#   ./pkg-mgr.sh --help       Show usage
 #
 # Dry-run (default) shows:
 #   1. All packages and which are skipped
@@ -44,9 +44,9 @@ for arg in "$@"; do
 done
 
 # =============================================================================
-# Load package lists (edit install-utilities.lists.sh to add/remove packages)
+# Load package lists (edit pkg-mgr.lists.sh to add/remove packages)
 # =============================================================================
-LISTS_FILE="$(dirname "$0")/install-utilities.lists.sh"
+LISTS_FILE="$(dirname "$0")/pkg-mgr.lists.sh"
 [[ -f "$LISTS_FILE" ]] || { echo "Error: package list file not found: $LISTS_FILE" >&2; exit 1; }
 source "$LISTS_FILE"
 
@@ -379,7 +379,7 @@ fi
 # Show plan (always runs)
 # =============================================================================
 echo "============================================================"
-echo " install-utilities.sh — Package Install Plan"
+echo " pkg-mgr.sh — Package Install Plan"
 echo "============================================================"
 echo ""
 echo "OS detected: $OSTYPE"
@@ -524,7 +524,7 @@ elif [[ "$OS" == "Linux" ]]; then
 		fi
 	fi
 	echo "--- macOS-only apps (NOT installable on Linux) ---"
-	echo "  (see macos_only_gui in install-utilities.lists.sh)"
+	echo "  (see macos_only_gui in pkg-mgr.lists.sh)"
 	echo ""
 fi
 
