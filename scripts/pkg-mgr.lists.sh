@@ -293,7 +293,6 @@ macos_only_gui=(
 
 	# Display / Monitor
 	monitorcontrol                   # Control external monitor brightness/contrast/volume from menulet
-	betterdisplay
 
 	# Audio
 	background-music                 # auto-pause music, per-app volume, record system audio
@@ -361,7 +360,7 @@ skip_on_linux=(
 # Future `make uninstall` will read this list to remove them.
 # Format: package_name  # (original_list) reason, deprecated date
 deprecated_pkgs=(
-	# e.g., pinta  # (cross_platform_gui) replaced by gimp, 2026-05
+    betterdisplay
 )
 
 # --- Brew name mapping ---
