@@ -549,6 +549,17 @@ function toggle-or-setting-displaysleep() {
   sudo pmset -c sleep $st displaysleep $dst
 }
 
+function toggle-auto-brightness() {
+  local current=$(defaults read /Library/Preferences/com.apple.iokit.AmbientLightSensor "Automatic Display Enabled" 2>/dev/null)
+  if [[ "$current" == "0" ]]; then
+    sudo defaults write /Library/Preferences/com.apple.iokit.AmbientLightSensor "Automatic Display Enabled" -bool true
+    echo "turn on 'Automatically adjust brightness'"
+  else
+    sudo defaults write /Library/Preferences/com.apple.iokit.AmbientLightSensor "Automatic Display Enabled" -bool false
+    echo "turn off 'Automatically adjust brightness'"
+  fi
+}
+
 # Toggle between headphones and MacBook Pro Speakers
 # If External Headphones available, use it instead of Plantronics
 function toggle-AudioSource() {
