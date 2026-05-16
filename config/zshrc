@@ -1051,7 +1051,15 @@ alias ei="$EDITOR $HOME/.config/i3/config"
 alias sz="source $HOME/.zshrc"
 
 # suffix alias
-alias -s {md,py,txt,vimrc,zshrc,conf,toml}=vim
+# executable files run, others open in vim
+function _suffix_open_or_exec() {
+	if [[ -x "$1" ]]; then
+		./"$1"
+	else
+		vim "$1"
+	fi
+}
+alias -s {md,py,txt,vimrc,zshrc,conf,toml}=_suffix_open_or_exec
 
 # global alias
 # https://thorsten-hans.com/5-types-of-zsh-aliases
