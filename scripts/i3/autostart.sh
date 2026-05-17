@@ -7,6 +7,8 @@ picom -b
 
 sleep 1
 nitrogen --restore
+# Fix: root window has no cursor defined, so mouse disappears over wallpaper area
+xsetroot -cursor_name left_ptr
 
 sleep 1
 conky -b
