@@ -309,6 +309,28 @@ function mkcdf() {
   cd $1
 }
 
+# trace a symlink chain layer by layer until it resolves to a real path or dead end
+# usage: trace_symlink ~/.kiro/skills
+function trace_symlink() {
+	local p="$1"
+	if [[ -z "$p" ]]; then
+		echo "usage: trace_symlink <path>" >&2
+		return 1
+	fi
+	while [[ -L "$p" ]]; do
+		local t=$(readlink "$p")
+		echo "  $p → $t"
+		[[ "$t" != /* ]] && t="$(dirname $p)/$t"
+		p="$t"
+	done
+	if [[ -e "$p" ]]; then
+		echo "  $p (real)"
+	else
+		echo "  $p (DEAD)"
+		return 2
+	fi
+}
+
 # display setting for monitor
 function screen_to_monitor(){
 	xrandr --output eDP-1 --mode 1920x1080
