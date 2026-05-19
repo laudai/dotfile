@@ -310,6 +310,7 @@ function mkcdf() {
 }
 
 # trace a symlink chain layer by layer until it resolves to a real path or dead end
+# note: trailing slash (path/) causes kernel to resolve symlink before reaching this function (POSIX path/. semantics)
 # usage: trace_symlink ~/.kiro/skills
 function trace_symlink() {
 	local p="$1"
