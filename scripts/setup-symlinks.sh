@@ -8,7 +8,7 @@
 # =============================================================================
 
 # --- Common dotfile symlinks ---
-ln -sf "$HOME/.dotfile/config/zshrc" "$HOME/.zshrc"
+ln -sf "$HOME/.dotfile/config/zsh/zshrc" "$HOME/.zshrc"
 ln -sf "$HOME/.dotfile/config/vimrc" "$HOME/.vimrc"
 ln -sf "$HOME/.dotfile/config/tmux.conf" "$HOME/.tmux.conf"
 ln -sf "$HOME/.dotfile/config/gitconfig" "$HOME/.gitconfig"

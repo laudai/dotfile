@@ -1,0 +1,312 @@
+#     _                    ____
+#  \_|_)                  (|   \       o
+#    |     __,             |    | __,
+#   _|    /  |  |   |     _|    |/  |  |
+#  (/\___/\_/|_/ \_/|_/  (/\___/ \_/|_/|_/
+#
+#  Github : https://github.com/laudai
+#  Medium : https://laudaihe.medium.com/
+
+# PATH (early so subsequent commands find binaries)
+[[ "$OSTYPE" == "darwin"* ]] && export PATH=/opt/homebrew/sbin:/opt/homebrew/bin:$PATH # for m1 homebrew
+
+# pre-omz (must be set BEFORE `source $ZSH/oh-my-zsh.sh`)
+# Path to your oh-my-zsh installation.
+export ZSH=$HOME/.oh-my-zsh
+ZSH_THEME="cloud"
+# Must be set BEFORE `source $ZSH/oh-my-zsh.sh` — oh-my-zsh reads this
+# once at source time to define the `history` alias (lib/history.zsh).
+HIST_STAMPS="%Y-%m-%dT%H:%M:%S%z"  # ISO 8601
+# export NVM_NO_USE in zsh-nvm before load plugin to avoid the autoload node
+export NVM_LAZY_LOAD=true
+export NVM_LAZY_LOAD_EXTRA_COMMANDS=("vim" "view" "kiro-cli")
+plugins=(
+    git
+    pip
+    python
+    systemd
+    tmux
+    docker
+    docker-compose
+    encode64
+    history-substring-search
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    sudo
+    vscode
+    vi-mode
+    zsh-navigation-tools
+    git-open
+    zsh-nvm
+    aws
+    zoxide
+)
+# plugin history-substring-search should load before zsh-syntax-highlighting to avoid syantax error
+# Deduplicate fpath and path to keep them clean across multiple source calls
+typeset -U fpath path
+# Custom completions (must be before oh-my-zsh source, which calls compinit)
+fpath=(~/.dotfile/completions $fpath)
+
+# config (external sources & host-specific)
+[[ -f "$HOME/.dotfile/config/color.txt" ]] && source "$HOME/.dotfile/config/color.txt"
+# Host-level config and secrets — set -a auto-exports all vars set in .env
+[[ -f "$HOME/.env" ]] && { set -a; source "$HOME/.env"; set +a }
+# Source private dotfile scripts (.sh/.function/.alias)
+# Version A: zsh glob (no fork, faster ~10-20ms)
+function _sz_function() {
+  local -a folders=(
+    $HOME/.dotfile/private
+  )
+  local -a exts=(sh function alias)
+  local f
+  for d in $folders; do
+    # Non-recursive: * matches single directory level only (no /),
+    # so subdirectories like internal_script/ are excluded.
+    # Only .sh/.function/.alias are sourced; .zsh scripts are standalone executables.
+    # ${(j:|:)~exts} joins exts array with | → "sh|function|alias"
+    # ~ enables glob expansion so the joined string is treated as a glob pattern
+    # *.(pattern) matches files by extension, (N) suppresses error if no match
+    for f in $d/*.(${(j:|:)~exts})(N); do
+      source "$f"
+    done
+  done
+}
+_sz_function
+
+# Version B: find (fork subprocess, more familiar syntax)
+# _sz_function() {
+#   local -a folders=(
+#     $HOME/.dotfile/private
+#   )
+#   local f
+#   for d in $folders; do
+#     for f in $(find "$d" -maxdepth 1 -type f \( -name '*.sh' -o -name '*.function' -o -name '*.alias' \) 2>/dev/null); do
+#       source "$f"
+#     done
+#   done
+# }
+# _sz_function
+
+# Load oh-my-zsh AFTER private config so host-specific overrides (PATH,
+# plugin-affecting env vars, alias overrides) are visible during plugin init
+source $ZSH/oh-my-zsh.sh
+
+
+#    __ __           __    _           ___
+#   / //_/__  __  __/ /_  (_)___  ____/ (_)___  ____ ______
+#  / ,< / _ \/ / / / __ \/ / __ \/ __  / / __ \/ __ `/ ___/
+# / /| /  __/ /_/ / /_/ / / / / / /_/ / / / / / /_/ (__  )
+#/_/ |_\___/\__, /_.___/_/_/ /_/\__,_/_/_/ /_/\__, /____/
+#          /____/                            /____/
+
+# keybindings
+# You can use C-v in your shell to check what key combinaiton you press
+bindkey '^[\' autosuggest-toggle # alt-\
+bindkey -s '^[i' '^Uexit^M' # alt-i
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'h' vi-backward-char
+bindkey '^Y^Y' undo # bind ^Y^Y undo like emacs ^Y keymaps
+bindkey '^[l' forward-word # alt-l
+bindkey '^[h' backward-word # alt-h
+bindkey '^[.' insert-last-word # alt-.
+bindkey '^[/' _run-help-clean # alt-/
+# How to switch comfortably to vi command mode on the zsh command line?
+# https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
+bindkey -M viins 'jk' vi-cmd-mode
+bindkey -M viins '^[e' _select-emacs
+bindkey -M vicmd '^[e' _select-emacs
+bindkey -M emacs '^[v' _select-vi
+bindkey -M viins '\ec' _select-emacs
+bindkey -M emacs '\ec' _select-vi
+bindkey -M vicmd " e" end-of-line
+bindkey -M vicmd " a" beginning-of-line
+# zsh-navigation-tools keybindings
+zle -N znt-cd-widget
+bindkey "^B" znt-cd-widget
+zle -N znt-kill-widget
+bindkey "^Y" znt-kill-widget
+# Set up fzf key bindings and fuzzy completion
+# fzf 0.48.0+ supports --zsh; older versions use separate source files
+if fzf --zsh &>/dev/null; then
+	source <(fzf --zsh)
+else
+	[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+	[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+fi
+# Rebind fzf cd widget from alt-c to alt-p (avoid conflict with vi/emacs toggle)
+bindkey -M emacs '\ep' fzf-cd-widget
+bindkey -M viins '\ep' fzf-cd-widget
+bindkey -M vicmd '\ep' fzf-cd-widget
+# pet query keybindings
+bindkey '^s' pet-snippet-search # ctrl-s
+# kiro agent selector
+bindkey '^k' kiro-agent-select # ctrl-k
+# Bind Ctrl+U to .kill-whole-line instead of vi-kill-line:
+# 1. Deletes entire line regardless of insert-mode entry point (vi-kill-line
+#    does nothing after A, unlike vim's <C-g>u<C-u> remap in .vimrc)
+# 2. Dot prefix bypasses vi-mode plugin's clipcopy wrapper that clears
+#    system clipboard with empty CUTBUFFER
+bindkey '^U' .kill-whole-line
+# keybindings reference
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
+# https://github.com/ThiefMaster/zsh-config/blob/master/zshrc.d/keybinds.zsh
+
+
+#   _____      __  __  _
+#  / ___/___  / /_/ /_(_)___  ____ _
+#  \__ \/ _ \/ __/ __/ / __ \/ __ `/
+# ___/ /  __/ /_/ /_/ / / / / /_/ /
+#/____/\___/\__/\__/_/_/ /_/\__, /
+#                          /____/
+
+# setting
+# Override oh-my-zsh defaults (lib/history.zsh: HISTSIZE=50000, SAVEHIST=10000)
+HISTSIZE=100000
+SAVEHIST=100000
+
+# Default ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+# See more document via man zshzle
+# use colour 0~7 avoid terminal only supports 8 colors
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=5,bg=none,bold,underline"
+
+# zsh-syntax-highlighting styles
+# [zsh comments nearly invisible on command-line](https://unix.stackexchange.com/questions/577586/zsh-comments-nearly-invisible-on-command-line)
+# https://github.com/zsh-users/zsh-syntax-highlighting/tree/master/highlighters/main
+# Declare the variable
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[comment]="fg=white,bold,underline"
+ZSH_HIGHLIGHT_STYLES[builtin]="bg=green"
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]="bg=magenta"
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]="bg=magenta"
+
+VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+VI_MODE_SET_CURSOR=true
+MODE_INDICATOR='%B%F{blue}<%b<<%f'
+
+
+#    ______                      __
+#   / ____/  ______  ____  _____/ /_
+#  / __/ | |/_/ __ \/ __ \/ ___/ __/
+# / /____>  </ /_/ / /_/ / /  / /_
+#/_____/_/|_/ .___/\____/_/   \__/
+#          /_/
+
+# export
+export EDITOR="vim"
+export VISUAL="$EDITOR"
+export MYVIMRC="$HOME/.vimrc"
+export DOTFILE="$HOME/.dotfile"
+SYMBOL_FILE="$HOME/.dotfile/config/symbol.txt"  # used by lsymbol/esymbol (no export — internal use only)
+# GPG: use current TTY for pinentry (required for GPG signing over SSH)
+export GPG_TTY=$(tty)
+# Custom dotfile scripts
+export PATH="$HOME/.dotfile/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+# fzf global defaults
+# note: ctrl-y is fzf built-in yank (emacs style: paste back killed text),
+#       overridden in FZF_CTRL_R_OPTS to copy selection to system clipboard
+export FZF_DEFAULT_OPTS="
+  --reverse
+  --cycle
+  --height=60%
+  --highlight-line
+  --border
+  --preview-window down
+  --bind 'ctrl-b:half-page-up,ctrl-f:half-page-down'
+  --bind 'shift-page-up:preview-page-up,shift-page-down:preview-page-down'
+  --bind '?:toggle-preview'
+  --bind 'ctrl-\:change-preview-window(right:50%|hidden|)'
+  --bind 'alt-y:execute-silent(echo -n {} | sed \"s/^[[:space:]]*[0-9]*\\t//\" | if command -v pbcopy >/dev/null; then pbcopy; else xclip -selection clipboard; fi)+accept'
+  --header 'ctrl+y (emacs yank/recover) | alt+y (copy) | ? (preview) | ctrl+\\ (preview pos) | ctrl+/ (line wrap) | shift+pgup/dn (preview page)'"
+
+# Ctrl+T: search files and paste path to command line
+# Use fd for speed (parallel, respects .gitignore) and --hidden for dotfiles
+export FZF_CTRL_T_COMMAND="fd --type f --type d --hidden --follow --exclude .git --exclude node_modules --exclude target"
+export FZF_CTRL_T_OPTS="
+  --preview '[ -d {} ] && tree -C {} || bat -n --color=always {}'"
+
+# Print tree structure in the preview window
+# Alt+P (rebound from Alt+C): cd into selected directory
+# Env var names must stay as FZF_ALT_C_* — fzf hardcodes these names
+# regardless of which key triggers fzf-cd-widget (see bindkey above)
+export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --exclude .git --exclude node_modules --exclude target"
+
+# Ctrl+R: history search with pet integration
+# bind alt-o to save to pet, ctrl-y to copy to clipboard in fzf history search
+# fzf action: +accept = close fzf and output selection to terminal
+#             +abort  = close fzf without output (silent operation)
+export FZF_CTRL_R_OPTS="
+  --info=right
+  --height=80%
+  --no-multi-line
+  --color header:italic:bold
+  --color 'fg:#bbccdd,fg+:#ddeeff,bg:#334455,preview-bg:#223344,border:#778899'
+  --header 'alt+o (pet new) | alt+y (copy) | ctrl+s (sort: +S relevance, -S recency)'
+  --preview 'echo {}' --preview-window hidden:50%:wrap
+  --bind 'ctrl-\:change-preview-window(down:50%|right:50%|)'
+  --bind 'ctrl-s:toggle-sort'
+  --bind 'alt-o:execute(pet new --tag {2..})+abort'"
+
+
+#   _____
+#  / ___/____  __  _______________
+#  \__ \/ __ \/ / / / ___/ ___/ _ \
+# ___/ / /_/ / /_/ / /  / /__/  __/
+#/____/\____/\__,_/_/   \___/\___/
+
+# source
+# Source split config files (functions/widgets defined before init hooks)
+source "$HOME/.dotfile/config/zsh/functions.zsh"
+source "$HOME/.dotfile/config/zsh/aliases.zsh"
+case "$OSTYPE" in
+  darwin*) source "$HOME/.dotfile/config/zsh/functions-macos.zsh" ;;
+  linux*)  source "$HOME/.dotfile/config/zsh/functions-linux.zsh" ;;
+esac
+
+
+#    ____      _ __
+#   /  _/___  (_) /_
+#   / // __ \/ / __/
+# _/ // / / / / /_
+#/___/_/ /_/_/\__/
+
+# init
+
+# nvm
+# install path: ~/.nvm (hardcoded path)
+# XDG_CONFIG_HOME variant removed — caused wrong path on desktop login
+# where gnome-session sets XDG_CONFIG_HOME=~/.config but nvm is in ~/.nvm
+export NVM_DIR="$HOME/.nvm"
+# https://medium.com/@ankitbabber/how-i-improved-my-shell-load-time-with-a-lazy-load-3acd89f8c4a3
+# manually lazy load the nvm if needed
+# _nvm_lazy_load() {
+#   unset -f nvm node npm npx yarn pnpm node_modules vim &> /dev/null
+#   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+#   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# }
+# nvm()  { _nvm_lazy_load; nvm  "$@"; }
+# node() { _nvm_lazy_load; node "$@"; }
+# npm()  { _nvm_lazy_load; npm  "$@"; }
+# npx()  { _nvm_lazy_load; npx  "$@"; }
+# vim()  { _nvm_lazy_load; vim  "$@"; }
+# other way to node lazy load
+# https://sumercip.com/posts/lazyload-zsh/
+# https://github.com/qoomon/zsh-lazyload
+
+# autoload
+# run-help: enable zsh built-in help for builtins (whence, bindkey, etc.)
+unalias run-help 2>/dev/null
+autoload -Uz run-help
+autoload -Uz run-help-git run-help-sudo run-help-openssl
+
+# starship (last — registers prompt hooks)
+eval "$(starship init zsh)"
+
+# https://superuser.com/questions/117841/when-reading-a-file-with-less-or-more-how-can-i-get-the-content-in-colors
+#export LESS="-r" #useful for raw-control-chars, but can't like alias to escape via backslash \
