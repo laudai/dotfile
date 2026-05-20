@@ -8,84 +8,84 @@
 # Linux-only functions — sourced only when $OSTYPE == linux*
 
 # display setting for monitor (X11)
-function screen_to_monitor(){
-	xrandr --output eDP-1 --mode 1920x1080
+function screen_to_monitor() {
+  xrandr --output eDP-1 --mode 1920x1080
 }
 
 # display setting for panel (X11)
-function screen_to_panel(){
-	xrandr --output eDP-1 --mode 1600x900
+function screen_to_panel() {
+  xrandr --output eDP-1 --mode 1600x900
 }
 
 # toggle your gnome desktop screensaver lock-enabled & ubuntu-lock-on-suspend
 # 切換自動鎖定螢幕、暫停時鎖定螢幕
-toggle-sll() {
+function toggle-sll() {
   local lock_enabled=$(gsettings get org.gnome.desktop.screensaver lock-enabled)
   local ubuntu_lock_on_suspend=$(gsettings get org.gnome.desktop.screensaver ubuntu-lock-on-suspend)
 
   if [[ $lock_enabled == true && $ubuntu_lock_on_suspend == true ]]; then
-	  gsettings set org.gnome.desktop.screensaver lock-enabled false
-	  gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend false
-	  echo -e "Your screen lock_enabled and ubuntu_lock_on_suspend are all ${BOLD_GREEN}True${RESET}."
-	  echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend to ${BOLD_RED}False${RESET}."
+    gsettings set org.gnome.desktop.screensaver lock-enabled false
+    gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend false
+    echo -e "Your screen lock_enabled and ubuntu_lock_on_suspend are all ${BOLD_GREEN}True${RESET}."
+    echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend to ${BOLD_RED}False${RESET}."
 
   else
-	  gsettings set org.gnome.desktop.screensaver lock-enabled true
-	  gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend true
-	  echo -e "Your screen lock_enabled or ubuntu_lock_on_suspend is ${BOLD_RED}False${RESET}."
-	  echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend all ${BOLD_GREEN}True${RESET}."
+    gsettings set org.gnome.desktop.screensaver lock-enabled true
+    gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend true
+    echo -e "Your screen lock_enabled or ubuntu_lock_on_suspend is ${BOLD_RED}False${RESET}."
+    echo -e "Trun screen lock_enabled and ubuntu_lock_on_suspend all ${BOLD_GREEN}True${RESET}."
   fi
 }
 
 # toggle your gnome app-switcher current-workspace-only
 # 切換是否可以透過'切換相同程式'切換不同 workspace 的視窗
-toggle-app-switcher_workspace-only() {
+function toggle-app-switcher_workspace-only() {
   local app_switcher_workspace=$(gsettings get org.gnome.shell.app-switcher current-workspace-only)
   if [[ $app_switcher_workspace == true ]]; then
-	  gsettings set org.gnome.shell.app-switcher current-workspace-only false
-	  echo -e "Change app-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
+    gsettings set org.gnome.shell.app-switcher current-workspace-only false
+    echo -e "Change app-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
   elif [[ $app_switcher_workspace == false ]]; then
-	  gsettings set org.gnome.shell.app-switcher current-workspace-only true
-	  echo -e "Change app-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
+    gsettings set org.gnome.shell.app-switcher current-workspace-only true
+    echo -e "Change app-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
   fi
 }
 
 # toggle your gnome window-switcher current-workspace-only
 # 切換是否可以透過'切換視窗'切換不同 workspace 的視窗
-toggle-window-switcher_workspace-only() {
+function toggle-window-switcher_workspace-only() {
   local window_switcher_workspace=$(gsettings get org.gnome.shell.window-switcher current-workspace-only)
   if [[ $window_switcher_workspace == true ]]; then
-	  gsettings set org.gnome.shell.window-switcher current-workspace-only false
-	  echo -e "Change window-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
+    gsettings set org.gnome.shell.window-switcher current-workspace-only false
+    echo -e "Change window-switcher current-workspace-only to ${BOLD_RED}False${RESET}."
   elif [[ $window_switcher_workspace == false ]]; then
-	  gsettings set org.gnome.shell.window-switcher current-workspace-only true
-	  echo -e "Change window-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
+    gsettings set org.gnome.shell.window-switcher current-workspace-only true
+    echo -e "Change window-switcher current-workspace-only to ${BOLD_GREEN}True${RESET}."
   fi
 }
 
 # toggle your gnome interface animations
 # 切換 gnome 特效動畫
-toggle-gnome-interface_animations() {
+function toggle-gnome-interface_animations() {
   local gnome_interface_animations=$(gsettings get org.gnome.desktop.interface enable-animations)
   if [[ $gnome_interface_animations == true ]]; then
-	  gsettings set org.gnome.desktop.interface enable-animations false
-	  echo -e "Change gnome interface animations to ${BOLD_RED}False${RESET}."
+    gsettings set org.gnome.desktop.interface enable-animations false
+    echo -e "Change gnome interface animations to ${BOLD_RED}False${RESET}."
   elif [[ $gnome_interface_animations == false ]]; then
-	  gsettings set org.gnome.desktop.interface enable-animations true
-	  echo -e "Change gnome interface animations to ${BOLD_GREEN}True${RESET}."
+    gsettings set org.gnome.desktop.interface enable-animations true
+    echo -e "Change gnome interface animations to ${BOLD_GREEN}True${RESET}."
   fi
 }
 
 # toggle your gnome workspace only with primary monitor
 # 只在主螢幕切換 workspace
-toggle-workspace-primary-monitor-only() {
+function toggle-workspace-primary-monitor-only() {
   local workspace_primary_monitor_only=$(gsettings get org.gnome.mutter workspaces-only-on-primary)
   if [[ $workspace_primary_monitor_only == true ]]; then
-	  gsettings set org.gnome.mutter workspaces-only-on-primary false
-	  echo -e "Change gnome workspace only on primary monitor to ${BOLD_RED}False${RESET}."
+    gsettings set org.gnome.mutter workspaces-only-on-primary false
+    echo -e "Change gnome workspace only on primary monitor to ${BOLD_RED}False${RESET}."
   elif [[ $workspace_primary_monitor_only == false ]]; then
-	  gsettings set org.gnome.mutter workspaces-only-on-primary true
-	  echo -e "Change gnome workspace only on primary monitor to ${BOLD_GREEN}True${RESET}."
+    gsettings set org.gnome.mutter workspaces-only-on-primary true
+    echo -e "Change gnome workspace only on primary monitor to ${BOLD_GREEN}True${RESET}."
   fi
 }
 
@@ -97,7 +97,7 @@ function wttr_to_png() {
   if which display &> /dev/null; then
     display -resize $(xrandr | fgrep '*' | awk '{print $1}') /tmp/weather.png
   else
-	echo 'You could use ImageMagick to show this image.'
+  echo 'You could use ImageMagick to show this image.'
   fi
 }
 

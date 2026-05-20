@@ -9,7 +9,9 @@
 
 # To remove any command from the zsh history file
 # this method is from https://goo.gl/sTPu62
-histrm() { LC_ALL=C sed --in-place '/$1/d' $HISTFILE }
+function histrm() {
+  LC_ALL=C sed --in-place '/$1/d' $HISTFILE
+}
 
 # cd folder and ls item at the same time
 # this method is from https://goo.gl/92NCHU
@@ -28,23 +30,23 @@ function mkcdf() {
 # note: trailing slash (path/) causes kernel to resolve symlink before reaching this function (POSIX path/. semantics)
 # usage: trace_symlink ~/.kiro/skills
 function trace_symlink() {
-	local p="$1"
-	if [[ -z "$p" ]]; then
-		echo "usage: trace_symlink <path>" >&2
-		return 1
-	fi
-	while [[ -L "$p" ]]; do
-		local t=$(readlink "$p")
-		echo "  $p → $t"
-		[[ "$t" != /* ]] && t="$(dirname $p)/$t"
-		p="$t"
-	done
-	if [[ -e "$p" ]]; then
-		echo "  $p (real)"
-	else
-		echo "  $p (DEAD)"
-		return 2
-	fi
+  local p="$1"
+  if [[ -z "$p" ]]; then
+    echo "usage: trace_symlink <path>" >&2
+    return 1
+  fi
+  while [[ -L "$p" ]]; do
+    local t=$(readlink "$p")
+    echo "  $p → $t"
+    [[ "$t" != /* ]] && t="$(dirname $p)/$t"
+    p="$t"
+  done
+  if [[ -e "$p" ]]; then
+    echo "  $p (real)"
+  else
+    echo "  $p (DEAD)"
+    return 2
+  fi
 }
 
 # change to vim insert mode and use emacs keymap
@@ -126,12 +128,12 @@ function dateJournalctl() {
 }
 
 # generate the Epoch Time (Linux and MacOS)
-function epochTimeDate_get(){
+function epochTimeDate_get() {
   date +%s
 }
 
 # generate the timestamp by ISO8601 by two epoch UNIX time
-function epochTimetoDate_transfer (){
+function epochTimetoDate_transfer() {
   case "$OSTYPE" in
     "linux-gnu"*)
         date -d @${1} -Isec -u
@@ -146,7 +148,7 @@ function epochTimetoDate_transfer (){
 }
 
 # generate the timestamp by ISO8601 by two epoch UNIX time
-function epochTimetoDate_calcuate (){
+function epochTimetoDate_calcuate() {
   case "$OSTYPE" in
     "linux-gnu"*)
         date -d @$((${1}+${2})) -Isec -u
@@ -182,7 +184,7 @@ function lsymbol() {
   if [[ -e "$SYMBOL_FILE" ]]; then
     less "$SYMBOL_FILE"
   else
-	echo "can't find $SYMBOL_FILE" 1>&2
+  echo "can't find $SYMBOL_FILE" 1>&2
   fi
 }
 
@@ -326,111 +328,111 @@ zle -N kiro-agent-select
 # --newtab: use Ghostty AppleScript to open tabs (macOS only, requires Ghostty 1.3.0+)
 # default: use tmux to open windows (cross-platform, requires active tmux session)
 function OpenDirtyRepository() {
-    local check_unpushed=false no_cmd=false use_newtab=false
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --unpushed|-u) check_unpushed=true ;;
-            --no-cmd|--silent|-s) no_cmd=true ;;
-            --newtab|-t) use_newtab=true ;;
-        esac
-        shift
-    done
+  local check_unpushed=false no_cmd=false use_newtab=false
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --unpushed|-u) check_unpushed=true ;;
+      --no-cmd|--silent|-s) no_cmd=true ;;
+      --newtab|-t) use_newtab=true ;;
+    esac
+    shift
+  done
 
-    local repos=(
-        ~/Documents/projects/*/*
-        ~/.dotfile
-        ~/.dotai
-    )
-    local dirty=() unpushed=() clean=() skipped=()
+  local repos=(
+    ~/Documents/projects/*/*
+    ~/.dotfile
+    ~/.dotai
+  )
+  local dirty=() unpushed=() clean=() skipped=()
 
-    for repo in "${repos[@]}"; do
-        if [[ ! -d "$repo/.git" ]]; then
-            skipped+=("$repo")
-        elif git -C "$repo" status --porcelain | grep -q .; then
-            dirty+=("$repo")
-        elif $check_unpushed && git -C "$repo" log --oneline @{u}..HEAD 2>/dev/null | grep -q .; then
-            unpushed+=("$repo")
-        else
-            clean+=("$repo")
-        fi
-    done
-
-    echo "=== Summary ==="
-    echo "Dirty:    ${#dirty[@]}"
-    $check_unpushed && echo "Unpushed: ${#unpushed[@]}"
-    echo "Clean:    ${#clean[@]}"
-    echo "Skipped:  ${#skipped[@]} (not a git repo)"
-    echo ""
-    (( ${#clean[@]} )) && printf "  [clean]     %s\n" "${clean[@]}"
-    (( ${#skipped[@]} )) && printf "  [skip]      %s\n" "${skipped[@]}"
-    (( ${#unpushed[@]} )) && printf "  [unpushed]  %s\n" "${unpushed[@]}"
-    (( ${#dirty[@]} )) && printf "  [dirty]     %s\n" "${dirty[@]}"
-
-    local targets=("${dirty[@]}" "${unpushed[@]}")
-    if [[ ${#targets[@]} -eq 0 ]]; then
-        echo ""
-        echo "Nothing to open."
-        return 0
-    fi
-
-    # Validate backend
-    if $use_newtab; then
-        [[ "$OSTYPE" != darwin* ]] && echo "--newtab is macOS only." >&2 && return 1
-    elif [[ -z "$TMUX" ]]; then
-        echo "Not in a tmux session. Starting one and re-running..."
-        local _args=()
-        $check_unpushed && _args+=(--unpushed)
-        $no_cmd && _args+=(--silent)
-        tmux new-session -s "dirty-repos-$$" "zsh -ic 'OpenDirtyRepository ${_args[*]}; exec zsh'"
-        return
-    fi
-
-    echo ""
-    local _open_repo
-    if $use_newtab; then
-        echo "Opening ${#targets[@]} tab(s) in Ghostty..."
-        _open_repo() {
-            local repo=$1 cmd=$2
-            osascript -e "tell application \"Ghostty\"
-                set t to new tab in front window
-                set term to focused terminal of t
-                input text \"cd '${repo}' && clear${cmd:+ && $cmd}\n\" to term
-            end tell"
-        }
+  for repo in "${repos[@]}"; do
+    if [[ ! -d "$repo/.git" ]]; then
+      skipped+=("$repo")
+    elif git -C "$repo" status --porcelain | grep -q .; then
+      dirty+=("$repo")
+    elif $check_unpushed && git -C "$repo" log --oneline @{u}..HEAD 2>/dev/null | grep -q .; then
+      unpushed+=("$repo")
     else
-        echo "Opening ${#targets[@]} window(s) in tmux..."
-        _open_repo() {
-            local repo=$1 cmd=$2
-            if [[ -n "$cmd" ]]; then
-                tmux new-window -c "$repo" "zsh -ic '$cmd; exec zsh'"
-            else
-                tmux new-window -c "$repo"
-            fi
-        }
+      clean+=("$repo")
     fi
+  done
 
-    for repo in "${dirty[@]}"; do
-        $no_cmd && _open_repo "$repo" "" || _open_repo "$repo" "gd"
-    done
-    for repo in "${unpushed[@]}"; do
-        $no_cmd && _open_repo "$repo" "" || _open_repo "$repo" "glup"
-    done
-    unfunction _open_repo 2>/dev/null
+  echo "=== Summary ==="
+  echo "Dirty:    ${#dirty[@]}"
+  $check_unpushed && echo "Unpushed: ${#unpushed[@]}"
+  echo "Clean:    ${#clean[@]}"
+  echo "Skipped:  ${#skipped[@]} (not a git repo)"
+  echo ""
+  (( ${#clean[@]} )) && printf "  [clean]     %s\n" "${clean[@]}"
+  (( ${#skipped[@]} )) && printf "  [skip]      %s\n" "${skipped[@]}"
+  (( ${#unpushed[@]} )) && printf "  [unpushed]  %s\n" "${unpushed[@]}"
+  (( ${#dirty[@]} )) && printf "  [dirty]     %s\n" "${dirty[@]}"
+
+  local targets=("${dirty[@]}" "${unpushed[@]}")
+  if [[ ${#targets[@]} -eq 0 ]]; then
+    echo ""
+    echo "Nothing to open."
+    return 0
+  fi
+
+  # Validate backend
+  if $use_newtab; then
+    [[ "$OSTYPE" != darwin* ]] && echo "--newtab is macOS only." >&2 && return 1
+  elif [[ -z "$TMUX" ]]; then
+    echo "Not in a tmux session. Starting one and re-running..."
+    local _args=()
+    $check_unpushed && _args+=(--unpushed)
+    $no_cmd && _args+=(--silent)
+    tmux new-session -s "dirty-repos-$$" "zsh -ic 'OpenDirtyRepository ${_args[*]}; exec zsh'"
+    return
+  fi
+
+  echo ""
+  local _open_repo
+  if $use_newtab; then
+    echo "Opening ${#targets[@]} tab(s) in Ghostty..."
+    function _open_repo() {
+      local repo=$1 cmd=$2
+      osascript -e "tell application \"Ghostty\"
+        set t to new tab in front window
+        set term to focused terminal of t
+        input text \"cd '${repo}' && clear${cmd:+ && $cmd}\n\" to term
+      end tell"
+    }
+  else
+    echo "Opening ${#targets[@]} window(s) in tmux..."
+    function _open_repo() {
+      local repo=$1 cmd=$2
+      if [[ -n "$cmd" ]]; then
+        tmux new-window -c "$repo" "zsh -ic '$cmd; exec zsh'"
+      else
+        tmux new-window -c "$repo"
+      fi
+    }
+  fi
+
+  for repo in "${dirty[@]}"; do
+    $no_cmd && _open_repo "$repo" "" || _open_repo "$repo" "gd"
+  done
+  for repo in "${unpushed[@]}"; do
+    $no_cmd && _open_repo "$repo" "" || _open_repo "$repo" "glup"
+  done
+  unfunction _open_repo 2>/dev/null
 }
 
 # run-help wrapper: clear autosuggestion before invoking run-help,
 # otherwise the grey suggestion text gets included in the command buffer
 function _run-help-clean() {
-	zle autosuggest-clear
-	zle run-help
+  zle autosuggest-clear
+  zle run-help
 }
 zle -N _run-help-clean
 
 # suffix alias helper: executable files run, others open in vim
 function _suffix_open_or_exec() {
-	if [[ -x "$1" ]]; then
-		./"$1"
-	else
-		vim "$1"
-	fi
+  if [[ -x "$1" ]]; then
+    ./"$1"
+  else
+    vim "$1"
+  fi
 }

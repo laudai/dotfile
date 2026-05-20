@@ -21,25 +21,25 @@ HIST_STAMPS="%Y-%m-%dT%H:%M:%S%z"  # ISO 8601
 export NVM_LAZY_LOAD=true
 export NVM_LAZY_LOAD_EXTRA_COMMANDS=("vim" "view" "kiro-cli")
 plugins=(
-    git
-    pip
-    python
-    systemd
-    tmux
-    docker
-    docker-compose
-    encode64
-    history-substring-search
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-    sudo
-    vscode
-    vi-mode
-    zsh-navigation-tools
-    git-open
-    zsh-nvm
-    aws
-    zoxide
+  git
+  pip
+  python
+  systemd
+  tmux
+  docker
+  docker-compose
+  encode64
+  history-substring-search
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  sudo
+  vscode
+  vi-mode
+  zsh-navigation-tools
+  git-open
+  zsh-nvm
+  aws
+  zoxide
 )
 # plugin history-substring-search should load before zsh-syntax-highlighting to avoid syantax error
 # Deduplicate fpath and path to keep them clean across multiple source calls
@@ -132,10 +132,10 @@ bindkey "^Y" znt-kill-widget
 # Set up fzf key bindings and fuzzy completion
 # fzf 0.48.0+ supports --zsh; older versions use separate source files
 if fzf --zsh &>/dev/null; then
-	source <(fzf --zsh)
+  source <(fzf --zsh)
 else
-	[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
-	[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+  [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+  [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
 fi
 # Rebind fzf cd widget from alt-c to alt-p (avoid conflict with vi/emacs toggle)
 bindkey -M emacs '\ep' fzf-cd-widget
