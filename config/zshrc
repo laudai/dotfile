@@ -803,11 +803,12 @@ zle -N pet-snippet-search
 stty -ixon
 
 function kiro-agent-select() {
-  local dotai_agents="$HOME/.dotai/kiro/agents"
+  local dotai_agents="$HOME/.dotai/agents"
   local built_agents="$HOME/.kiro/agents"
   local list=""
-  for f in "$dotai_agents"/*.json(N); do
-    local name="${${f:t}%.json}"
+  for f in "$dotai_agents"/*.yaml(N); do
+    local name="${${f:t}%.yaml}"
+    [[ "$name" == _* ]] && continue
     if [[ -f "$built_agents/$name.json" ]]; then
       list+="$name"$'\n'
     else
@@ -822,7 +823,7 @@ function kiro-agent-select() {
   local name="${entry%%  \[*}"
   [[ -n "$name" ]] || return
   if [[ "$entry" == *"[BUILD FAILED]"* ]]; then
-    BUFFER=" # agent '$name' failed to build — run: cd ~/.dotai && ./build.sh"
+    BUFFER=" # agent '$name' failed to build — run: cd ~/.dotai && python3 scripts/build.py"
     CURSOR=$#BUFFER
     zle redisplay
     return
