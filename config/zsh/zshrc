@@ -261,13 +261,27 @@ export FZF_CTRL_R_OPTS="
 #/____/\____/\__,_/_/   \___/\___/
 
 # source
-# Source split config files (functions/widgets defined before init hooks)
-source "$HOME/.dotfile/config/zsh/functions.zsh"
-source "$HOME/.dotfile/config/zsh/aliases.zsh"
+# Modular config files. Order matters — functions/widgets must be defined
+# before init hooks (oh-my-zsh, starship, fzf) below.
+ZSH_CONFIG="$HOME/.dotfile/config/zsh"
+
+# Cross-platform modules (ordered)
+typeset -a zsh_modules=(
+  functions.zsh   # Utility functions (must be first — others depend on it)
+  aliases.zsh     # Command aliases
+  aitool.zsh      # Local AI daemons (Anytype + agentmemory) control
+)
+
+# OS-specific module
 case "$OSTYPE" in
-  darwin*) source "$HOME/.dotfile/config/zsh/functions-macos.zsh" ;;
-  linux*)  source "$HOME/.dotfile/config/zsh/functions-linux.zsh" ;;
+  darwin*) zsh_modules+=(functions-macos.zsh) ;;
+  linux*)  zsh_modules+=(functions-linux.zsh) ;;
 esac
+
+for m in $zsh_modules; do
+  source "$ZSH_CONFIG/$m"
+done
+unset ZSH_CONFIG zsh_modules m
 
 
 #    ____      _ __
