@@ -13,44 +13,67 @@ Will insall all VSCode extensions forcibly in the array in this script.
 # https://github.com/shanalikhan/code-settings-sync
 # https://code.visualstudio.com/docs/editor/settings-sync
 declare -a vscode_extensions=(
+    # --- Python ---
     "ms-python.python"
     "charliermarsh.ruff"
     "ms-toolsai.jupyter"
-    "ms-ceintl.vscode-language-pack-zh-hant"
-    "formulahendry.code-runner"
+
+    # --- Markdown ---
     "yzhang.markdown-all-in-one"
-    "vscodevim.vim"
     "DavidAnson.vscode-markdownlint"
     "shd101wyy.markdown-preview-enhanced"
-    "formulahendry.auto-rename-tag"
-    "aaron-bond.better-comments"
-    "alefragnani.bookmarks"
-    "github.vscode-pull-request-github"
+
+    # --- Git ---
     "eamodio.gitlens"
-    "ritwickdey.liveserver"
-    "patbenatar.advanced-new-file"
-    "vira.vsc-vira-theme"
-    "pkief.material-icon-theme"
-    "ms-vscode-remote.remote-ssh"
-    "jeanp413.open-remote-ssh"
-    "esbenp.prettier-vscode"
-    "ArthurLobo.easy-codesnap"
-    "techer.open-in-browser"
-    "vscode-icons-team.vscode-icons"
-    "mikestead.dotenv"
-    "editorconfig.editorconfig"
-    "hoovercj.vscode-settings-cycler"
-    "gruntfuggly.todo-tree"
     "mhutchie.git-graph"
     "donjayamanne.githistory"
+    "github.vscode-pull-request-github"
+
+    # --- Remote ---
+    "ms-vscode-remote.remote-ssh"
+    "jeanp413.open-remote-ssh"
+
+    # --- Debug ---
+    "vadimcn.vscode-lldb"
+    "hediet.debug-visualizer"
+
+    # --- Editor enhancement ---
+    "vscodevim.vim"
+    "aaron-bond.better-comments"
+    "alefragnani.bookmarks"
     "leodevbro.blockman"
-	"j4ng5y.charactercount"
-	"worisur.wordcount-cjk"
-	"uctakeoff.vscode-counter"
-	"brokenbonesdd.opencclint"
-	"hediet.debug-visualizer"
-	"vadimcn.vscode-lldb"
-	"druideinformatique.antidote"
+    "hoovercj.vscode-settings-cycler"
+    "patbenatar.advanced-new-file"
+    "formulahendry.auto-rename-tag"
+    "gruntfuggly.todo-tree"
+
+    # --- Formatter / Linter ---
+    "esbenp.prettier-vscode"
+    "editorconfig.editorconfig"
+    "brokenbonesdd.opencclint"
+
+    # --- Stats / Counter ---
+    "j4ng5y.charactercount"
+    "worisur.wordcount-cjk"
+    "uctakeoff.vscode-counter"
+
+    # --- Theme / Appearance ---
+    "vira.vsc-vira-theme"
+    "pkief.material-icon-theme"
+    "vscode-icons-team.vscode-icons"
+
+    # --- Web / Preview ---
+    "ritwickdey.liveserver"
+    "techer.open-in-browser"
+    "formulahendry.code-runner"
+    "ArthurLobo.easy-codesnap"
+
+    # --- Language / i18n ---
+    "ms-ceintl.vscode-language-pack-zh-hant"
+    "druideinformatique.antidote"
+
+    # --- Config / Env ---
+    "mikestead.dotenv"
 )
 
 
