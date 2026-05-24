@@ -18,8 +18,8 @@
   // bracketPairColorization extensions built in August 2021 (version 1.60)
   "editor.bracketPairColorization.enabled": true,
   // Blockman extensions setting for new VSCode API setting in September 2021 v1.61
-  "editor.guides.indentation": false,
-  "editor.guides.bracketPairs": false,
+  "editor.guides.indentation": true,
+  "editor.guides.bracketPairs": true,
   // https://github.com/microsoft/vscode/issues/20947
   "editor.minimap.renderCharacters": false, // minimap render block instead of character
   "editor.lineNumbers": "relative",
