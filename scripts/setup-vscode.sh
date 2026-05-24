@@ -48,6 +48,7 @@ declare -a vscode_extensions=(
 	"j4ng5y.charactercount"
 	"brokenbonesdd.opencclint"
 	"hediet.debug-visualizer"
+	"vadimcn.vscode-lldb"
 )
 
 
