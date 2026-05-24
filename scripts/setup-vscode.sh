@@ -18,7 +18,6 @@ declare -a vscode_extensions=(
     "ms-toolsai.jupyter"
     "ms-ceintl.vscode-language-pack-zh-hant"
     "formulahendry.code-runner"
-    "mdickin.markdown-shortcuts"
     "yzhang.markdown-all-in-one"
     "vscodevim.vim"
     "DavidAnson.vscode-markdownlint"
