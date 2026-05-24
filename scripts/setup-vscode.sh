@@ -46,6 +46,8 @@ declare -a vscode_extensions=(
     "donjayamanne.githistory"
     "leodevbro.blockman"
 	"j4ng5y.charactercount"
+	"worisur.wordcount-cjk"
+	"uctakeoff.vscode-counter"
 	"brokenbonesdd.opencclint"
 	"hediet.debug-visualizer"
 	"vadimcn.vscode-lldb"
