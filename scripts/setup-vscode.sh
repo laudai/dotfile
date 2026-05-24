@@ -49,6 +49,7 @@ declare -a vscode_extensions=(
 	"brokenbonesdd.opencclint"
 	"hediet.debug-visualizer"
 	"vadimcn.vscode-lldb"
+	"druideinformatique.antidote"
 )
 
 
