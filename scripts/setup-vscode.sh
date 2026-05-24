@@ -34,7 +34,7 @@ declare -a vscode_extensions=(
     "ms-vscode-remote.remote-ssh"
     "jeanp413.open-remote-ssh"
     "esbenp.prettier-vscode"
-    "pnp.polacode"
+    "ArthurLobo.easy-codesnap"
     "techer.open-in-browser"
     "vscode-icons-team.vscode-icons"
     "mikestead.dotenv"
