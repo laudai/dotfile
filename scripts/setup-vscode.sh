@@ -58,7 +58,7 @@ declare -a vscode_extensions=(
     "uctakeoff.vscode-counter"
 
     # --- Theme / Appearance ---
-    "vira.vsc-vira-theme"
+    "BeardedBear.beardedtheme"
     "pkief.material-icon-theme"
     "vscode-icons-team.vscode-icons"
 

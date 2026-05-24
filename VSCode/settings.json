@@ -24,8 +24,8 @@
   "editor.minimap.renderCharacters": false, // minimap render block instead of character
   "editor.lineNumbers": "relative",
   // Workbench setting
-  "workbench.colorTheme": "Vira Teal High Contrast",
-  "workbench.iconTheme": "vira-icons-teal",
+  "workbench.colorTheme": "Bearded Theme Oceanic",
+  "workbench.iconTheme": "material-icon-theme",
   "workbench.colorCustomizations": {
     "editor.selectionBackground": "#5A5AAD",
     "editor.findMatchHighlightBackground": "#8C8C00"
