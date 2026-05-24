@@ -30,7 +30,7 @@ declare -a vscode_extensions=(
     "eamodio.gitlens"
     "ritwickdey.liveserver"
     "patbenatar.advanced-new-file"
-    "equinusocio.vsc-material-theme"
+    "vira.vsc-vira-theme"
     "pkief.material-icon-theme"
     "ms-vscode-remote.remote-ssh"
     "esbenp.prettier-vscode"
