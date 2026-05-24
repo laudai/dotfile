@@ -33,6 +33,7 @@ declare -a vscode_extensions=(
     "vira.vsc-vira-theme"
     "pkief.material-icon-theme"
     "ms-vscode-remote.remote-ssh"
+    "jeanp413.open-remote-ssh"
     "esbenp.prettier-vscode"
     "pnp.polacode"
     "techer.open-in-browser"
