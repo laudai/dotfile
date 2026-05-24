@@ -14,6 +14,7 @@ Will insall all VSCode extensions forcibly in the array in this script.
 # https://code.visualstudio.com/docs/editor/settings-sync
 declare -a vscode_extensions=(
     "ms-python.python"
+    "charliermarsh.ruff"
     "ms-ceintl.vscode-language-pack-zh-hant"
     "formulahendry.code-runner"
     "mdickin.markdown-shortcuts"
