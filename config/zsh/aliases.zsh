@@ -76,3 +76,9 @@ alias -g ppa=" | \less" # purge pager
 # make usb port 1-3 wakeup from s3 situation
 # please make sure the XHC in /proc/acpi/wakeup is enabled
 alias usb_s3_wakeup="echo 'enabled' | sudo tee /sys/bus/usb/devices/1-3/power/wakeup"
+
+# Override oh-my-zsh git plugin `gdup` alias (git diff @{upstream})
+# gdup: unpushed commits vs upstream (aligns with glup)
+# gdupa: include working tree + staged changes
+alias gdup='git diff @{u} HEAD'
+alias gdupa='git diff @{u}'

@@ -91,6 +91,14 @@ _sz_function
 # plugin-affecting env vars, alias overrides) are visible during plugin init
 source $ZSH/oh-my-zsh.sh
 
+# Post-omz alias overrides — unalias to let function definitions in
+# functions.zsh take precedence over oh-my-zsh plugin aliases.
+local -a omz_unalias=(
+  gdup      # git plugin in ohmyzsh: use gdup() with -c flag in functions.zsh
+  run-help  # zsh built-in help, re-bound below with autoload
+)
+for ua in $omz_unalias; do unalias "$ua" 2>/dev/null; done
+
 
 #    __ __           __    _           ___
 #   / //_/__  __  __/ /_  (_)___  ____/ (_)___  ____ ______
@@ -315,7 +323,6 @@ export NVM_DIR="$HOME/.nvm"
 
 # autoload
 # run-help: enable zsh built-in help for builtins (whence, bindkey, etc.)
-unalias run-help 2>/dev/null
 autoload -Uz run-help
 autoload -Uz run-help-git run-help-sudo run-help-openssl
 
