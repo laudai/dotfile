@@ -74,6 +74,7 @@ common_pkgs=(
 
 	# Shell utilities
 	zsh
+	bash                             # install latest bash (5.x+) to run tmux plugin tmux2k
 	coreutils
 	gawk
 	tmux
