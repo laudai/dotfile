@@ -72,6 +72,9 @@ declare -a vscode_extensions=(
     "ms-ceintl.vscode-language-pack-zh-hant"
     "druideinformatique.antidote"
 
+    # --- AI ---
+    "anthropic.claude-code"
+
     # --- Config / Env ---
     "mikestead.dotenv"
 )

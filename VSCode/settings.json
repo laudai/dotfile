@@ -602,4 +602,7 @@
     "sound": "off",
     "announcement": "auto"
   },
+  "claudeCode.disableLoginPrompt": true,
+  "claudeCode.claudeProcessWrapper": "claude",
+  "claudeCode.preferredLocation": "panel"
 }
