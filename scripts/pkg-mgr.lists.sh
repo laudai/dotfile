@@ -70,7 +70,7 @@ common_pkgs=(
 	# Code stats / Editor
 	cloc
 	tokei
-	vim
+	vim-gtk3
 
 	# Shell utilities
 	zsh
@@ -381,6 +381,7 @@ declare -A brew_name_map=(
 	[bw]="bitwarden-cli"
 	[code]="visual-studio-code"
 	[codium]="vscodium"
+	[vim-gtk3]="vim"
 )
 
 # =============================================================================
