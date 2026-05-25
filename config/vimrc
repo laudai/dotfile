@@ -22,6 +22,9 @@ set autoindent
 set nocompatible "disable backwards compatibility with vi
 set background=dark "bg"
 set t_Co=256 "number of colors"
+if has('termguicolors')
+  set termguicolors
+endif
 set laststatus=2 "ls, 下方的狀態橫Bar。Default is 1"
 set ruler "ru, 狀態列最右邊的資訊，共有Top, Bot, All, %"
 set shiftwidth=4 "sw, 使用>>的字元寬度，如果是0會使用tabstop設定"
@@ -246,6 +249,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'berdandy/ansiesc.vim'
+Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 " Pending
 " 'jiangmiao/auto-pairs'
 " 'preservim/nerdtree'
@@ -254,9 +258,14 @@ Plug 'berdandy/ansiesc.vim'
 " Initialize plugin system
 call plug#end()
 
+" Colorscheme
+let g:material_terminal_italics = 1
+let g:material_theme_style = 'default'
+colorscheme material
+
 " Plugin setting
 " airline plugin
-let g:airline_theme='base16_google'
+let g:airline_theme='material'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = '‧'
