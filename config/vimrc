@@ -7,166 +7,161 @@
 "  Github : https://github.com/laudai
 "  Medium : https://laudaihe.medium.com/
 
-" Use Vim settings, rather than Vi settings (much better!).
-" " This must be first, because it changes other options as a side effect.
 
-" VI Setting
-set number "nu"
-set relativenumber "rnu"
-"ai, 自動縮排，如果此行從第四字元開始，按下Enter後，下行就會從第四字元開始。Default is noai"
-set autoindent
+"    ______                           __
+"   / ____/__  ____  ___  _________ _/ /
+"  / / __/ _ \/ __ \/ _ \/ ___/ __ `/ /
+" / /_/ /  __/ / / /  __/ /  / /_/ / /
+" \____/\___/_/ /_/\___/_/   \__,_/_/
 
-
-" VIM Setting
-"nocp, no compatible to vi,can use vim plugin.Default is nocp"
-set nocompatible "disable backwards compatibility with vi
-set background=dark "bg"
-set t_Co=256 "number of colors"
+" general
+set nocompatible
+set background=dark
+set t_Co=256
 if has('termguicolors')
   set termguicolors
 endif
-set laststatus=2 "ls, 下方的狀態橫Bar。Default is 1"
-set ruler "ru, 狀態列最右邊的資訊，共有Top, Bot, All, %"
-set shiftwidth=4 "sw, 使用>>的字元寬度，如果是0會使用tabstop設定"
-set softtabstop=4 "sts"
-set tabstop=4 "ts"
-"set expandtab=4 "et, 還不確定是什麼功能"
-" search-setting
-set hlsearch "hls, highlith all its matches."
-set incsearch "is, 即時前往符合搜尋條件的字
-set ignorecase "ic, 忽略大小寫
-set smartcase "scs, 智慧搜尋
-" works likes bash shell
-" set wildmode=longest,list
-" works likes zsh
-set wildmenu "wmnu, default is off"
-set wildmode=full "wim, default is full"
-" need try later
-" https://www.reddit.com/r/vim/comments/vvtz3v/comment/ifocpxd/?utm_source=share&utm_medium=web2x&context=3
-" set wildoptions+=fuzzy
-set history=200 "set history number, default is 50
-set pastetoggle=<F7> "pt, toggle vim paste mode"
-" edit-setting
-" enable X11-based-system clipboard, In Ubuntu & Debian, u need install vim-gtk3
-" https://stackoverflow.com/questions/3961859/how-to-copy-to-clipboard-in-vim
-set clipboard^=unnamedplus,unnamed " this setting run on both Linux, and MacOS M1
-filetype plugin indent on " enable filetype plugins and indent
+set number
+set relativenumber
+set autoindent
+set laststatus=2
+set ruler
+set history=200
+set pastetoggle=<F7>
+set clipboard^=unnamedplus,unnamed
 set undofile
-set autochdir " acd, 當開啟多個不同資料夾檔案時，會自動切換到目前編輯檔案路徑
-set autoread " ar, 當文件僅在vim外部進行修改，可進行自動讀檔(有焦點使用限制）
-" misc-setting
-" 將vim中的0開頭數字視為10進制，這樣就可以直接用快鍵加減
-" number<C-a> or number<C-x>
+set autochdir
+set autoread
 set nrformats=bin,hex,alpha
+filetype plugin indent on
 
-" Highlight setting
+" tabs & indentation
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+
+" search
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+
+" wildmenu (command-line completion)
+set wildmenu
+set wildmode=full
+
+" highlight
 highlight CursorLine cterm=bold,underline ctermbg=black ctermfg=None
 
-" Abbreviations setting ,ab
+" abbreviations
 iab [] []()<left><left><left>
 
 
-" Keybindings
-" map-modes
-":map   :noremap  :unmap     Normal, Visual, Select, Operator-pending
-":nmap  :nnoremap :nunmap    Normal
-":vmap  :vnoremap :vunmap    Visual and Select
-":smap  :snoremap :sunmap    Select
-":xmap  :xnoremap :xunmap    Visual
-":omap  :onoremap :ounmap    Operator-pending
-":map!  :noremap! :unmap!    Insert and Command-line
-":imap  :inoremap :iunmap    Insert
-":lmap  :lnoremap :lunmap    Insert, Command-line, Lang-Arg
-":cmap  :cnoremap :cunmap    Command-line
-":tmap  :tnoremap :tunmap    Terminal-Job
-" nnoremap : Normal no recursion map
+"     __ __          __    _           ___
+"    / //_/__  __  _/ /_  (_)___  ____/ (_)___  ____ ______
+"   / ,< / _ \/ / / / __ \/ / __ \/ __  / / __ \/ __ `/ ___/
+"  / /| /  __/ /_/ / /_/ / / / / / /_/ / / / / / /_/ (__  )
+" /_/ |_\___/\__, /_.___/_/_/ /_/\__,_/_/_/ /_/\__, /____/
+"           /____/                             /____/
+
+" keybindings
+"
+" map-modes reference:
+" :map   :noremap  :unmap     Normal, Visual, Select, Operator-pending
+" :nmap  :nnoremap :nunmap    Normal
+" :vmap  :vnoremap :vunmap    Visual and Select
+" :xmap  :xnoremap :xunmap    Visual
+" :omap  :onoremap :ounmap    Operator-pending
+" :imap  :inoremap :iunmap    Insert
+" :cmap  :cnoremap :cunmap    Command-line
+" :tmap  :tnoremap :tunmap    Terminal-Job
+
+" escape & mode switching
 map! jk <ESC>
-imap <C-]> <ESC>:e<CR> "re-edit this file in insert mode"
+imap <C-]> <ESC>:e<CR>
 inoremap <C-v><C-v> <C-v>
+
+" insert mode editing
 inoremap <C-d> <Del>
-" Insert newline without entering insert mode
-" https://vim.fandom.com/wiki/Insert_newline_without_entering_insert_mode
-nnoremap oo o<Esc>k
-nnoremap OO O<Esc>j
-" Shifting blocks visually
-" https://vim.fandom.com/wiki/Shifting_blocks_visually
-vnoremap > >gv
-vnoremap < <gv
 inoremap <S-Tab> <C-D>
-vnoremap <Tab> >v
-vnoremap <S-Tab> <v
-map <ESC>n <M-n>
-map <ESC>p <M-p>
-nnoremap <M-n> :tabn<CR> \| :echo 'Change to next tab'<CR>
-nnoremap <M-p> :tabp<CR> \| :echo 'Change to previous tab'<CR>
-nnoremap <C-p> :bp<CR> \| :echo 'Change to previous buffer'<CR>
-nnoremap <C-n> :bn<CR> \| :echo 'Change to next buffer'<CR>
-nnoremap ` '
-nnoremap ' `
-" onoremap ' `
-" onoremap ` '
-" you can modified operator pending mode to use y'' d''
-" also can use operatorPendingModeKeyBindings in VSCode vim keymap
-" https://vi.stackexchange.com/questions/12576/how-to-remap-backtick-mark-with-single-quote-mark-globally
-nmap qq :q<CR>
-nmap q; q:
-map <ESC>j <M-j>
-map <ESC>k <M-k>
-nn <M-j> :.m+1<CR>
-nn <M-k> :.m-2<CR>
-" You can't send C-j to vim in gnome-terminal. It will parse to C-M.
-" But you can use it in Windows terminal, guake terminal.
-nn <C-j> <C-w>j
-nn <C-k> <C-w>k
-nn <C-l> <C-w>l
-nn <C-h> <C-w>h
-nn <C-\> <C-w>w
-nn a; :
-nn aj 5j \| :echo 'Downward 5 linewise.'<CR>
-nn ak 5k \| :echo 'Upward 5 linewise.'<CR>
-nn H ^
-nn L g_
-nn Y y$
-nn <C-v><C-v> <C-v>
-" set manual store/restore vim session
-set <S-F4>=[1;2S
-nn <S-F4> :mksession! ~/.vim_manual_session.vim<CR> \| :echo 'stores session to ~/.vim_manual_session.vim'<CR>
-nn <F4> :source ~/.vim_manual_session.vim<CR> \| :echo 'restores session from ~/.vim_manual_session.vim'<CR>
-" break undo sequence, start new change for the Ctrl-w, Ctrl-u, Ctrl-h, Ctrl-d
-" https://vim.fandom.com/wiki/Recover_from_accidental_Ctrl-U
+" break undo sequence for Ctrl-w, Ctrl-u, Ctrl-h, Ctrl-d
 inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 inoremap <C-h> <C-g>u<C-h>
 inoremap <C-d> <C-g>u<Del>
 
+" newline without entering insert mode
+nnoremap oo o<Esc>k
+nnoremap OO O<Esc>j
 
-" Toggle Cursorline on/off with one key press
-" https://stackoverflow.com/questions/1497404/toggle-cursorline-on-off-with-one-key-press
-" Mapping 'fast' keycodes
-" https://vim.fandom.com/wiki/Mapping_fast_keycodes_in_terminal_Vim
-" You should test keystroke in VIM ex mode via :{C-v}{C-S-F2}
-" There is a <S-F2> keycodes but no <C-S-F2>. You should map keystroke to <C-S-F2>
-" :h keycodes, :h terminal-key-codes
-" <ESC> equal ^[
+" visual mode shifting (re-select after shift)
+vnoremap > >gv
+vnoremap < <gv
+vnoremap <Tab> >v
+vnoremap <S-Tab> <v
+
+" line movement
+map <ESC>j <M-j>
+map <ESC>k <M-k>
+nn <M-j> :.m+1<CR>
+nn <M-k> :.m-2<CR>
+nn aj 5j \| :echo 'Downward 5 linewise.'<CR>
+nn ak 5k \| :echo 'Upward 5 linewise.'<CR>
+
+" navigation shortcuts
+nn H ^
+nn L g_
+nn Y y$
+nn <C-v><C-v> <C-v>
+nnoremap ` '
+nnoremap ' `
+
+" window navigation
+nn <C-j> <C-w>j
+nn <C-k> <C-w>k
+nn <C-l> <C-w>l
+nn <C-h> <C-w>h
+nn <C-\> <C-w>w
+
+" buffer navigation
+nnoremap <C-p> :bp<CR> \| :echo 'Change to previous buffer'<CR>
+nnoremap <C-n> :bn<CR> \| :echo 'Change to next buffer'<CR>
+
+" tab navigation
+map <ESC>n <M-n>
+map <ESC>p <M-p>
+nnoremap <M-n> :tabn<CR> \| :echo 'Change to next tab'<CR>
+nnoremap <M-p> :tabp<CR> \| :echo 'Change to previous tab'<CR>
+
+" quick commands
+nmap qq :q<CR>
+nmap q; q:
+nn a; :
+
+" session save/restore
+set <S-F4>=[1;2S
+nn <S-F4> :mksession! ~/.vim_manual_session.vim<CR> \| :echo 'stores session to ~/.vim_manual_session.vim'<CR>
+nn <F4> :source ~/.vim_manual_session.vim<CR> \| :echo 'restores session from ~/.vim_manual_session.vim'<CR>
+
+" toggle cursorline/cursorcolumn
 set <S-F2>=[1;2Q
 map <S-F2> :set cursorline!<CR>
 map <ESC>[1;5Q <C-F2>
 map <C-F2> :set cursorcolumn!<CR>
 map <ESC>[1;6Q <C-S-F2>
 map <C-S-F2> :set cursorcolumn!<Bar>set cursorline!<CR>
-" Toggle relativenumber
+
+" toggle relativenumber
 map <ESC>[1;6R <C-S-F3>
 map <C-S-F3> :set rnu!<CR>
 
-" <leader> mapleader, <leader> key default is '\'
+" leader key
 let mapleader="\<space>"
 nmap <leader>n :noh<CR>
 nmap <leader>w <ESC>:w<CR>
 nmap <leader>d ^dg_ \| :echo "Delete whole line without linewise from
     \ non-block to non-block char!"<CR>
 nmap <leader>bd :bd<CR>
-" buffer only can mapping via keybinding or use plugin BufOnly.vim
-" https://stackoverflow.com/questions/4545275/vim-close-all-buffers-but-this-one
 nmap <leader>bo :%bd\|e#<CR>
 nmap <leader>qq <ESC>:cq<CR>
 nnoremap <leader>ev :vsp ~/.vimrc<CR>
@@ -182,7 +177,7 @@ nn <leader>H H
 nn <leader>M M
 nn <leader>L L
 
-" use system clipboard, also u can use xsel,xclip command.
+" clipboard operations (system clipboard)
 noremap <Leader>y "+y
 noremap <Leader>p "0p
 noremap <Leader>P "+P
@@ -192,26 +187,13 @@ noremap <Leader>dw "_dw
 inoremap <C-v> <ESC>"+pa
 vnoremap <C-c> "+y
 vnoremap <C-d> "+d
-"  VIM学习笔记 键盘映射 (Map)
-" http://yyq123.blogspot.com/2010/12/vim-map.html
-" 快捷鍵設定教學
-" 中文版	http://haoxiang.org/2011/09/vim-modes-and-mappin/
-" 英文版	https://medium.com/vim-drops/understand-vim-mappings-and-create-your-own-shortcuts-f52ee4a6b8ed
 
-" coc.nvim <TAB>, <CR> map
-" https://github.com/neoclide/coc.nvim
-" Use tab for trigger completion with characters ahead and navigate
-" NOTE: There's always complete item selected by default, you may want to enable
-" no select by `"suggest.noselect": true` in your configuration file
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config
+" coc.nvim completion mappings
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-" Make <CR> to accept selected completion item or notify coc.nvim to format
-" <C-g>u breaks current undo, please make your own choice
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 function! CheckBackspace() abort
@@ -220,9 +202,15 @@ function! CheckBackspace() abort
 endfunction
 
 
-" Plugin
+"     ____  __            _
+"    / __ \/ /_  ______ _(_)___  _____
+"   / /_/ / / / / / __ `/ / __ \/ ___/
+"  / ____/ / /_/ / /_/ / / / / (__  )
+" /_/   /_/\__,_/\__, /_/_/ /_/____/
+"               /____/
+
+" plugins
 " vim-plug automatic installation
-" https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -230,48 +218,38 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-"
-" airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" https://python.libhunt.com/compare-python-mode-vs-jedi-vim
-" Developing python with vim, what plugin to choose? (python-mode vs. jedi-vim)
 Plug 'davidhalter/jedi-vim'
-" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-" edit file more smoothly
 Plug 'tpope/vim-surround'
 Plug 'wellle/targets.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'justinmk/vim-sneak'
 Plug 'yggdroot/indentline'
-" coc, vim auto complete. Use release branch (recommended)
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'berdandy/ansiesc.vim'
 Plug 'kaicataldo/material.vim', { 'branch': 'main' }
-" Pending
-" 'jiangmiao/auto-pairs'
-" 'preservim/nerdtree'
-"
-"
-" Initialize plugin system
 call plug#end()
 
-" Colorscheme
+" colorscheme
 let g:material_terminal_italics = 1
 let g:material_theme_style = 'default'
 colorscheme material
+" fallback: if no plugins installed, comment out the 3 lines above and use
+" terminal 16-color palette (controlled by Ghostty/terminal theme).
+" No colorscheme needed — vim inherits colors from the terminal emulator.
 
-" Plugin setting
-" airline plugin
+" airline
 let g:airline_theme='material'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = '‧'
 let g:airline#extensions#tabline#left_alt_sep = '┊'
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-" jedi-vim plugin
+
+" jedi-vim
 let g:jedi#goto_command = "<leader>d"
 let g:jedi#goto_assignments_command = "<leader>g"
 let g:jedi#goto_stubs_command = "<leader>s"
@@ -282,73 +260,50 @@ let g:jedi#completions_command = "<C-Space>"
 let g:jedi#auto_initialization = 1
 let g:jedi#popup_on_dot = 0
 autocmd FileType python setlocal completeopt-=preview
-" indentLine plugin
-let g:vim_json_conceal=0 "disable JSON conceal to show double quotes
+
+" indentLine
+let g:vim_json_conceal=0
 let g:indentLine_enabled = 1
 let g:indentLine_setColors = 1
 let g:indentLine_color_term = 214
-"let g:indentLine_bgcolor_term = 240
 let g:indentLine_defaultGroup = 'SpecialKey'
 let g:indentLine_char = '§'
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
-""" This is copy from vim74 example
 
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
+"       _         __                          __
+"      / \  _   _/ /_____  ___ _ __ ___   __| |___
+"     / _ \| | | | __/ _ \/ __| '_ ` _ \ / _` / __|
+"    / ___ \ |_| | || (_) \__ \ | | | | | (_| \__ \
+"   /_/   \_\__,_|\__\___/|___/_| |_| |_|\__,_|___/
 
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 72,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
+" autocmds
 
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
+" jump to last known cursor position when editing a file
+augroup vimrcEx
   au!
-
-  " For all text files set 'textwidth' to 78 characters.
   autocmd FileType text setlocal textwidth=78
-
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
   autocmd BufReadPost *
     \ if line("'\"") >= 1 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
+augroup END
 
-  augroup END
-
-else
-
-  set autoindent		" always set autoindenting on
-
-endif " has("autocmd")
-
-" This is copy from vim74 example
-
-
-" Bash Script header
+" file templates
 autocmd BufNewFile *.sh 0put =\"#!/usr/bin/env bash\<nl>\"|$
 autocmd BufNewFile *.sh 1put =\"# Author : laudai\<nl>\"|$
 autocmd BufNewFile *.sh 2put =\"\<nl>\"|$
 
-" Python header
 autocmd BufNewFile *.py 0put =\"#!/usr/bin/env python\<nl>\"|$
-autocmd BufNewFile *.py 1put =\"# encoding: utf8\<nl>\"|$
-autocmd BufNewFile *.py 2put =\"# Author : laudai\<nl>\"|$
-autocmd BufNewFile *.py 3put =\"\<nl>\"|$
+autocmd BufNewFile *.py 1put =\"# Author : laudai\<nl>\"|$
+autocmd BufNewFile *.py 2put =\"\<nl>\"|$
 
-" Vim’s absolute, relative and hybrid line numbers
-" https://jeffkreeftmeijer.com/vim-number/
+" toggle relative line numbers and cursorline based on focus/mode
 augroup displaytoggle
   autocmd!
-
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
     \| set cursorline
     \| highlight LineNr ctermfg=darkgray
-
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
     \| set nocursorline
     \| highlight LineNr ctermfg=yellow
