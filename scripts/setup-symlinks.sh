@@ -34,6 +34,7 @@ elif [[ "$OSTYPE" == "linux"* ]]; then
 	ln -sf "$HOME/.dotfile/config/polybar.config.ini" "$HOME/.config/polybar/config.ini"
 	ln -sf "$HOME/.dotfile/config/dunstrc" "$HOME/.config/dunst/dunstrc"
 	ln -sf "$HOME/.dotfile/config/rofi.rasi" "$HOME/.config/rofi/config.rasi"
+	ln -sf "$HOME/.dotfile/config/i3status.conf" "$HOME/.config/i3status/config"
 fi
 
 # --- SSH config ---
