@@ -98,6 +98,25 @@ symbol = " "
 format = '[$symbol($profile )(\($region\) )]($style)'
 style = "bold yellow"
 
+
+[custom.cloud]
+command = """
+vendor=$(cat /sys/class/dmi/id/sys_vendor 2>/dev/null)
+case "$vendor" in
+  *Amazon*)  echo "AWS" ;;
+  *Hetzner*) echo "HTZ" ;;
+  *Google*)  echo "GCP" ;;
+  *Microsoft*) echo "AZ" ;;
+  *DigitalOcean*) echo "DO" ;;
+  *) exit 1 ;;
+esac
+"""
+when = "test -f /sys/class/dmi/id/sys_vendor"
+symbol = " "
+format = "[$symbol$output]($style) "
+style = "bold bright-blue"
+disabled = false
+
 [docker_context]
 symbol = " "
 
