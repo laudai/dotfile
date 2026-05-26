@@ -111,7 +111,7 @@ case "$vendor" in
   *) exit 1 ;;
 esac
 """
-when = "test -f /sys/class/dmi/id/sys_vendor"
+when = "grep -qiE \"amazon|hetzner|google|microsoft|digitalocean\" /sys/class/dmi/id/sys_vendor 2>/dev/null"
 symbol = " "
 format = "[$symbol$output]($style) "
 style = "bold bright-blue"
@@ -255,3 +255,4 @@ style = "bold blue"
 bash_indicator = " "
 zsh_indicator = ""
 disabled = false
+format = "$indicator"
