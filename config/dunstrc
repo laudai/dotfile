@@ -1,0 +1,23 @@
+# Dunst notification daemon configuration
+# Theme: Nord - https://www.nordtheme.com/docs/colors-and-palettes
+
+[global]
+font = JetBrainsMono NL Nerd Font 10
+frame_width = 2
+frame_color = "#88c0d0"
+separator_color = frame
+
+[urgency_low]
+background = "#2e3440"
+foreground = "#eceff4"
+frame_color = "#4c566a"
+
+[urgency_normal]
+background = "#2e3440"
+foreground = "#eceff4"
+frame_color = "#88c0d0"
+
+[urgency_critical]
+background = "#bf616a"
+foreground = "#eceff4"
+frame_color = "#bf616a"

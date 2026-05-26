@@ -1,0 +1,39 @@
+/* Rofi application launcher configuration */
+/* Theme: Nord - https://www.nordtheme.com/docs/colors-and-palettes */
+
+* {
+    bg: #2e3440;
+    fg: #eceff4;
+    accent: #88c0d0;
+    urgent: #bf616a;
+    selected: #3b4252;
+}
+
+window {
+    background-color: @bg;
+    border-color: @accent;
+    border: 2px;
+}
+
+mainbox {
+    background-color: @bg;
+}
+
+inputbar {
+    background-color: @selected;
+    text-color: @fg;
+}
+
+listview {
+    background-color: @bg;
+}
+
+element {
+    background-color: @bg;
+    text-color: @fg;
+}
+
+element selected {
+    background-color: @selected;
+    text-color: @accent;
+}

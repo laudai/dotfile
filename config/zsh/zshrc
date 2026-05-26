@@ -226,7 +226,9 @@ export PATH="$HOME/.local/bin:$PATH"
 # fzf global defaults
 # note: ctrl-y is fzf built-in yank (emacs style: paste back killed text),
 #       overridden in FZF_CTRL_R_OPTS to copy selection to system clipboard
+# Nord theme - https://www.nordtheme.com/docs/colors-and-palettes
 export FZF_DEFAULT_OPTS="
+  --color=bg+:#3b4252,bg:#2e3440,fg:#eceff4,fg+:#eceff4,hl:#88c0d0,hl+:#5e81ac,info:#a3be8c,prompt:#81a1c1,pointer:#bf616a,marker:#a3be8c,spinner:#b48ead,header:#88c0d0,border:#4c566a
   --reverse
   --cycle
   --height=60%
