@@ -44,7 +44,7 @@
 
 # --- my config ---
 
-font-family = CaskaydiaMono Nerd Font Mono
+font-family = CaskaydiaMono Nerd Font
 #font-family = Fira Code Regular
 window-inherit-font-size = false
 window-theme = dark

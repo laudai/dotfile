@@ -1,157 +1,157 @@
-# ~/.config/starship.toml
-# combine from:
-# https://gist.github.com/ryo-ARAKI/48a11585299f9032fa4bda60c9bba593
-# https://github.com/addy3494/startship_config/blob/main/starship.toml
-# https://mvolkmann.github.io/blog/starship/?v=1.0.18
+#     _                    ____
+#  \_|_)                  (|   \       o
+#    |     __,             |    | __,
+#   _|    /  |  |   |     _|    |/  |  |
+#  (/\___/\_/|_/ \_/|_/  (/\___/ \_/|_/|_/
+#
+#  Starship prompt configuration
+#  https://starship.rs/config/
 
-# Prompt
-# Configure the format of the prompt.
-format = "[☁ ](cyan)$all"
-# Wait 10 milliseconds for starship to check files under the current directory.
-scan_timeout = 10
-# Disable the blank line at the start of the prompt
+
+#    ______                           __
+#   / ____/__  ____  ___  _________ _/ /
+#  / / __/ _ \/ __ \/ _ \/ ___/ __ `/ /
+# / /_/ /  __/ / / /  __/ /  / /_/ / /
+# \____/\___/_/ /_/\___/_/   \__,_/_/
+
+# general
+format = "[ ](cyan)$all"
+scan_timeout = 30
 add_newline = true
-# Timeout for commands executed by starship (in milliseconds).
 command_timeout = 300
 
-# First param
+[character]
+success_symbol = "[](bold green)"
+error_symbol = "[](bold red)"
+vicmd_symbol = "[](bold green)"
+
+[line_break]
+disabled = true
+
 [username]
-format = "[$user]($style)[|](bold)"
+format = "[$user]($style)[@](bold)"
 style_user = "purple"
 style_root = "red"
 disabled = false
 show_always = false
 
-# Second param
 [hostname]
-format = "[$hostname]($style) ⇶ "
+format = "[$hostname]($style) ⇒ "
 ssh_only = false
 trim_at = "-"
 style = "green"
 disabled = false
 
-# Third param
 [directory]
 style = "cyan"
 truncation_length = 2
 truncate_to_repo = false
 truncation_symbol = "repo: "
-read_only = ""
+read_only = " "
 read_only_style = "red"
 
+
+#    _______ __
+#   / ____(_) /_
+#  / / __/ / __/
+# / /_/ / / /_
+# \____/_/\__/
+
 # git
-[git_state]
-format = '[\($state( $progress_current of $progress_total)\)]($style) '
-
-[git_status]
-format = "$all_status$ahead_behind"
-style = "bright-white"
-ahead = "⇡ ×${count} "
-behind = "⇣ ×${count} "
-diverged = "⇕⇡ ×${ahead_count}⇣ ×${behind_count} "
-deleted = "✘ ×${count} "
-conflicted = "⚔  "
-untracked = "ண  ×${count} "
-stashed = " "
-modified = "⌨  ×${count} "
-staged = "✤  ×${count} "
-renamed = "➼ ×${count} "
-
 [git_branch]
 format = "[$symbol$branch]($style) "
-symbol = " "
+symbol = " "
 style = "yellow"
 
 [git_commit]
 commit_hash_length = 8
 style = "bold white"
 
-# battery
-[battery]
-format = "[$symbol$percentage]($style) "
-full_symbol = ""
-charging_symbol = ""
-discharging_symbol = ""
-unknown_symbol = ""
-empty_symbol = ""
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
 
-[[battery.display]] # "underline bold italic red" style when capacity is between 0% and 15%
-threshold = 15
-style = "underline bold italic red"
-
-[[battery.display]] # "underline italic yellow" style when capacity is between 15% and 50%
-threshold = 50
-style = "underline italic yellow"
-
-[[battery.display]] # "green" style when capacity is between 10% and 30%
-threshold = 80
-style = "green"
-
-[time]
-format = "$time($style) "
+[git_status]
+format = "$all_status$ahead_behind"
 style = "bright-white"
-time_format = "%T"
-disabled = true
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇡${ahead_count} ⇣${behind_count} "
+deleted = "✗${count} "
+conflicted = "⚠ "
+untracked = "?${count} "
+stashed = "⚑ "
+modified = "✎${count} "
+staged = "✚${count} "
+renamed = "➜${count} "
 
-[line_break]
-disabled = true
 
-[memory_usage]
-format = "$symbol[${ram}( | ${swap})]($style) "
-threshold = 85
-style = "bold dimmed white"
-symbol = "☢ "
-disabled = false
+#     __ __          __    _           ___
+#    / //_/__  __  _/ /_  (_)___  ____/ (_)___  ____ ______
+#   / ,< / _ \/ / / / __ \/ / __ \/ __  / / __ \/ __ `/ ___/
+#  / /| /  __/ /_/ / /_/ / / / / / /_/ / / / / / /_/ (__  )
+# /_/ |_\___/\__, /_.___/_/_/ /_/\__,_/_/_/ /_/\__, /____/
+#           /____/                             /____/
 
-[cmd_duration]
-min_time = 10_000  # Show command duration over 10,000 milliseconds (=10 sec)
-format = "took [$duration]($style) "
-style = "bold bright-white"
-
-[status]
-symbol = "🔴"
-format = '[$symbol$status_common_meaning$status_signal_name$status_maybe_int]($style)'
-not_found_symbol="?"
-map_symbol = true
-disabled = false
-
-[character]
-success_symbol = "[↪](bold green)"
-error_symbol = "[✗](bold red) "
-vicmd_symbol = "[↩](bold green)"
-
-# Indicates when in bash shell.
-[custom.bash]
-command = "echo 🌠"
-when = '[ "$STARSHIP_SHELL" == "bash" ]'
-
-# SYMBOLS 
+# languages & tools
 [aws]
-symbol = " "
-
-[conda]
-symbol = " "
-
-[dart]
-symbol = " "
+symbol = " "
+format = '[$symbol($profile )(\($region\) )]($style)'
+style = "bold yellow"
 
 [docker_context]
 symbol = " "
 
-[elixir]
-symbol = " "
-
-[elm]
-symbol = " "
-
 [golang]
 symbol = " "
 
-[hg_branch]
-symbol = " "
-
 [java]
 symbol = " "
+
+[nodejs]
+symbol = " "
+
+[python]
+symbol = " "
+format = "[$symbol$version( \\($virtualenv\\))]($style) "
+style = "bright-green"
+detect_extensions = []
+detect_files = [".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]
+python_binary = ["python3", "python", "python2"]
+
+[rust]
+symbol = " "
+format = "[$symbol$version]($style) "
+
+[terraform]
+symbol = "󱁢 "
+format = "[$symbol$workspace]($style) "
+
+[package]
+symbol = "󰏗 "
+
+[conda]
+symbol = " "
+
+[ruby]
+symbol = " "
+
+[php]
+symbol = " "
+
+[perl]
+symbol = " "
+
+[swift]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
 
 [julia]
 symbol = " "
@@ -159,37 +159,80 @@ format = "[$symbol$version]($style) "
 style = "bold green"
 
 [nim]
-symbol = " "
+symbol = " "
 
 [nix_shell]
-symbol = " "
+symbol = " "
 
-[nodejs]
-symbol = " "
+[hg_branch]
+symbol = " "
 
-[package]
-symbol = " "
 
-[perl]
-symbol = " "
+#    _____            __
+#   / ___/__  _______/ /____  ____ ___
+#   \__ \/ / / / ___/ __/ _ \/ __ `__ \
+#  ___/ / /_/ (__  ) /_/  __/ / / / / /
+# /____/\__, /____/\__/\___/_/ /_/ /_/
+#      /____/
 
-[php]
-symbol = " "
+# system
+[battery]
+format = "[$symbol$percentage]($style) "
+full_symbol = " "
+charging_symbol = " "
+discharging_symbol = " "
+unknown_symbol = " "
+empty_symbol = " "
 
-[python]
-symbol = " "
-format = "[$symbol$version]($style) "
-style = "bright-green"
-detect_extensions = []
-detect_files = [".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]
-python_binary = ["python3","python","python2"]
+[[battery.display]]
+threshold = 15
+style = "underline bold italic red"
 
-[ruby]
-symbol = " "
+[[battery.display]]
+threshold = 50
+style = "underline italic yellow"
 
-[rust]
-symbol = " "
-format = "[$symbol$version]($style) "
+[[battery.display]]
+threshold = 80
+style = "green"
 
-[swift]
-symbol = "ﯣ "
+[memory_usage]
+format = "$symbol[${ram}( | ${swap})]($style) "
+threshold = 85
+style = "bold dimmed white"
+symbol = " "
+disabled = false
+
+[time]
+format = " [$time]($style) "
+style = "bright-white"
+time_format = "%T"
+disabled = true
+
+[cmd_duration]
+min_time = 10_000
+format = " [$duration]($style) "
+style = "bold bright-white"
+
+[status]
+symbol = ""
+format = '[$symbol $status_common_meaning$status_signal_name$status_maybe_int]($style)'
+not_found_symbol = ""
+map_symbol = true
+disabled = false
+
+[sudo]
+format = "[$symbol]($style)"
+symbol = " "
+style = "bold red"
+disabled = false
+
+[jobs]
+symbol = " "
+format = "[$symbol$number]($style) "
+style = "bold blue"
+
+[shell]
+bash_indicator = " "
+zsh_indicator = ""
+disabled = false
