@@ -2,18 +2,29 @@
 
 **_Author : LauDai_**
 
+Personal dotfiles for macOS and Linux, managed via symlinks.
+
 ## Setup
 
 New machine setup order:
 
 ```bash
-# 1. Install utilities, symlinks, zsh plugins (includes bitwarden-cli)
+# 1. Install packages, utilities, and create symlinks
 ./scripts/pkg-mgr.sh --install
 
-# 2. Restore host-level secrets from Bitwarden → ~/.env (requires bw from step 1)
+# 2. Create symlinks for all config files
+./scripts/setup-symlinks.sh
+
+# 3. Install oh-my-zsh custom plugins
+./scripts/install-ZSH-Plugins.sh
+
+# 4. Restore host-level secrets from Bitwarden → ~/.env
 ./scripts/sync-env.sh
 
-# 3. Open a new terminal session to load ~/.env
+# 5. (Optional) Install VSCode settings and extensions
+./scripts/setup-vscode.sh
+
+# 6. Open a new terminal session to load ~/.env
 ```
 
 **`~/.env` setup** (first time only, before running `sync-env.sh`):
@@ -21,182 +32,142 @@ New machine setup order:
 - Contents should match `host.env.example`
 - Run `bw login` then `./scripts/sync-env.sh`
 
-**Contents**
+---
 
-- <a href=#tag-tmux>How to use tmux</a>
-  - <a href=#tag-tmux-Colors>Colors</a>
-  - <a href=#tag-tmux-keybindings>My tmux keybindings</a>
-  - <a href=#tag-tmux-screenshot>tmux screenshot</a>
-- <a href=#tag-zsh>Zsh</a>
+## Structure
 
-# <a id="tag-tmux" href="#tag-tmux">How to use tmux</a>
-
-_My tmux configure is running in tmux 3.0a version_
-
-## <a id="tag-tmux-Colors" href=#tag-tmux-Colors>Colors</a>
-
-In tmux Manual
-
-```text
-The colour is one of: black, red, green, yellow, blue, magenta, cyan, white, aixterm bright variants (if supported: brightred, brightgreen, and so on), colour0 to colour255 from the 256-colour set, default, or a hexadecimal RGB string such as ‘#ffffff’, which chooses the closest match from the default 256-colour set.
 ```
-
-### Check your terminal color support colors
-
-There are two file can test your terminal color.
-
-`$bash color_test1.sh`
-or
-`$bash color_test2.sh`
-
-#### You can type in ternimal to show your ternimal supoort colors
-
-`$tput colors`
-
-![ternimal suppotr colors](screenshot/tput_colors.png)
-
-Set tmux 256 colors
-`set -g default-terminal "screen-256color"`
-
-Show your tmux setting
-`$tmux show -g`
-
-Show tmux bind kyes
-`<prefix> ?`
-or
-`:list-keys`
-
-## <a id="tag-tmux-keybindings" href=#tag-tmux-keybindings>My tmux keybindings</a>
+.dotfile/
+├── config/              # All config files (symlinked to ~/)
+│   ├── zsh/             # zshrc, aliases, functions (split by OS)
+│   ├── ghostty          # Ghostty terminal config
+│   ├── tmux.conf
+│   ├── vimrc
+│   ├── gitconfig
+│   ├── gitignore_global
+│   ├── starship.toml    # Starship prompt config
+│   ├── ssh.config       # SSH settings (included via ~/.ssh/config)
+│   ├── pet.config.toml  # pet snippet manager
+│   ├── i3.config        # i3 window manager (Linux)
+│   ├── polybar.config.ini
+│   ├── conky.conf
+│   └── karabiner_bash_emacs.json  # Karabiner (macOS)
+├── VSCode/              # settings.json, keybindings, snippets
+├── scripts/             # Setup and utility scripts
+│   ├── pkg-mgr.sh      # Cross-platform package installer (brew/apt)
+│   ├── pkg-mgr.lists.sh # Package lists (edit this, not pkg-mgr.sh)
+│   ├── setup-symlinks.sh # Create all dotfile symlinks
+│   ├── install-ZSH-Plugins.sh # Clone oh-my-zsh custom plugins
+│   ├── sync-env.sh     # Pull secrets from Bitwarden → ~/.env
+│   ├── setup-vscode.sh # Install VSCode settings + extensions
+│   ├── ssh/             # SSH helpers (date-match, SSM proxy)
+│   ├── tmux/            # Tmux status bar scripts
+│   └── i3/              # i3 WM automation scripts (Linux)
+├── bin/                 # Custom executables (added to PATH)
+│   ├── masscode2pet     # Sync massCode snippets to pet
+│   ├── pkg-lookup       # Check package availability across managers
+│   ├── whatismyip       # Show IP and VPN status
+│   └── workspace        # Create pre-configured tmux workspace
+├── completions/         # Shell completions (bash/zsh)
+├── Layout/              # Window manager layouts (Amethyst macOS)
+├── docs/                # Reference documentation
+│   ├── vimrc-reference.md
+│   └── tmux-reference.md
+├── archive/             # Legacy/unused configs
+└── screenshot/          # Screenshots
+```
 
 ---
 
-My prefix setting is C-a
+## Tools & Themes
 
-```text
-<prefix> | : split window horizontal 	(origin path)
-<prefix> _ : split window vertical 		(origin path)
-<prefix> \ : split window horizontal 	(current path)
-<prefix> - : split window vertical 		(current path)
-<prefix> C : creat a new windw from current path to  next index
-<prefix> C-b : clear screen & screen history
-<prefix> = : choose buffer (no zoom to window)
-<prefix> M-k : confirm before kill current session
-<prefix> C-k : confirm before kill current window
-<prefix> C-o : rotate the current window upward 	(repeat)
-<prefix> M-o : rotate the current window downward 	(repeat)
-M-| : set layout main vertical
-M-_ : set layout main horizontal
-C-| : set layout even horizontal
-C-_ : set layout even vertical
-C-t : set layout tiled
-<prefix> C-t : via a choose window to move current pane to window
-<prefix> C-j : prompt a cmd to join <window>.<pane> to this pane
-<prefix> o : kill all panes but the current pane in this window
-<prefix> O : select next pane (repeat)
-<prefix> / : select last window
-<prefix> M-s : prompt a cmd to swap current window's index to target index
-<prefix> M-f : set repeat 0.6s , titles off , display time 0.75s
-<prefix> M-n : set repeat 1s , titles on , display time 1.5s
-<prefix> C-p : go to previous window (repeat)
-<prefix> C-n : go to next window (repeat)
-<prefix> { : swap current pane to previous pane (repeat)
-<prefix> } : swap current pane to previous pane (repeat)
-<prefix> M-v : swap current pane to last vistied pane
-<prefix> C-Right: move current pane to the right of pane (cycle)(repeat)
-<prefix> C-Left: move current pane to the left of pane (cycle)(repeat)
-<prefix> C-Up: move current pane to the up of pane (cycle)(repeat)
-<prefix> C-Down: move current pane to the down of pane (cycle)(repeat)
-<prefix> T : move window to next unused number
-<prefix> S : prompt a cmd to new session
-<prefix> @ : prompt a cmd to change window's index
-M-1~9 : select current windows's pane
-M-s : synchronize all panes
-C-S-Up :add 50 lines to up
-C-S-Down :add 50 lines to down
-C-S-Left : add 50 lines to left
-C-S-Right : add 50 lines to right
-```
+| Tool | Theme/Style | Config |
+|------|-------------|--------|
+| Ghostty | Material Design Colors | `config/ghostty` |
+| tmux (tmux2k) | Catppuccin, icons-only | `config/tmux.conf` |
+| Vim | material.vim (default variant) | `config/vimrc` |
+| VSCode | Bearded Theme Oceanic | `VSCode/settings.json` |
+| Zsh | oh-my-zsh (prompt overridden by Starship) | `config/zsh/zshrc` |
+| Prompt | Starship | `config/starship.toml` |
 
-If you wanna see more origin useful tmux keybindings. U can checkout my [gist](https://gist.github.com/laudai/1d084f664e987e50fdceebcdd699261d).
+---
 
-M - which is the Meta key (i.e. Alt on most keyboards)
+## Documentation
 
-S - means Shift key
+- [Vim keybindings & settings reference](docs/vimrc-reference.md)
+- [Tmux keybindings & settings reference](docs/tmux-reference.md)
 
-※ Note: Can't send C-| to putty, windows terminal and MobaXterm. Maybe this is a bug!?
+---
 
-※ Note: Can't send \<prefix> C-h in MobaXterm. Maybe this is a bug in MobaXterm!?
+## Scripts
 
-### In copy-mode
+| Script | Description |
+|--------|-------------|
+| `pkg-mgr.sh` | Cross-platform package installer. Detects OS, supports `--install`, `--check-apt`, `--check-brew`. Default is dry-run. |
+| `pkg-mgr.lists.sh` | Package lists sourced by pkg-mgr.sh. Edit this file to add/remove packages. |
+| `setup-symlinks.sh` | Creates symlinks: ~/.zshrc, ~/.vimrc, ~/.tmux.conf, ~/.gitconfig, ~/.ssh/config (Include), ghostty, starship, etc. OS-specific: karabiner (macOS), i3/polybar/conky (Linux). |
+| `install-ZSH-Plugins.sh` | Clones oh-my-zsh custom plugins (zsh-autosuggestions, zsh-syntax-highlighting, git-open, zsh-nvm, etc.) |
+| `sync-env.sh` | Pulls host-level secrets from Bitwarden Secure Note → ~/.env |
+| `setup-vscode.sh` | Copies VSCode settings/keybindings and batch-installs extensions |
 
-> Copy-mode use vi-mode, use tmux-yank plugin.
+---
 
-in copy-mode-vi will binding `Space` key to send begin-selection
+## Key Config Notes
 
-`bind-key -T copy-mode-vi Space send-keys -X begin-selection`
+### Tmux
 
-## <a id="tag-tmux-screenshot" href=#tag-tmux-screenshot>tmux screenshot</a>
+- Prefix: `Ctrl-a`
+- Status bar: tmux2k plugin (catppuccin theme, icons-only mode)
+- Plugins: tpm, tmux-yank, tmux-urlview, tmux-resurrect, tmux-open, tmux2k
+- Requires: bash 5.x+ (for tmux2k associative arrays)
 
-![tmux2.5 screenshoot](screenshot/tmux2.5.png)
+### Vim
 
-You can find more example tmux.conf from
-`/usr/share/doc/tmux/examples`
+- Colorscheme: material.vim (`default` variant, blue-gray background)
+- Airline: material theme with powerline fonts
+- Completion: coc.nvim (LSP-based)
+- Leader key: `<Space>`
+- Requires: vim with `+clipboard` (macOS built-in works, Linux needs `vim-gtk3`)
+
+### Zsh
+
+- Framework: oh-my-zsh
+- Key plugins: zsh-autosuggestions, zsh-syntax-highlighting, vi-mode, fzf, zoxide
+- Functions split into: `functions.zsh`, `functions-macos.zsh`, `functions-linux.zsh`
+- Aliases: `aliases.zsh`
+
+### Terminal
+
+- macOS: Ghostty (Material Design Colors)
+- Font: Nerd Font (required for powerline symbols in tmux/vim/starship)
+
+---
 
 ## Requirements
 
-#### For workspace.sh
+### General
 
-all you can get via `sudo apt install`
+- `zsh`, `git`, `curl`, `vim` (with `+clipboard`), `tmux` (3.2+)
+- bash 5.x+ (for tmux2k plugin)
+- A [Nerd Font](https://www.nerdfonts.com/) installed and set in terminal
 
-- `ipython3`, `htop`, `speedtest-cli`, `glances`, `mc`, `screenfetch`
-- `fortunes`, `lolcat`, `cowsay`, `cmatrix`
+### Linux-specific
 
-#### For tmux plugin
-
-- `xsel` (recommended) or `xclip` for tmux-yank
+- `vim-gtk3` for clipboard support
+- `xsel` or `xclip` for tmux-yank
 - `urlview` for tmux-urlview
-- `iostat` or `sar` (Optional requirement) for tmux-cpu
 
-You can open a highlighted text in copy-mode via press `o` or `Ctrl-o` to open file by `xdg-open` or `$EDITOR` respectively .Power by tmux-open pulgin
+### macOS-specific
 
-# <a id="tag-zsh" href=#tag-zsh>Zsh</a>
-
-## My zsh plugins
-
-`git pip python systemd tmux docker docker-compose encode64 history-substring-search zsh-autosuggestions zsh-syntax-highlighting sudo vscode vi-mode zsh-navigation-tools git-open`
-
-##### tmux_note.txt is a file that remind some tmux setting
-
-##### zshrc.zsh-template.orig is the oh-my-zsh template original file backup.
+- Homebrew
+- `brew install bash` (macOS ships bash 3.2, tmux2k needs 5.x+)
 
 ---
 
-[you can change your Ctrl to CAPS via this link](http://www.atjiang.com/pragmatic-tmux-configure/)
+## Caps Lock → Ctrl
 
-```text
-绑定 CAPS LOCK 键到 CTRL 键
+Remap Caps Lock to Ctrl for easier prefix/modifier access:
 
-在 OS X 上：打开 Keyboard preference panel->System Preference，按下 Modifier 键，然后将 CAPS LOCK 的动作改为 Control。
-
-在 Linux，需对键盘配置文件进行修改：
-
-sudo vi /etc/default/keyboard
-
-找到以 XKBOPTIONS 开头的行，添加 ctrl:nocaps 使 CAPS LOCK 成为另一个 CTRL 键，或者添加 ctrl:swapcaps 使 CAPS LOCK 键和 CTRL 两键的功能相互交换。 例如，修改后的内容可能为：
-
-XKBOPTIONS="lv3:ralt_alt,compose:menu,ctrl:nocaps"
-
-然后运行：
-
-sudo dpkg-reconfigure keyboard-configuration
-```
-
----
-
-## [Emacs Wiki : MovingTheCtrlKey](https://www.emacswiki.org/emacs/MovingTheCtrlKey)
-
----
-
-### Ubuuntu 17.10 can use gnome-tweak-tool to change the CTRL to CAPS LOCK key
-
-![gnome-tweak-tool cahnge CTRL2CAPS](screenshot/gnome-tweak-tool_changeCTRL2CAPS.png)
+- **macOS**: System Preferences → Keyboard → Modifier Keys → Caps Lock → Control
+- **Linux (GNOME)**: gnome-tweaks → Keyboard → Additional Layout Options → Ctrl position
+- **Linux (console)**: Add `ctrl:nocaps` to `XKBOPTIONS` in `/etc/default/keyboard`

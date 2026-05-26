@@ -78,11 +78,11 @@
 
 | Mapping | 說明 | Description |
 |---------|------|--------|
-| `<C-d>` | 向前刪除一個字元（如 Delete 鍵） | Delete character forward (like Delete key) |
 | `<S-Tab>` | 減少縮排 | Reduce indent (un-indent) |
 | `<C-u>` | 刪除到行首，帶 undo 斷點（可單獨復原） | Delete to start of line, with undo breakpoint |
 | `<C-w>` | 刪除前一個字，帶 undo 斷點 | Delete previous word, with undo breakpoint |
 | `<C-h>` | 刪除前一個字元，帶 undo 斷點 | Delete previous character, with undo breakpoint |
+| `<C-d>` | 向前刪除一個字元，帶 undo 斷點 | Delete forward, with undo breakpoint |
 
 ### Newline Without Insert Mode
 
