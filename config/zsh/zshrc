@@ -108,7 +108,13 @@ for ua in $omz_unalias; do unalias "$ua" 2>/dev/null; done
 #          /____/                            /____/
 
 # keybindings
-# You can use C-v in your shell to check what key combinaiton you press
+# Key notation: ^[ and \e both mean ESC (0x1b) — terminal sends ESC+key for Alt+key
+# Debug keypress:
+#   shell:   Ctrl-v then press key (shows raw sequence inline)
+#   terminal: cat -v (shows escape sequences)
+#   TTY:     showkey -a (root, not in X/Wayland)
+#   X11:     xev (keypress events) / xmodmap -pke (all mappings)
+#   Wayland: wev (keypress events)
 bindkey '^[\' autosuggest-toggle # alt-\
 bindkey -s '^[i' '^Uexit^M' # alt-i
 bindkey '^P' history-substring-search-up
