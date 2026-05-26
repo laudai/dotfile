@@ -125,18 +125,20 @@ bindkey '^[/' _run-help-clean # alt-/
 # How to switch comfortably to vi command mode on the zsh command line?
 # https://superuser.com/questions/351499/how-to-switch-comfortably-to-vi-command-mode-on-the-zsh-command-line
 bindkey -M viins 'jk' vi-cmd-mode
-bindkey -M viins '^[e' _select-emacs
-bindkey -M vicmd '^[e' _select-emacs
-bindkey -M emacs '^[v' _select-vi
-bindkey -M viins '\ec' _select-emacs
-bindkey -M emacs '\ec' _select-vi
-bindkey -M vicmd " e" end-of-line
-bindkey -M vicmd " a" beginning-of-line
+# vi/emacs mode toggle keybindings
+bindkey -M viins '^[e' _select-emacs  # alt-e: switch to emacs mode (from vi insert)
+bindkey -M vicmd '^[e' _select-emacs  # alt-e: switch to emacs mode (from vi command)
+bindkey -M emacs '^[v' _select-vi     # alt-v: switch to vi mode (from emacs)
+bindkey -M viins '\ec' _select-emacs  # alt-c: switch to emacs mode (from vi insert)
+bindkey -M emacs '\ec' _select-vi     # alt-c: switch to vi mode (from emacs)
+# vi command mode shortcuts (space+e/a as end/beginning of line)
+bindkey -M vicmd " e" end-of-line         # space-e: jump to end of line
+bindkey -M vicmd " a" beginning-of-line   # space-a: jump to beginning of line
 # zsh-navigation-tools keybindings
 zle -N znt-cd-widget
-bindkey "^B" znt-cd-widget
+bindkey "^B" znt-cd-widget    # ctrl-b: znt directory navigator
 zle -N znt-kill-widget
-bindkey "^Y" znt-kill-widget
+bindkey "^Y" znt-kill-widget  # ctrl-y: znt process killer
 # Set up fzf key bindings and fuzzy completion
 # fzf 0.48.0+ supports --zsh; older versions use separate source files
 if fzf --zsh &>/dev/null; then
@@ -146,9 +148,9 @@ else
   [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
 fi
 # Rebind fzf cd widget from alt-c to alt-p (avoid conflict with vi/emacs toggle)
-bindkey -M emacs '\ep' fzf-cd-widget
-bindkey -M viins '\ep' fzf-cd-widget
-bindkey -M vicmd '\ep' fzf-cd-widget
+bindkey -M emacs '\ep' fzf-cd-widget  # alt-p: fzf directory picker (emacs mode)
+bindkey -M viins '\ep' fzf-cd-widget  # alt-p: fzf directory picker (vi insert)
+bindkey -M vicmd '\ep' fzf-cd-widget  # alt-p: fzf directory picker (vi command)
 # pet query keybindings
 bindkey '^s' pet-snippet-search # ctrl-s
 # kiro agent selector
