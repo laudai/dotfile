@@ -146,8 +146,8 @@ function setup_ide() {
 # --- macOS: key repeat for vim extension ---
 function setup_macos_key_repeat() {
   defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
-  defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false
-  defaults write com.visualstudio.code.oss ApplePressAndHoldEnabled -bool false
+  defaults write com.vscodium ApplePressAndHoldEnabled -bool false
+  defaults write dev.kiro.desktop ApplePressAndHoldEnabled -bool false
   defaults delete -g ApplePressAndHoldEnabled 2>/dev/null || true
   echo "[macOS] Key repeat enabled for vim extension"
 }
