@@ -184,10 +184,12 @@ bindkey '^U' .kill-whole-line
 HISTSIZE=100000
 SAVEHIST=100000
 
-# Default ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
-# See more document via man zshzle
-# use colour 0~7 avoid terminal only supports 8 colors
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=5,bg=none,bold,underline"
+# BUG: zsh >=5.9 region_highlight cannot clear numeric fg codes on accept
+#   (both <8 and 256-color). Only named colors work correctly.
+#   Workaround: use "fg=magenta" instead of "fg=5" or "fg=125"
+#   Issue: https://github.com/zsh-users/zsh-autosuggestions/issues/698
+#   Track: https://github.com/zsh-users/zsh-syntax-highlighting/issues/857
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=magenta,bold,underline"
 
 # zsh-syntax-highlighting styles
 # [zsh comments nearly invisible on command-line](https://unix.stackexchange.com/questions/577586/zsh-comments-nearly-invisible-on-command-line)
