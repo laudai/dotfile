@@ -200,7 +200,7 @@ format = "[$symbol$percentage]($style) "
 full_symbol = " "
 charging_symbol = " "
 discharging_symbol = " "
-unknown_symbol = " "
+unknown_symbol = " "
 empty_symbol = " "
 
 [[battery.display]]
