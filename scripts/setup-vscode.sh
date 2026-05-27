@@ -1,18 +1,17 @@
-# Visual Studio Code
+#!/usr/bin/env zsh
+set -eo pipefail
 
-# default path by different os
-VSCODE_PATH="$HOME/.dotfile/VSCode"
-VSCODE_LINUX_PATH="$HOME/.config/Code/User"
-VSCODE_MAC_PATH="$HOME/Library/Application Support/Code/User"
-INSTALL_EXTENSIONS_MOTD="
-Now start to install the VSCode extensions.
-Will insall all VSCode extensions forcibly in the array in this script.
-"
-
-# MacOS high CPU cluprit
+# setup-vscode.sh — Symlink settings + install extensions for VS Code / VSCodium / Kiro IDE
+# Supports macOS and Linux. Detects available IDEs via CLI or app bundle.
+#
+# MacOS high CPU culprit (historical reference)
 # https://github.com/shanalikhan/code-settings-sync
 # https://code.visualstudio.com/docs/editor/settings-sync
-declare -a vscode_extensions=(
+
+DOTFILE_VSCODE="$HOME/.dotfile/VSCode"
+
+# --- Extension list (shared across all IDEs) ---
+declare -a shared_extensions=(
     # --- Python ---
     "ms-python.python"
     "charliermarsh.ruff"
@@ -29,20 +28,14 @@ declare -a vscode_extensions=(
     "donjayamanne.githistory"
     "github.vscode-pull-request-github"
 
-    # --- Remote ---
-    "ms-vscode-remote.remote-ssh"
-    "jeanp413.open-remote-ssh"
-
     # --- Debug ---
     "vadimcn.vscode-lldb"
-    "hediet.debug-visualizer"
 
     # --- Editor enhancement ---
     "vscodevim.vim"
     "aaron-bond.better-comments"
     "alefragnani.bookmarks"
     "leodevbro.blockman"
-    "hoovercj.vscode-settings-cycler"
     "patbenatar.advanced-new-file"
     "formulahendry.auto-rename-tag"
     "gruntfuggly.todo-tree"
@@ -53,8 +46,6 @@ declare -a vscode_extensions=(
     "brokenbonesdd.opencclint"
 
     # --- Stats / Counter ---
-    "j4ng5y.charactercount"
-    "worisur.wordcount-cjk"
     "uctakeoff.vscode-counter"
 
     # --- Theme / Appearance ---
@@ -70,89 +61,149 @@ declare -a vscode_extensions=(
 
     # --- Language / i18n ---
     "ms-ceintl.vscode-language-pack-zh-hant"
-    "druideinformatique.antidote"
-
-    # --- AI ---
-    "anthropic.claude-code"
 
     # --- Config / Env ---
     "mikestead.dotenv"
+
+    # --- AI ---
+    "anthropic.claude-code"
 )
 
+# Extensions only for VS Code (Marketplace-exclusive)
+declare -a vscode_only_extensions=(
+    "ms-vscode-remote.remote-ssh"
+    "j4ng5y.charactercount"
+    "hediet.debug-visualizer"
+    "hoovercj.vscode-settings-cycler"
+    "druideinformatique.antidote"
+)
 
-function end_of_setting() {
-    local os_setting_path="$1"
-    echo "Set keybindings.json, settings.json, and python snippets on '$os_setting_path' successfully."
+# Extensions only for VSCodium / Kiro IDE (Open VSX alternatives)
+declare -a openvsx_only_extensions=(
+    "jeanp413.open-remote-ssh"
+    "worisur.wordcount-cjk"
+)
+
+# --- Helper functions ---
+
+function link_settings() {
+  local user_path="$1"
+  local ide_name="$2"
+
+  [[ ! -d "$user_path" ]] && mkdir -p "$user_path"
+
+  ln -sf "$DOTFILE_VSCODE/settings.json" "$user_path/settings.json"
+  ln -sf "$DOTFILE_VSCODE/keybindings.json" "$user_path/keybindings.json"
+
+  [[ ! -d "$user_path/snippets" ]] && mkdir -p "$user_path/snippets"
+  ln -sf "$DOTFILE_VSCODE/python.json" "$user_path/snippets/python.json"
+
+  echo "[$ide_name] Linked: settings + keybindings + snippets → $user_path"
 }
 
+function install_extensions() {
+  local cli="$1"
+  local ide_name="$2"
+  shift 2
+  local -a exts=("$@")
 
-# check vscode path
-if [[ -d "$VSCODE_PATH" ]]; then
-    :
-else
-   echo "Cannot find the "$VSCODE_PATH", will exit this script."
-   exit 1
-fi
+  echo "[$ide_name] Installing ${#exts[@]} extensions..."
+  for ext in "${exts[@]}"; do
+    "$cli" --install-extension "$ext" --force || echo "  WARNING: failed to install $ext"
+  done
+}
 
+function setup_ide() {
+  local cli="$1"
+  local user_path="$2"
+  local ide_name="$3"
+  local ide_type="$4"  # "vscode" | "openvsx" | "kiro"
 
-# check the vscode was installed and set to the environment variable
-which code &> /dev/null
-if [[ $? -eq 0 ]]; then
-    echo "Can find code command in the environment variable."
-elif [[ $? -eq 1 ]]; then
-    echo "
-    Cannot find the code command in the environment variable.
-    You need to install the VSCode and add the command into the environment varible.
-    " >&2 && exit 1
-else
-    echo "Undefined error number." >&2 && exit 1
-fi
-echo
+  echo
+  echo "=== $ide_name ==="
 
+  # Symlink settings
+  link_settings "$user_path" "$ide_name"
 
-# set the configuration files by different os
+  # Install extensions
+  local -a exts=("${shared_extensions[@]}")
+
+  case "$ide_type" in
+    vscode)
+      exts+=("${vscode_only_extensions[@]}")
+      ;;
+    openvsx)
+      exts+=("${openvsx_only_extensions[@]}")
+      ;;
+    kiro)
+      exts+=("${openvsx_only_extensions[@]}")
+      ;;
+  esac
+
+  install_extensions "$cli" "$ide_name" "${exts[@]}"
+}
+
+# --- macOS: key repeat for vim extension ---
+function setup_macos_key_repeat() {
+  defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
+  defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false
+  defaults write com.visualstudio.code.oss ApplePressAndHoldEnabled -bool false
+  defaults delete -g ApplePressAndHoldEnabled 2>/dev/null || true
+  echo "[macOS] Key repeat enabled for vim extension"
+}
+
+# --- Main ---
+
+# Verify dotfile source exists
+[[ ! -d "$DOTFILE_VSCODE" ]] && echo "Error: $DOTFILE_VSCODE not found" >&2 && exit 1
+
+# Determine OS-specific paths
 case "$OSTYPE" in
-    "linux-gnu"*)
-        # keybindings and settings
-        BASE_PATH="$VSCODE_LINUX_PATH"
-        ln -sf "$VSCODE_PATH/keybindings.json" "$BASE_PATH/keybindings.json"
-        ln -sf "$VSCODE_PATH/settings.json" "$BASE_PATH/settings.json"
-
-        # snippets
-        [[ ! -d "$BASE_PATH/snippets" ]] && mkdir -p "$BASE_PATH/snippets"
-        ln -sf "$VSCODE_PATH/python.json" "$BASE_PATH/snippets/phthon.json"
-
-        end_of_setting "$BASE_PATH"
-        ;;
-    "darwin"*)
-        BASE_PATH="$VSCODE_MAC_PATH"
-        ln -sf "$VSCODE_PATH/keybindings.json" "$BASE_PATH/keybindings.json"
-        ln -sf "$VSCODE_PATH/settings.json" "$BASE_PATH/settings.json"
-
-        # snippets
-        [[ ! -d "$BASE_PATH/snippets" ]] && mkdir -p "$BASE_PATH/snippets"
-        ln -sf "$VSCODE_PATH/python.json" "$BASE_PATH/snippets/phthon.json"
-
-        # extension settings
-        # vim
-        # To enable key-repeating, execute the following in your Terminal, log out and back in, and then restart VS Code:
-        defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false              # For VS Code
-        defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false      # For VS Code Insider
-        defaults write com.visualstudio.code.oss ApplePressAndHoldEnabled -bool false         # For VS Codium
-        defaults write com.microsoft.VSCodeExploration ApplePressAndHoldEnabled -bool false   # For VS Codium Exploration users
-        defaults delete -g ApplePressAndHoldEnabled
-        echo
-
-        end_of_setting "$BASE_PATH"
-        ;;
-    *)
-        echo "Can not match any OSTYPE variable name." >&2
-        exit 1
-        ;;
+  darwin*)
+    code_user="$HOME/Library/Application Support/Code/User"
+    codium_user="$HOME/Library/Application Support/VSCodium/User"
+    kiro_user="$HOME/Library/Application Support/Kiro/User"
+    kiro_cli="/Applications/Kiro.app/Contents/Resources/app/bin/code"
+    ;;
+  linux*)
+    code_user="$HOME/.config/Code/User"
+    codium_user="$HOME/.config/VSCodium/User"
+    kiro_user=""  # Linux: not supported yet
+    kiro_cli=""
+    ;;
+  *)
+    echo "Unsupported OS: $OSTYPE" >&2 && exit 1
+    ;;
 esac
 
-echo "$INSTALL_EXTENSIONS_MOTD"
-for extension in "${vscode_extensions[@]}"
-do
-    code --install-extension "$extension" --force
-done
+found=0
+
+# VS Code
+if command -v code &>/dev/null; then
+  setup_ide "code" "$code_user" "VS Code" "vscode"
+  found=1
+fi
+
+# VSCodium
+if command -v codium &>/dev/null; then
+  setup_ide "codium" "$codium_user" "VSCodium" "openvsx"
+  found=1
+fi
+
+# Kiro IDE (macOS only, detect by app bundle)
+if [[ "$OSTYPE" == darwin* ]] && [[ -x "$kiro_cli" ]]; then
+  setup_ide "$kiro_cli" "$kiro_user" "Kiro IDE" "kiro"
+  found=1
+fi
+
+# macOS key repeat
+[[ "$OSTYPE" == darwin* ]] && setup_macos_key_repeat
+
+# Summary
+if [[ $found -eq 0 ]]; then
+  echo "Error: No IDE found (code/codium/kiro). Install one first." >&2
+  exit 1
+fi
+
+echo
+echo "Done."
