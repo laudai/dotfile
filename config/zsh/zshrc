@@ -57,7 +57,7 @@ function _sz_function() {
   local -a folders=(
     $HOME/.dotfile/private
   )
-  local -a exts=(sh function alias export)
+  local -a exts=(sh function alias export source)
   local f
   for d in $folders; do
     # Non-recursive: * matches single directory level only (no /),
