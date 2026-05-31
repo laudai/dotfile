@@ -883,6 +883,15 @@ $repo_url"
 			post_install_msgs+=("docker-ce:\n    Log out and back in for docker group to take effect.\n    Docs: https://docs.docker.com/engine/install/linux-postinstall/")
 		fi
 
+		# ddcutil (DDC/CI monitor control)
+		if printf '%s\n' "${pkg_install[@]}" | grep -qx ddcutil; then
+			# i2c-dev is builtin in Ubuntu kernels (modinfo i2c-dev shows "filename: (builtin)")
+			# no modprobe needed; only group membership is required for non-root access
+			# i2c group is created by i2c-tools postinst (ddcutil depends on i2c-tools)
+			sudo usermod -aG i2c "$USER"
+			post_install_msgs+=("ddcutil:\n    Added $USER to i2c group.\n    Log out and back in (or run 'newgrp i2c') for group to take effect.\n    Verify: ddcutil detect\n    Docs: https://www.ddcutil.com/i2c_permissions/")
+		fi
+
 		# flatpak (first-time install)
 		if printf '%s\n' "${pkg_install[@]}" | grep -qx flatpak; then
 			post_install_msgs+=("flatpak:\n    Reboot or re-login for XDG desktop portal to take effect (file picker, notifications).\n    Docs: https://flatpak.org/setup/Ubuntu")

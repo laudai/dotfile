@@ -122,6 +122,9 @@ common_pkgs=(
 	# Security
 	bw                               # Bitwarden CLI (brew: bitwarden-cli)
 
+	# Display control (DDC/CI)
+	# m1ddc removed — BetterDisplay HTTP API covers all DDC features and is more reliable
+
 	# Entertainment / Eye candy
 	screenfetch                      # system info display
 	cowsay
@@ -141,6 +144,7 @@ linux_only_pkgs=(
 	build-essential                  # gcc/g++/make (Linux only, macOS uses Xcode CLT)
 	openssh-server                   # Linux only (macOS built-in)
 	bind9-dnsutils                   # dig/nslookup (macOS built-in)
+	ddcutil                          # DDC/CI monitor control via I2C (post-install: add user to i2c group)
 	hping3                           # TCP/IP packet tool
 	sysstat                          # system performance monitoring (sar/iostat/mpstat)
 	acpi                             # battery/lid state (i3 render_i3_monitor.sh)
@@ -294,6 +298,7 @@ macos_only_gui=(
 
 	# Display / Monitor
 	monitorcontrol                   # Control external monitor brightness/contrast/volume from menulet
+	betterdisplay                    # DDC/CI monitor control via HTTP API; used for input source switching
 
 	# Audio
 	background-music                 # auto-pause music, per-app volume, record system audio
@@ -361,7 +366,6 @@ skip_on_linux=(
 # Future `make uninstall` will read this list to remove them.
 # Format: package_name  # (original_list) reason, deprecated date
 deprecated_pkgs=(
-    betterdisplay
 )
 
 # --- Brew name mapping ---

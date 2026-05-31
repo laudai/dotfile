@@ -99,3 +99,26 @@ Please quit Alfred and agree this request, re-launch Alfred after delete those f
     echo "Didn't find Alfred 4/5 in the /Applications folder."
   fi
 }
+
+# Switch MAG251RX input to another machine via DDC/CI over USB-C
+# tool: BetterDisplay (brew install --cask betterdisplay) — must be running in background
+# HTTP API: http://localhost:55777 (enable under Settings > Application > Integration)
+# list input sources: curl "http://localhost:55777/get?namelike=MAG251&inputSourceList"
+# current input:      curl "http://localhost:55777/get?namelike=MAG251&ddc&vcp=0x60&value"
+# switch input:       curl "http://localhost:55777/set?namelike=MAG251&ddc&vcp=0x60&value=N"
+#   MAG251RX accepted values (VCP 0x60): DP1=15, DP2/USB-C=16, HDMI1=17, HDMI2=18
+#   actual mapping: mac=16(DP2/USB-C), linux=17(HDMI1)
+# note: m1ddc was unreliable for input switching on this monitor; BetterDisplay HTTP API is stable
+# to update after port change:
+#   1. on Linux: ddcutil getvcp 0x60  -> get new code + physical port name
+#   2. look up physical port name in VCP 0x60 accepted values above
+#   3. update value in this function and in Linux function
+function monitor-switch() {
+  curl -sf "http://localhost:55777/set?namelike=MAG251&ddc&vcp=0x60&value=17" > /dev/null || {
+    echo "monitor-switch: BetterDisplay not responding" >&2
+    return 1
+  }
+  # fallback if BetterDisplay is not running (m1ddc is unreliable but sometimes works):
+  # for i in 1 2 3; do m1ddc display 1 set input 17 2>/dev/null && return 0; sleep 0.3; done
+  # m1ddc display 1 set input-alt 144 2>/dev/null
+}

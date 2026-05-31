@@ -127,3 +127,21 @@ function fjlr() {
   journalctl --no-pager -u "$unit" -n "${3:-500}" |
     fzf --raw --query "$query"
 }
+
+# Switch MAG251RX input to another machine via DDC/CI over I2C
+# tool: ddcutil (apt install ddcutil), user must be in i2c group (usermod -aG i2c $USER)
+# list connected displays:  ddcutil detect          -> shows displays connected to THIS machine only
+# all supported input codes: ddcutil capabilities | grep -A 20 "Input Source"
+#                            -> queries monitor firmware for full VCP 0x60 value list
+# current input:   ddcutil getvcp 0x60            -> returns current code + physical port name
+# switch input:    ddcutil setvcp 0x60 N   (0x60 = VCP Input Source, VESA MCCS standard)
+#   known codes (MAG251RX): HDMI1=0x11, HDMI2=0x12, DP1=0x0f, DP2=0x10
+#   note: these codes differ from m1ddc input-alt codes — do NOT mix them
+#   actual mapping: this machine uses 0x11 (HDMI1); target mac port is 0x10 (DP2)
+# to update after port change:
+#   1. run: ddcutil getvcp 0x60  -> get new code + physical port name
+#   2. look up physical port name in VCP 0x60 accepted values (see functions-macos.zsh) for Mac code
+#   3. update setvcp code here and value in Mac function
+function monitor-switch() {
+  ddcutil setvcp 0x60 0x10
+}
