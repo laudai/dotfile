@@ -214,6 +214,13 @@ function count_characters() {
   printf $1 | wc -m
 }
 
+# git diff between adjacent commits by number
+# usage: gdn 7 => git diff @~7 @~6 | gdn 1 => git diff @~1 @
+function gdn() {
+  local n=$1; shift
+  git diff @~$n @~$((n - 1)) "$@"
+}
+
 # fzf interactive git diff preview
 # usage: fgd (unstaged) | fgd --cached (staged) | fgd HEAD~3 | fgd main
 function fgd() {
