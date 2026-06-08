@@ -50,6 +50,9 @@ alias dcp="docker-compose"
 alias dcls="docker container ls"
 alias dclsa="docker container ls -a"
 
+# dotfile manual reference
+ alias imd="view ~/.dotfile/docs/i3-reference.md"
+
 # edit and source config
 alias ez="vim -c 'call timer_start(50, {-> execute(\"Files ~/.dotfile/config/zsh/\")})'"
 alias et="$EDITOR $HOME/.tmux.conf"
