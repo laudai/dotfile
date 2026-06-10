@@ -159,8 +159,8 @@ bindkey -M viins '\ep' fzf-cd-widget  # alt-p: fzf directory picker (vi insert)
 bindkey -M vicmd '\ep' fzf-cd-widget  # alt-p: fzf directory picker (vi command)
 # pet query keybindings
 bindkey '^s' pet-snippet-search # ctrl-s
-# kiro agent selector
-bindkey '^k' kiro-agent-select # ctrl-k
+# ai agent selector
+bindkey '^k' ai-agent-select # ctrl-k
 # Bind Ctrl+U to .kill-whole-line instead of vi-kill-line:
 # 1. Deletes entire line regardless of insert-mode entry point (vi-kill-line
 #    does nothing after A, unlike vim's <C-g>u<C-u> remap in .vimrc)

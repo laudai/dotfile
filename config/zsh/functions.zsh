@@ -298,38 +298,63 @@ function pet-snippet-search() {
 zle -N pet-snippet-search
 stty -ixon
 
-function kiro-agent-select() {
+function ai-agent-select() {
   local dotai_agents="$HOME/.dotai/agents"
-  local built_agents="$HOME/.kiro/agents"
+  local dotai_private_agents="$HOME/.dotai/private/agents"
   local list=""
-  for f in "$dotai_agents"/*.yaml(N); do
+
+  for f in "$dotai_agents"/*.yaml(N) "$dotai_private_agents"/*.yaml(N); do
     local name="${${f:t}%.yaml}"
     [[ "$name" == _* ]] && continue
-    if [[ -f "$built_agents/$name.json" ]]; then
-      list+="$name"$'\n'
-    else
-      list+="$name  [BUILD FAILED]"$'\n'
-    fi
+    list+="$name"$'\n'
   done
   [[ -n "$list" ]] || return
-  local selected=$(echo "$list" | fzf --prompt='kiro agent> ' --header='enter: chat | ctrl-t: chat --tui' --expect=ctrl-t)
-  [[ -n "$selected" ]] || return
-  local key="${selected%%$'\n'*}"
-  local entry="${selected#*$'\n'}"
-  local name="${entry%%  \[*}"
-  [[ -n "$name" ]] || return
-  if [[ "$entry" == *"[BUILD FAILED]"* ]]; then
-    BUFFER=" # agent '$name' failed to build — run: cd ~/.dotai && python3 scripts/build.py"
+
+  local platforms="kiro\nclaude"
+  local platform=$(echo "$platforms" | fzf --prompt='platform> ' --header='enter: new session | ctrl-r: resume' --expect=ctrl-r)
+  [[ -n "$platform" ]] || return
+  local pkey="${platform%%$'\n'*}"
+  local pentry="${platform#*$'\n'}"
+  [[ -n "$pentry" ]] || return
+
+  if [[ "$pkey" == "ctrl-r" ]]; then
+    case "$pentry" in
+      kiro)   BUFFER="kiro-cli chat --resume-picker" ;;
+      claude) BUFFER="claude --resume" ;;
+    esac
     CURSOR=$#BUFFER
     zle redisplay
     return
   fi
-  BUFFER="kiro-cli chat --agent \"${name}\""
-  [[ "$key" == "ctrl-t" ]] && BUFFER+=" --tui"
+
+  local selected=$(echo "$list" | fzf --prompt="${pentry} agent> " --header='select agent')
+  [[ -n "$selected" ]] || return
+
+  case "$pentry" in
+    kiro)
+      local built_agents="$HOME/.kiro/agents"
+      if [[ ! -f "$built_agents/$selected.json" ]]; then
+        BUFFER=" # agent '$selected' not built — run: cd ~/.dotai && python3 scripts/build.py"
+        CURSOR=$#BUFFER
+        zle redisplay
+        return
+      fi
+      BUFFER="kiro-cli chat --agent \"${selected}\""
+      ;;
+    claude)
+      if [[ ! -f "$HOME/.claude/agents/$selected.md" ]]; then
+        BUFFER=" # agent '$selected' not found in ~/.claude/agents/"
+        CURSOR=$#BUFFER
+        zle redisplay
+        return
+      fi
+      BUFFER="claude --agent \"${selected}\""
+      ;;
+  esac
   CURSOR=$#BUFFER
   zle redisplay
 }
-zle -N kiro-agent-select
+zle -N ai-agent-select
 
 # Check dirty git repos and open them in tmux windows or Ghostty tabs
 # --newtab: use Ghostty AppleScript to open tabs (macOS only, requires Ghostty 1.3.0+)
