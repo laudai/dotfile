@@ -8,3 +8,9 @@
 	adog = log --all --decorate --oneline --graph
 [include]
     path = ~/.config/git/config-override
+[diff]
+	tool = vimdiff
+[difftool "codium"]
+	cmd = codium --wait --diff \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
