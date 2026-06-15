@@ -441,8 +441,8 @@ if [[ "$OS" == "macOS" ]]; then
 		echo ""
 		echo -e "  ${TC_YELLOW}⚠  Upgrading casks may require re-granting macOS privacy permissions"
 		echo -e "  (Accessibility, Screen Recording, etc.) unless your terminal has"
-		echo -e "  'App Management' permission enabled.${TC_RESET}"
-		echo "  → System Settings → Privacy & Security → App Management → enable your terminal"
+		echo -e "  'App Management' or 'Full Disk Access' permission enabled.${TC_RESET}"
+		echo "  → System Settings → Privacy & Security → App Management (or Full Disk Access)"
 		echo ""
 	fi
 elif [[ "$OS" == "Linux" ]]; then
@@ -558,7 +558,7 @@ if [[ "$OS" == "macOS" ]]; then
 		# Prevent brew install from upgrading already-installed casks.
 		# Without this, outdated casks get upgraded via uninstall/reinstall,
 		# which causes macOS to revoke privacy permissions (Accessibility, etc.)
-		# unless the terminal has "App Management" permission.
+		# unless the terminal has "App Management" or "Full Disk Access" permission.
 		export HOMEBREW_NO_INSTALL_UPGRADE=1
 
 		batch_install "brew install --cask" "${pkg_install_fonts[@]}"
