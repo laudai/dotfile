@@ -244,18 +244,32 @@ export FZF_DEFAULT_OPTS="
   --bind 'alt-y:execute-silent(echo -n {} | sed \"s/^[[:space:]]*[0-9]*\\t//\" | if command -v pbcopy >/dev/null; then pbcopy; else xclip -selection clipboard; fi)+accept'
   --header 'ctrl+y (emacs yank/recover) | alt+y (copy) | ? (preview) | ctrl+\\ (preview pos) | ctrl+/ (line wrap) | shift+pgup/dn (preview page)'"
 
+# Resolve fd / bat binary names across platforms:
+#   macOS/brew -> `fd`,     `bat`
+#   Debian/apt -> `fdfind`, `batcat`  (both base names are taken by other
+#                 Debian packages, so fd-find / bat install under suffixes)
+# A `fd=fdfind` alias does NOT help here — fzf runs FZF_*_COMMAND and the
+# preview via non-interactive `sh -c`, which does not expand zsh aliases.
+if command -v fd >/dev/null 2>&1; then fd_bin=fd; elif command -v fdfind >/dev/null 2>&1; then fd_bin=fdfind; fi
+if command -v bat >/dev/null 2>&1; then bat_bin=bat; elif command -v batcat >/dev/null 2>&1; then bat_bin=batcat; fi
+
 # Ctrl+T: search files and paste path to command line
 # Use fd for speed (parallel, respects .gitignore) and --hidden for dotfiles
-export FZF_CTRL_T_COMMAND="fd --type f --type d --hidden --follow --exclude .git --exclude node_modules --exclude target"
+# (skipped when no fd is installed — fzf then falls back to its built-in find)
+if [[ -n "$fd_bin" ]]; then
+  export FZF_CTRL_T_COMMAND="$fd_bin --type f --type d --hidden --follow --exclude .git --exclude node_modules --exclude target"
+  export FZF_ALT_C_COMMAND="$fd_bin --type d --hidden --exclude .git --exclude node_modules --exclude target"
+fi
+# Preview: bat for files (syntax highlight), fall back to plain cat if absent
 export FZF_CTRL_T_OPTS="
-  --preview '[ -d {} ] && tree -C {} || bat -n --color=always {}'"
-
+  --preview '[ -d {} ] && tree -C {} || ${bat_bin:-cat} -n --color=always {}'"
 # Print tree structure in the preview window
 # Alt+P (rebound from Alt+C): cd into selected directory
 # Env var names must stay as FZF_ALT_C_* — fzf hardcodes these names
 # regardless of which key triggers fzf-cd-widget (see bindkey above)
 export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
-export FZF_ALT_C_COMMAND="fd --type d --hidden --exclude .git --exclude node_modules --exclude target"
+
+unset fd_bin bat_bin
 
 # Ctrl+R: history search with pet integration
 # bind alt-o to save to pet, ctrl-y to copy to clipboard in fzf history search
