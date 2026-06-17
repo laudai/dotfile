@@ -160,12 +160,13 @@ bindkey -M vicmd '\ep' fzf-cd-widget  # alt-p: fzf directory picker (vi command)
 # pet query keybindings
 bindkey '^s' pet-snippet-search # ctrl-s
 # ai agent selector
-bindkey '^k' ai-agent-select # ctrl-k
+bindkey '^X^K' ai-agent-select # ctrl-x ctrl-k
 # Bind Ctrl+U to .kill-whole-line instead of vi-kill-line:
 # 1. Deletes entire line regardless of insert-mode entry point (vi-kill-line
 #    does nothing after A, unlike vim's <C-g>u<C-u> remap in .vimrc)
 # 2. Dot prefix bypasses vi-mode plugin's clipcopy wrapper that clears
 #    system clipboard with empty CUTBUFFER
+bindkey -M viins '^K' kill-line   # ctrl-k: kill to end of line (restore emacs default)
 bindkey '^U' .kill-whole-line
 # keybindings reference
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
