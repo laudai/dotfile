@@ -174,7 +174,8 @@
   // blockman
   "blockman.n01LineHeight": 0,
   "blockman.n04ColorComboPreset": "Classic Dark 3 (Solid colors)",
-  "blockman.n32BlackListOfFileFormats": "plaintext, markdown, python",
+  "blockman.n33A01B2FromDepth0ToInwardForAllBackgrounds": "45,0,0,2; none",
+  "blockman.n32BlackListOfFileFormats": "plaintext, markdown",
   // opencclint
   "opencclint.converterOptions": "tw=>cn",
   // vim
