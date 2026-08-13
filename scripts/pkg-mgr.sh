@@ -944,7 +944,14 @@ mkdir -p "$HOME/Documents/projects/Personal"
 mkdir -p "$HOME/.local/bin"
 curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"
 
+# install herdr (agent multiplexer for AI coding agents)
+# install.sh installs latest release to ~/.local/bin/herdr; re-run to upgrade
+# ref: https://herdr.dev/docs/install/
+curl -fsSL https://herdr.dev/install.sh | sh
 
+# regenerate herdr zsh completion (matches installed version)
+# _herdr is gitignored; ~/.dotfile/completions/ is in fpath via .zshrc
+command -v herdr >/dev/null && herdr completion zsh > "$HOME/.dotfile/completions/_herdr"
 
 # install oh-my-zsh framework
 # modify the original install script to non-interactive way
